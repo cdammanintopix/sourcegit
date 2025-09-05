@@ -1,0 +1,26 @@
+stages:
+  - build
+
+variables:
+  GIT_SUBMODULE_STRATEGY: normal
+  DOCKER_REGISTRY: "${CI_REGISTRY}/sw/tools/docker"
+
+build_Rocky9_x64_Release:
+  stage: build
+  image: ${DOCKER_REGISTRY}/ipx-rocky:9
+  script:
+    - dnf install -y dotnet-sdk-9.0
+    - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64
+    - rm -f build/SourceGit/*.dbg
+    - mv build/SourceGit/SourceGit build/SourceGit/sourcegit
+    - cd build
+    - rpmbuild -bb --target="x86_64" resources/rpm/SPECS/build.spec --define "_topdir $(pwd)/resources/rpm" --define "_version v$(cat ../VERSION)"
+    - mv resources/rpm/RPMS/x86_64/*.rpm ./
+  artifacts:
+    paths:
+      - build/*.rpm
+    expire_in: 1 weeks
+  needs: []
+  tags:
+    - linux
+    - x64
