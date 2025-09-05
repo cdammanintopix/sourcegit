@@ -33,7 +33,7 @@ namespace SourceGit.Views
         {
             get;
             set;
-        }
+        } = true;
 
         public static readonly StyledProperty<string> GitVersionProperty =
             AvaloniaProperty.Register<Preferences, string>(nameof(GitVersion));

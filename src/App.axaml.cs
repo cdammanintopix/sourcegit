@@ -568,6 +568,7 @@ namespace SourceGit
         {
             Native.OS.SetupExternalTools();
             Models.AvatarManager.Instance.Start();
+            Models.CIManager.Instance.Start();
 
             string startupRepo = null;
             if (desktop.Args is { Length: 1 } && Directory.Exists(desktop.Args[0]))

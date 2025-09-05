@@ -27,6 +27,7 @@ namespace SourceGit.Models
             set;
         } = 0.65;
 
+        public ViewModels.Repository Repository { get; set; } = null;
         public string SHA { get; set; } = string.Empty;
         public User Author { get; set; } = User.Invalid;
         public ulong AuthorTime { get; set; } = 0;

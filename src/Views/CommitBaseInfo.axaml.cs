@@ -102,6 +102,47 @@ namespace SourceGit.Views
             e.Handled = true;
         }
 
+        private void OnOpenCILink(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.CommitDetail detail && sender is Control control)
+            {
+                var links = new List<Models.CommitLink>();
+                foreach (var link in WebLinks)
+                {
+                    if (link.URLPrefix.Contains("gitlab.intopix.com", StringComparison.Ordinal))
+                    {
+                        links.Add(link);
+                    }
+                }
+                if (links.Count > 1)
+                {
+                    var menu = new ContextMenu();
+
+                    foreach (var link in links)
+                    {
+                        var url = $"{link.URLPrefix}{detail.Commit.SHA}/pipelines";
+                        var item = new MenuItem() { Header = link.Name };
+                        item.Click += (_, ev) =>
+                        {
+                            Native.OS.OpenBrowser(url);
+                            ev.Handled = true;
+                        };
+
+                        menu.Items.Add(item);
+                    }
+
+                    menu.Open(control);
+                }
+                else if (links.Count == 1)
+                {
+                    var url = $"{links[0].URLPrefix}{detail.Commit.SHA}/pipelines";
+                    Native.OS.OpenBrowser(url);
+                }
+            }
+
+            e.Handled = true;
+        }
+
         private async void OnOpenContainsIn(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.CommitDetail detail && sender is Button button)
