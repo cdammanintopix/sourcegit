@@ -5,6 +5,25 @@ variables:
   GIT_SUBMODULE_STRATEGY: normal
   DOCKER_REGISTRY: "${CI_REGISTRY}/sw/tools/docker"
 
+build_Windows_x64_Release:
+  stage: build
+  image: ${DOCKER_REGISTRY}/ipx-win:latest
+  script:
+    - wget https://dot.net/v1/dotnet-install.ps1 -o dotnet-install.ps1
+    - ./dotnet-install.ps1 -Channel 9.0
+    - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r win-x64
+    - rm build/SourceGit/*.pdb
+    - cd build
+    - Compress-Archive -Path SourceGit -DestinationPath SourceGit.zip
+  artifacts:
+    paths:
+      - build/*.zip
+    expire_in: 1 weeks
+  needs: []
+  tags:
+    - windows
+    - x64
+
 build_Rocky9_x64_Release:
   stage: build
   image: ${DOCKER_REGISTRY}/ipx-rocky:9
