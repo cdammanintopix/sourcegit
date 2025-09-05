@@ -90,7 +90,7 @@ namespace SourceGit.ViewModels
                     if (submodules.Count > 0)
                         await new Commands.Submodule(_repo.FullPath)
                             .Use(log)
-                            .UpdateAsync(submodules, true, true);
+                            .UpdateAsync(submodules, true, false);
                 }
 
                 if (needPop)

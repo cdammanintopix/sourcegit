@@ -43,7 +43,7 @@ namespace SourceGit.ViewModels
         {
             get;
             set;
-        } = true;
+        } = false;
 
         public bool EnableRemote
         {
