@@ -35,6 +35,12 @@ namespace SourceGit.Models
         [GeneratedRegex(@"^(?:(\d+)\+)?(.+?)@.+\.github\.com$")]
         private static partial Regex REG_GITHUB_USER_EMAIL();
 
+        [GeneratedRegex(@"^(?:(\d+)\+)?(.+?)@intopix\.com$")]
+        private static partial Regex REG_INTOPIX_USER_EMAIL();
+
+        [GeneratedRegex(@"^\[\{(.*)""avatar_url"":""(.+png)""(.*)""email""(.*)\}\]$")]
+        private static partial Regex REG_AVATAR();
+
         private readonly Lock _synclock = new();
         private string _storePath;
         private List<IAvatarHost> _avatars = new List<IAvatarHost>();
@@ -77,6 +83,27 @@ namespace SourceGit.Models
                     var url = matchGitHubUser.Success ?
                         $"https://avatars.githubusercontent.com/{matchGitHubUser.Groups[2].Value}" :
                         $"https://www.gravatar.com/avatar/{md5}?d=404";
+                    var matchIntopixUser = REG_INTOPIX_USER_EMAIL().Match(email);
+                    if (matchIntopixUser.Success) {
+                        try
+                        {
+                            using var client = new HttpClient();
+                            client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", Environment.GetEnvironmentVariable("SOURCEGIT_GITLAB_TOKEN"));
+                            client.Timeout = TimeSpan.FromSeconds(2);
+                            var rsp = await client.GetAsync($"https://gitlab.intopix.com/api/v4/users?search={matchIntopixUser.Groups[0].Value}");
+                            if (rsp.IsSuccessStatusCode)
+                            {
+                                var matchAvatar = REG_AVATAR().Match(rsp.Content.ReadAsStringAsync().Result);
+                                if (matchAvatar.Success) {
+                                    url = matchAvatar.Groups[2].Value;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                    }
 
                     var localFile = Path.Combine(_storePath, md5);
                     Bitmap img = null;
