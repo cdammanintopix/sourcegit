@@ -2,6 +2,9 @@ variables:
   GIT_SUBMODULE_STRATEGY: normal
   DOCKER_REGISTRY: "${CI_REGISTRY}/sw/tools/docker"
 
+default:
+  interruptible: true
+
 stages:
   - build
   - export
@@ -33,12 +36,46 @@ build_Windows_x64_Release:
     - windows
     - x64
 
+build_Ubuntu2404_x64_Release:
+  stage: build
+  image: ${DOCKER_REGISTRY}/ipx-ubuntu:24.04
+  script:
+    - wget https://dot.net/v1/dotnet-install.sh
+    - bash dotnet-install.sh --channel 9.0
+    - export DOTNET_ROOT=$HOME/.dotnet
+    - export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+    - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64 -p:DisableUpdateDetection=true
+    - rm -f build/SourceGit/*.dbg
+    - mv build/SourceGit/SourceGit build/SourceGit/sourcegit
+    - cd build
+    - install -d resources/deb/opt/sourcegit/
+    - install -d resources/deb/usr/bin/
+    - install -d resources/deb/usr/share/applications/
+    - install -d resources/deb/usr/share/icons/
+    - cp -f SourceGit/* resources/deb/opt/sourcegit/
+    - ln -rsf resources/deb/opt/sourcegit/sourcegit resources/deb/usr/bin/
+    - cp -r resources/_common/applications resources/deb/usr/share/
+    - cp -r resources/_common/icons resources/deb/usr/share/
+    - 'sed -i -e "s/^Version:.*/Version: $(cat ../VERSION)/" -e "s/^Architecture:.*/Architecture: amd64/" resources/deb/DEBIAN/control'
+    - dpkg-deb --root-owner-group --build resources/deb "sourcegit_$(cat ../VERSION)-1_amd64.deb"
+  artifacts:
+    paths:
+      - build/*.deb
+    expire_in: 1 weeks
+  needs: []
+  tags:
+    - linux
+    - x64
+
 build_Rocky9_x64_Release:
   stage: build
   image: ${DOCKER_REGISTRY}/ipx-rocky:9
   script:
-    - dnf install -y dotnet-sdk-9.0
-    - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64
+    - wget https://dot.net/v1/dotnet-install.sh
+    - bash dotnet-install.sh --channel 9.0
+    - export DOTNET_ROOT=$HOME/.dotnet
+    - export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+    - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64 -p:DisableUpdateDetection=true
     - rm -f build/SourceGit/*.dbg
     - mv build/SourceGit/SourceGit build/SourceGit/sourcegit
     - cd build
@@ -65,6 +102,7 @@ export:
     - mkdir -p $DELIVERY_PATH/$DELIVERY_DIR
     - cp build/SourceGit.zip $DELIVERY_PATH/$DELIVERY_DIR/SourceGit_v${VERSION}.zip
     - cp build/*.rpm $DELIVERY_PATH/$DELIVERY_DIR/
+    - cp build/*.deb $DELIVERY_PATH/$DELIVERY_DIR/
     - curl --header "Content-Type:application/json" --header "PRIVATE-TOKEN:${HW_BOT_PRIVATE_TOKEN}" --data "{ \"name\":\"Release of SourceGit ${VERSION}\", \"tag_name\":\"release-${DELIVERY_DIR}\", \"ref\":\"$CI_COMMIT_REF_NAME\", \"description\":\"Super nice release of SourceGit. Version is ${VERSION}. Release ID is ${DELIVERY_DIR}. Release directory is $DELIVERY_PATH/$DELIVERY_DIR/.\", \"assets\":{ \"links\":[{ \"name\":\"Pipeline logs & artifacts\", \"url\":\"$CI_PIPELINE_URL\" }] } }" --request POST https://gitlab.intopix.com/api/v4/projects/${CI_PROJECT_ID}/releases
   only:
     refs:
