@@ -1301,10 +1301,6 @@ namespace SourceGit.ViewModels
 
                 var commits = await new Commands.QueryCommits(FullPath, builder.ToString()).GetResultAsync().ConfigureAwait(false);
                 var graph = Models.CommitGraph.Parse(commits, _settings.HistoryShowFlags.HasFlag(Models.HistoryShowFlags.FirstParentOnly));
-                foreach (var commit in commits)
-                {
-                    commit.Repository = this;
-                }
 
                 Dispatcher.UIThread.Invoke(() =>
                 {

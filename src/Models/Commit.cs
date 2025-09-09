@@ -17,7 +17,6 @@ namespace SourceGit.Models
     {
         public const string EmptyTreeSHA1 = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 
-        public ViewModels.Repository Repository { get; set; } = null;
         public string SHA { get; set; } = string.Empty;
         public User Author { get; set; } = User.Invalid;
         public ulong AuthorTime { get; set; } = 0;

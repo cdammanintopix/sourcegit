@@ -86,6 +86,12 @@ namespace SourceGit.ViewModels
             set => SetProperty(ref _bottomArea, value);
         }
 
+        public Repository Repository
+        {
+            get => _repo;
+            set => SetProperty(ref _repo, value);
+        }
+
         public Histories(Repository repo)
         {
             _repo = repo;
