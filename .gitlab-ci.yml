@@ -17,16 +17,17 @@ workflow:
       when: never
     - when: always
 
-build_Windows_x64_Release:
+Windows_x64_Release_build:
   stage: build
   image: ${DOCKER_REGISTRY}/ipx-win:latest
   script:
     - wget https://dot.net/v1/dotnet-install.ps1 -o dotnet-install.ps1
     - ./dotnet-install.ps1 -Channel 9.0
+    - $env:DOTNET_CLI_TELEMETRY_OPTOUT=1
     - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r win-x64
     - rm build/SourceGit/*.pdb
     - cd build
-    - Compress-Archive -Path SourceGit -DestinationPath SourceGit.zip
+    - Compress-Archive -Path SourceGit -DestinationPath sourcegit_v$(cat ../VERSION)-1.zip
   artifacts:
     paths:
       - build/*.zip
@@ -36,12 +37,14 @@ build_Windows_x64_Release:
     - windows
     - x64
 
-build_Ubuntu2404_x64_Release:
+Linux_x64_Release_build:
   stage: build
   image: ${DOCKER_REGISTRY}/ipx-ubuntu:24.04
   script:
+    - apt-get update && apt-get install -y rpm
     - wget https://dot.net/v1/dotnet-install.sh
     - bash dotnet-install.sh --channel 9.0
+    - export DOTNET_CLI_TELEMETRY_OPTOUT=1
     - export DOTNET_ROOT=$HOME/.dotnet
     - export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
     - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64 -p:DisableUpdateDetection=true
@@ -57,32 +60,12 @@ build_Ubuntu2404_x64_Release:
     - cp -r resources/_common/applications resources/deb/usr/share/
     - cp -r resources/_common/icons resources/deb/usr/share/
     - 'sed -i -e "s/^Version:.*/Version: $(cat ../VERSION)/" -e "s/^Architecture:.*/Architecture: amd64/" resources/deb/DEBIAN/control'
-    - dpkg-deb --root-owner-group --build resources/deb "sourcegit_$(cat ../VERSION)-1_amd64.deb"
-  artifacts:
-    paths:
-      - build/*.deb
-    expire_in: 1 weeks
-  needs: []
-  tags:
-    - linux
-    - x64
-
-build_Rocky9_x64_Release:
-  stage: build
-  image: ${DOCKER_REGISTRY}/ipx-rocky:9
-  script:
-    - wget https://dot.net/v1/dotnet-install.sh
-    - bash dotnet-install.sh --channel 9.0
-    - export DOTNET_ROOT=$HOME/.dotnet
-    - export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
-    - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64 -p:DisableUpdateDetection=true
-    - rm -f build/SourceGit/*.dbg
-    - mv build/SourceGit/SourceGit build/SourceGit/sourcegit
-    - cd build
+    - dpkg-deb --root-owner-group --build --nocheck resources/deb "sourcegit_v$(cat ../VERSION)-1_amd64.deb"
     - rpmbuild -bb --target="x86_64" resources/rpm/SPECS/build.spec --define "_topdir $(pwd)/resources/rpm" --define "_version v$(cat ../VERSION)"
     - mv resources/rpm/RPMS/x86_64/*.rpm ./
   artifacts:
     paths:
+      - build/*.deb
       - build/*.rpm
     expire_in: 1 weeks
   needs: []
@@ -100,7 +83,7 @@ export:
     - export DELIVERY_DIR=$(date +%Y%m%d)_${VERSION}_$(git rev-parse --short HEAD)
     - echo "Delivering to the folder $DELIVERY_PATH/$DELIVERY_DIR"
     - mkdir -p $DELIVERY_PATH/$DELIVERY_DIR
-    - cp build/SourceGit.zip $DELIVERY_PATH/$DELIVERY_DIR/SourceGit_v${VERSION}.zip
+    - cp build/*.zip $DELIVERY_PATH/$DELIVERY_DIR/
     - cp build/*.rpm $DELIVERY_PATH/$DELIVERY_DIR/
     - cp build/*.deb $DELIVERY_PATH/$DELIVERY_DIR/
     - curl --header "Content-Type:application/json" --header "PRIVATE-TOKEN:${HW_BOT_PRIVATE_TOKEN}" --data "{ \"name\":\"Release of SourceGit ${VERSION}\", \"tag_name\":\"release-${DELIVERY_DIR}\", \"ref\":\"$CI_COMMIT_REF_NAME\", \"description\":\"Super nice release of SourceGit. Version is ${VERSION}. Release ID is ${DELIVERY_DIR}. Release directory is $DELIVERY_PATH/$DELIVERY_DIR/.\", \"assets\":{ \"links\":[{ \"name\":\"Pipeline logs & artifacts\", \"url\":\"$CI_PIPELINE_URL\" }] } }" --request POST https://gitlab.intopix.com/api/v4/projects/${CI_PROJECT_ID}/releases
