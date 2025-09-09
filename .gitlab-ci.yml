@@ -3,7 +3,6 @@ variables:
   DOCKER_REGISTRY: "${CI_REGISTRY}/sw/tools/docker"
 
 stages:
-  - build
   - export
 
 workflow:
@@ -14,45 +13,6 @@ workflow:
       when: never
     - when: always
 
-build_Windows_x64_Release:
-  stage: build
-  image: ${DOCKER_REGISTRY}/ipx-win:latest
-  script:
-    - wget https://dot.net/v1/dotnet-install.ps1 -o dotnet-install.ps1
-    - ./dotnet-install.ps1 -Channel 9.0
-    - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r win-x64
-    - rm build/SourceGit/*.pdb
-    - cd build
-    - Compress-Archive -Path SourceGit -DestinationPath SourceGit.zip
-  artifacts:
-    paths:
-      - build/*.zip
-    expire_in: 1 weeks
-  needs: []
-  tags:
-    - windows
-    - x64
-
-build_Rocky9_x64_Release:
-  stage: build
-  image: ${DOCKER_REGISTRY}/ipx-rocky:9
-  script:
-    - dnf install -y dotnet-sdk-9.0
-    - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64
-    - rm -f build/SourceGit/*.dbg
-    - mv build/SourceGit/SourceGit build/SourceGit/sourcegit
-    - cd build
-    - rpmbuild -bb --target="x86_64" resources/rpm/SPECS/build.spec --define "_topdir $(pwd)/resources/rpm" --define "_version v$(cat ../VERSION)"
-    - mv resources/rpm/RPMS/x86_64/*.rpm ./
-  artifacts:
-    paths:
-      - build/*.rpm
-    expire_in: 1 weeks
-  needs: []
-  tags:
-    - linux
-    - x64
-
 export:
   stage: export
   image: ${DOCKER_REGISTRY}/ipx-ubuntu:latest-utils
@@ -60,11 +20,8 @@ export:
     - set -e
     - export VERSION=$(cat VERSION)
     - export DELIVERY_PATH=/mnt/IPXWarehouse/Hardware/SourceGit
-    - export DELIVERY_DIR=$(date +%Y%m%d)_$(git describe --abbrev=8 --always --dirty=)
-    - mkdir -p $DELIVERY_PATH/$DELIVERY_DIR
+    - export DELIVERY_DIR=$(date +%Y%m%d)_${VERSION}_$(git rev-parse --short HEAD)
     - echo "Delivering to the folder $DELIVERY_PATH/$DELIVERY_DIR"
-    - cp build/SourceGit.zip $DELIVERY_PATH/$DELIVERY_DIR/SourceGit_v${VERSION}.zip
-    - cp build/*.rpm $DELIVERY_PATH/$DELIVERY_DIR/
     - curl --header "Content-Type:application/json" --header "PRIVATE-TOKEN:${HW_BOT_PRIVATE_TOKEN}" --data "{ \"name\":\"Release of SourceGit ${VERSION}\", \"tag_name\":\"release-${DELIVERY_DIR}\", \"ref\":\"$CI_COMMIT_REF_NAME\", \"description\":\"Super nice release of SourceGit. Version is ${VERSION}. Release ID is ${DELIVERY_DIR}. Release directory is $DELIVERY_PATH/$DELIVERY_DIR/.\", \"assets\":{ \"links\":[{ \"name\":\"Pipeline logs & artifacts\", \"url\":\"$CI_PIPELINE_URL\" }] } }" --request POST https://gitlab.intopix.com/api/v4/projects/${CI_PROJECT_ID}/releases
   only:
     refs:
