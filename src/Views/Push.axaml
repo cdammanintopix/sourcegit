@@ -94,8 +94,7 @@
                 Height="32"
                 Content="{DynamicResource Text.Push.CheckSubmodules}"
                 IsChecked="{Binding CheckSubmodules, Mode=TwoWay}"
-                IsVisible="{Binding IsCheckSubmodulesVisible}"
-                ToolTip.Tip="--recurse-submodules=check"/>
+                IsVisible="{Binding IsCheckSubmodulesVisible}"/>
 
       <CheckBox Grid.Row="5" Grid.Column="1"
                 Content="{DynamicResource Text.Push.WithAllTags}"

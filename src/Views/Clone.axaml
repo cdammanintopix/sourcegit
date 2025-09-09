@@ -78,8 +78,7 @@
 
       <CheckBox Grid.Row="5" Grid.Column="1"
                 Content="{DynamicResource Text.Clone.RecurseSubmodules}"
-                IsChecked="{Binding InitAndUpdateSubmodules, Mode=TwoWay}"
-                ToolTip.Tip="--recurse-submodules"/>
+                IsChecked="{Binding InitAndUpdateSubmodules, Mode=TwoWay}"/>
     </Grid>
   </StackPanel>
 </UserControl>

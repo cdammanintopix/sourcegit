@@ -47,8 +47,7 @@
                 Height="32"
                 Content="{DynamicResource Text.Checkout.RecurseSubmodules}"
                 IsChecked="{Binding RecurseSubmodules, Mode=TwoWay}"
-                IsVisible="{Binding IsRecurseSubmoduleVisible}"
-                ToolTip.Tip="--recurse-submodules"/>
+                IsVisible="{Binding IsRecurseSubmoduleVisible}"/>
 
       <Grid Grid.Row="3" Grid.Column="1" ColumnDefinitions="Auto,*" Margin="0,6,0,0">
         <Path Grid.Column="0"
