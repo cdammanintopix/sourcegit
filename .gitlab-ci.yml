@@ -8,6 +8,8 @@ stages:
 
 workflow:
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     - if: $CI_COMMIT_TAG
       when: never
     - when: always
@@ -57,11 +59,12 @@ export:
   script:
     - set -e
     - export VERSION=$(cat VERSION)
-    - export DELIVERY_PATH=/mnt/IPXWarehouse/Software/SourceGit
-    - export DELIVERY_DIR=$(date +%Y%m%d)_${VERSION}_$(git describe --abbrev=8 --always --dirty=)
+    - export DELIVERY_PATH=/mnt/IPXWarehouse/Hardware/SourceGit
+    - export DELIVERY_DIR=$(date +%Y%m%d)_$(git describe --abbrev=8 --always --dirty=)
     - mkdir -p $DELIVERY_PATH/$DELIVERY_DIR
     - echo "Delivering to the folder $DELIVERY_PATH/$DELIVERY_DIR"
-    - cp build/* $DELIVERY_PATH/$DELIVERY_DIR/
+    - cp build/SourceGit.zip $DELIVERY_PATH/$DELIVERY_DIR/SourceGit_v${VERSION}.zip
+    - cp build/*.rpm $DELIVERY_PATH/$DELIVERY_DIR/
     - curl --header "Content-Type:application/json" --header "PRIVATE-TOKEN:${HW_BOT_PRIVATE_TOKEN}" --data "{ \"name\":\"Release of SourceGit ${VERSION}\", \"tag_name\":\"release-${DELIVERY_DIR}\", \"ref\":\"$CI_COMMIT_REF_NAME\", \"description\":\"Super nice release of SourceGit. Version is ${VERSION}. Release ID is ${DELIVERY_DIR}. Release directory is $DELIVERY_PATH/$DELIVERY_DIR/.\", \"assets\":{ \"links\":[{ \"name\":\"Pipeline logs & artifacts\", \"url\":\"$CI_PIPELINE_URL\" }] } }" --request POST https://gitlab.intopix.com/api/v4/projects/${CI_PROJECT_ID}/releases
   only:
     refs:
