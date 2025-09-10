@@ -37,11 +37,10 @@ Windows_x64_Release_build:
     - windows
     - x64
 
-Linux_x64_Release_build:
+Ubuntu2404_x64_Release_build:
   stage: build
   image: ${DOCKER_REGISTRY}/ipx-ubuntu:24.04
   script:
-    - apt-get update && apt-get install -y rpm
     - wget https://dot.net/v1/dotnet-install.sh
     - bash dotnet-install.sh --channel 9.0
     - export DOTNET_CLI_TELEMETRY_OPTOUT=1
@@ -61,11 +60,32 @@ Linux_x64_Release_build:
     - cp -r resources/_common/icons resources/deb/usr/share/
     - 'sed -i -e "s/^Version:.*/Version: $(cat ../VERSION)/" -e "s/^Architecture:.*/Architecture: amd64/" resources/deb/DEBIAN/control'
     - dpkg-deb --root-owner-group --build --nocheck resources/deb "sourcegit_v$(cat ../VERSION)-1_amd64.deb"
+  artifacts:
+    paths:
+      - build/*.deb
+    expire_in: 1 weeks
+  needs: []
+  tags:
+    - linux
+    - x64
+
+Rocky9_x64_Release_build:
+  stage: build
+  image: ${DOCKER_REGISTRY}/ipx-rocky:9
+  script:
+    - wget https://dot.net/v1/dotnet-install.sh
+    - bash dotnet-install.sh --channel 9.0
+    - export DOTNET_CLI_TELEMETRY_OPTOUT=1
+    - export DOTNET_ROOT=$HOME/.dotnet
+    - export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+    - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64 -p:DisableUpdateDetection=true
+    - rm -f build/SourceGit/*.dbg
+    - mv build/SourceGit/SourceGit build/SourceGit/sourcegit
+    - cd build
     - rpmbuild -bb --target="x86_64" resources/rpm/SPECS/build.spec --define "_topdir $(pwd)/resources/rpm" --define "_version v$(cat ../VERSION)"
     - mv resources/rpm/RPMS/x86_64/*.rpm ./
   artifacts:
     paths:
-      - build/*.deb
       - build/*.rpm
     expire_in: 1 weeks
   needs: []
