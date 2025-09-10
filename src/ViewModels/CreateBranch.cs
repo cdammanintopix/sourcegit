@@ -70,7 +70,7 @@ namespace SourceGit.ViewModels
             _repo = repo;
             _baseOnRevision = branch.Head;
 
-            if (!branch.IsLocal && repo.Branches.Find(x => x.IsLocal && x.Name == branch.Name) == null)
+            if (!branch.IsLocal /*&& repo.Branches.Find(x => x.IsLocal && x.Name == branch.Name) == null*/)
                 Name = branch.Name;
 
             BasedOn = branch;
