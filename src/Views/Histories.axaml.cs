@@ -1216,6 +1216,51 @@ namespace SourceGit.Views
             menu.Items.Add(submenu);
         }
 
+        private void OnOpenCILink(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Histories histories && sender is Control control)
+            {
+                var repoView = this.FindAncestorOfType<Repository>();
+                if (repoView is not { DataContext: ViewModels.Repository repo } || control is not Button button || button.Content is not Views.CI { DataContext: Models.Commit commit })
+                    return;
+
+                var links = new List<Models.CommitLink>();
+                foreach (var link in Models.CommitLink.Get(repo.Remotes))
+                {
+                    if (link.URLPrefix.Contains("gitlab.intopix.com", StringComparison.Ordinal))
+                    {
+                        links.Add(link);
+                    }
+                }
+                if (links.Count > 1)
+                {
+                    var menu = new ContextMenu();
+
+                    foreach (var link in links)
+                    {
+                        var url = $"{link.URLPrefix}{commit.SHA}/pipelines";
+                        var item = new MenuItem() { Header = link.Name };
+                        item.Click += (_, ev) =>
+                        {
+                            Native.OS.OpenBrowser(url);
+                            ev.Handled = true;
+                        };
+
+                        menu.Items.Add(item);
+                    }
+
+                    menu.Open(control);
+                }
+                else if (links.Count == 1)
+                {
+                    var url = $"{links[0].URLPrefix}{commit.SHA}/pipelines";
+                    Native.OS.OpenBrowser(url);
+                }
+            }
+
+            e.Handled = true;
+        }
+
         private double _lastGraphStartY = 0;
         private double _lastGraphClipWidth = 0;
         private double _lastGraphRowHeight = 0;
