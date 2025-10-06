@@ -84,6 +84,12 @@ namespace SourceGit.ViewModels
             set;
         } = true;
 
+        public bool CISkip
+        {
+            get;
+            set;
+        } = false;
+
         public bool PushAllTags
         {
             get => _repo.Settings.PushAllTags;
@@ -176,6 +182,7 @@ namespace SourceGit.ViewModels
                 PushAllTags,
                 _repo.Submodules.Count > 0 && CheckSubmodules,
                 _isSetTrackOptionVisible && Tracking,
+                CISkip,
                 ForcePush).Use(log).RunAsync();
 
             log.Complete();

@@ -4,7 +4,7 @@ namespace SourceGit.Commands
 {
     public class Push : Command
     {
-        public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force)
+        public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool ciSkip, bool force)
         {
             _remote = remote;
 
@@ -18,6 +18,8 @@ namespace SourceGit.Commands
                 Args += "--recurse-submodules=check ";
             if (track)
                 Args += "-u ";
+            if (ciSkip)
+                Args += "-o ci.skip ";
             if (force)
                 Args += "--force-with-lease ";
 

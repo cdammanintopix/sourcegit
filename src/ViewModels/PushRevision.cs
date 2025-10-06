@@ -45,6 +45,7 @@ namespace SourceGit.ViewModels
                 false,
                 false,
                 false,
+                false,
                 Force).Use(log).RunAsync();
 
             log.Complete();
