@@ -73,12 +73,12 @@ namespace SourceGit.Views
             clip.Dispose();
         }
 
-        private string GetReq() {
-            if (Remotes == null || SHA == null)
+        public static string GetReq(List<Models.Remote> remotes, string sha) {
+            if (remotes == null || sha == null)
             {
                 return "";
             }
-            foreach (var remote in Remotes)
+            foreach (var remote in remotes)
             {
                 if (remote.TryGetVisitURL(out var link))
                 {
@@ -91,7 +91,7 @@ namespace SourceGit.Views
 
                     if (host.Contains("gitlab.intopix.com", StringComparison.Ordinal))
                     {
-                        return route + '/' + SHA;
+                        return route + '/' + sha;
                     }
                 }
             }
@@ -100,7 +100,7 @@ namespace SourceGit.Views
 
         public void OnCIResourceChanged(string req, Bitmap image)
         {
-            if (req.Equals(GetReq(), StringComparison.Ordinal))
+            if (req.Equals(GetReq(Remotes, SHA), StringComparison.Ordinal))
             {
                 img = image;
                 InvalidateVisual();
@@ -127,7 +127,7 @@ namespace SourceGit.Views
 
             if (change.Property == RemotesProperty || change.Property == SHAProperty)
             {
-                var req = GetReq();
+                var req = GetReq(Remotes, SHA);
                 if (string.IsNullOrEmpty(req))
                     return;
 
@@ -150,7 +150,7 @@ namespace SourceGit.Views
             refetch.Header = App.Text("CI.Refetch");
             refetch.Click += (_, ev) =>
             {
-                var req = GetReq();
+                var req = GetReq(Remotes, SHA);
                 if (!string.IsNullOrEmpty(req))
                     Models.CIManager.Instance.Request(req, true);
 
