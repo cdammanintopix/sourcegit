@@ -17,8 +17,11 @@ namespace SourceGit.Views
         public static readonly StyledProperty<string> SHAProperty =
             AvaloniaProperty.Register<CI, string>("SHA");
 
-        public static readonly StyledProperty<bool> ShowRefreshIfNullProperty =
-            AvaloniaProperty.Register<CI, bool>("ShowRefreshIfNull");
+        public static readonly StyledProperty<bool> ShowDefaultIconIfNullProperty =
+            AvaloniaProperty.Register<CI, bool>("ShowDefaultIconIfNull");
+
+        public static readonly StyledProperty<Button> ButtonProperty =
+            AvaloniaProperty.Register<CI, Button>("Button");
 
         public List<Models.Remote> Remotes
         {
@@ -32,10 +35,16 @@ namespace SourceGit.Views
             set => SetValue(SHAProperty, value);
         }
 
-        public bool ShowRefreshIfNull
+        public bool ShowDefaultIconIfNull
         {
-            get => GetValue(ShowRefreshIfNullProperty);
-            set => SetValue(ShowRefreshIfNullProperty, value);
+            get => GetValue(ShowDefaultIconIfNullProperty);
+            set => SetValue(ShowDefaultIconIfNullProperty, value);
+        }
+
+        public Button Button
+        {
+            get => GetValue(ButtonProperty);
+            set => SetValue(ButtonProperty, value);
         }
 
         public CI()
@@ -52,11 +61,11 @@ namespace SourceGit.Views
             var rect = new Rect(0, 0, Bounds.Width, Bounds.Height);
             var clip = context.PushClip(new RoundedRect(rect, corner));
 
-            if (_img != null)
+            if (img != null)
             {
-                context.DrawImage(_img, rect);
+                context.DrawImage(img, rect);
             }
-            else if (ShowRefreshIfNull)
+            else if (ShowDefaultIconIfNull)
             {
                 context.DrawImage(new Bitmap(AssetLoader.Open(new Uri($"avares://SourceGit/Resources/Images/gitlab.png", UriKind.RelativeOrAbsolute))), rect);
             }
@@ -93,7 +102,7 @@ namespace SourceGit.Views
         {
             if (req.Equals(GetReq(), StringComparison.Ordinal))
             {
-                _img = image;
+                img = image;
                 InvalidateVisual();
             }
         }
@@ -122,7 +131,7 @@ namespace SourceGit.Views
                 if (string.IsNullOrEmpty(req))
                     return;
 
-                _img = Models.CIManager.Instance.Request(req, false);
+                img = Models.CIManager.Instance.Request(req, false);
                 InvalidateVisual();
             }
         }
@@ -155,5 +164,10 @@ namespace SourceGit.Views
         }
 
         private Bitmap _img = null;
+        private Bitmap img
+        {
+            get { return _img; }
+            set { _img = value; if (Button != null) { Button.IsEnabled = _img != null; } }
+        }
     }
 }
