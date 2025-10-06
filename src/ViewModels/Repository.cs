@@ -10,6 +10,7 @@ using Avalonia.Collections;
 using Avalonia.Threading;
 
 using CommunityToolkit.Mvvm.ComponentModel;
+using SourceGit.Models;
 
 namespace SourceGit.ViewModels
 {
@@ -839,6 +840,12 @@ namespace SourceGit.ViewModels
         {
             if (CanCreatePopup())
                 ShowPopup(new Apply(this));
+        }
+
+        public void RunCIPipeline(Commit commit)
+        {
+            if (CanCreatePopup())
+                ShowPopup(new RunCIPipeline(this, commit));
         }
 
         public async Task ExecCustomActionAsync(Models.CustomAction action, object scopeTarget)

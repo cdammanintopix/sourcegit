@@ -802,6 +802,36 @@ namespace SourceGit.Views
             menu.Items.Add(archive);
             menu.Items.Add(new MenuItem() { Header = "-" });
 
+            var ci = new MenuItem();
+            ci.Icon = App.CreateMenuIcon("Icons.Action");
+            ci.Header = "CI";
+            
+            var pipeline = new MenuItem();
+            pipeline.Icon = App.CreateMenuIcon("Icons.Action");
+            pipeline.Header = App.Text("CI.NewPipeline");
+            pipeline.Click += (_, e) =>
+            {
+                repo.RunCIPipeline(commit);
+                e.Handled = true;
+            };
+            ci.Items.Add(pipeline);
+
+            var refetch = new MenuItem();
+            refetch.Icon = App.CreateMenuIcon("Icons.Loading");
+            refetch.Header = App.Text("CI.Refetch");
+            refetch.Click += (_, ev) =>
+            {
+                var req = CI.GetReq(repo.Remotes, commit.SHA);
+                if (!string.IsNullOrEmpty(req))
+                    Models.CIManager.Instance.Request(req, true);
+
+                ev.Handled = true;
+            };
+            ci.Items.Add(refetch);
+            
+            menu.Items.Add(ci);
+            menu.Items.Add(new MenuItem() { Header = "-" });
+
             var actions = repo.GetCustomActions(Models.CustomActionScope.Commit);
             if (actions.Count > 0)
             {

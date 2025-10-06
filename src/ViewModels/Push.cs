@@ -182,8 +182,7 @@ namespace SourceGit.ViewModels
                 PushAllTags,
                 _repo.Submodules.Count > 0 && CheckSubmodules,
                 _isSetTrackOptionVisible && Tracking,
-                CISkip,
-                ForcePush).Use(log).RunAsync();
+                ForcePush, CISkip).Use(log).RunAsync();
 
             log.Complete();
             return succ;

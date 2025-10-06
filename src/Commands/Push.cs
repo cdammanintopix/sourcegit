@@ -4,7 +4,7 @@ namespace SourceGit.Commands
 {
     public class Push : Command
     {
-        public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool ciSkip, bool force)
+        public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force, bool ciSkip=false)
         {
             _remote = remote;
 
@@ -18,15 +18,15 @@ namespace SourceGit.Commands
                 Args += "--recurse-submodules=check ";
             if (track)
                 Args += "-u ";
-            if (ciSkip)
-                Args += "-o ci.skip ";
             if (force)
                 Args += "--force-with-lease ";
+            if (ciSkip)
+                Args += "-o ci.skip ";
 
             Args += $"{remote} {local}:{remoteBranch}";
         }
 
-        public Push(string repo, string remote, string refname, bool isDelete)
+        public Push(string repo, string remote, string refname, bool isDelete, string ciArgs="")
         {
             _remote = remote;
 
@@ -36,6 +36,9 @@ namespace SourceGit.Commands
 
             if (isDelete)
                 Args += "--delete ";
+
+            if (ciArgs.Length > 0)
+                Args += "-o ci.input=\"ci-args=" + ciArgs.Replace("\"", "\\\"") + "\" ";
 
             Args += $"{remote} {refname}";
         }
