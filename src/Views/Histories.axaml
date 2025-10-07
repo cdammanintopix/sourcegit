@@ -162,8 +162,8 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Button="{Binding $parent[Button]}"
-                            Remotes="{Binding $parent[v:Histories].((vm:Histories)DataContext).Repository.Remotes}"
-                            SHA="{Binding SHA}"
+                            Repository="{Binding $parent[v:Histories].((vm:Histories)DataContext).Repository}"
+                            Commit="{Binding}"
                             Opacity="{Binding IsMerged, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}}"
                             IsHitTestVisible="False"/>
                 </Button>

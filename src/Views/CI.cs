@@ -11,11 +11,11 @@ namespace SourceGit.Views
 {
     public class CI : Control, Models.ICIHost
     {
-        public static readonly StyledProperty<List<Models.Remote>> RemotesProperty =
-            AvaloniaProperty.Register<CI, List<Models.Remote>>(nameof(Remotes));
+        public static readonly StyledProperty<ViewModels.Repository> RepositoryProperty =
+            AvaloniaProperty.Register<CI, ViewModels.Repository>(nameof(Repository));
 
-        public static readonly StyledProperty<string> SHAProperty =
-            AvaloniaProperty.Register<CI, string>("SHA");
+        public static readonly StyledProperty<Models.Commit> CommitProperty =
+            AvaloniaProperty.Register<CI, Models.Commit>("Commit");
 
         public static readonly StyledProperty<bool> ShowDefaultIconIfNullProperty =
             AvaloniaProperty.Register<CI, bool>("ShowDefaultIconIfNull");
@@ -23,16 +23,16 @@ namespace SourceGit.Views
         public static readonly StyledProperty<Button> ButtonProperty =
             AvaloniaProperty.Register<CI, Button>("Button");
 
-        public List<Models.Remote> Remotes
+        public ViewModels.Repository Repository
         {
-            get => GetValue(RemotesProperty);
-            set => SetValue(RemotesProperty, value);
+            get => GetValue(RepositoryProperty);
+            set => SetValue(RepositoryProperty, value);
         }
 
-        public string SHA
+        public Models.Commit Commit
         {
-            get => GetValue(SHAProperty);
-            set => SetValue(SHAProperty, value);
+            get => GetValue(CommitProperty);
+            set => SetValue(CommitProperty, value);
         }
 
         public bool ShowDefaultIconIfNull
@@ -54,7 +54,7 @@ namespace SourceGit.Views
 
         public override void Render(DrawingContext context)
         {
-            if (Remotes == null || SHA == null)
+            if (Repository == null || Repository.Remotes == null || Commit == null)
                 return;
 
             var corner = (float)Math.Max(2, Bounds.Width / 16);
@@ -100,7 +100,7 @@ namespace SourceGit.Views
 
         public void OnCIResourceChanged(string req, Bitmap image)
         {
-            if (req.Equals(GetReq(Remotes, SHA), StringComparison.Ordinal))
+            if (req.Equals(GetReq(Repository.Remotes, Commit.SHA), StringComparison.Ordinal))
             {
                 img = image;
                 InvalidateVisual();
@@ -125,14 +125,17 @@ namespace SourceGit.Views
         {
             base.OnPropertyChanged(change);
 
-            if (change.Property == RemotesProperty || change.Property == SHAProperty)
+            if (change.Property == RepositoryProperty || change.Property == CommitProperty)
             {
-                var req = GetReq(Remotes, SHA);
-                if (string.IsNullOrEmpty(req))
-                    return;
+                if (Repository != null && Commit != null)
+                {
+                    var req = GetReq(Repository.Remotes, Commit.SHA);
+                    if (string.IsNullOrEmpty(req))
+                        return;
 
-                img = Models.CIManager.Instance.Request(req, false);
-                InvalidateVisual();
+                    img = Models.CIManager.Instance.Request(req, false);
+                    InvalidateVisual();
+                }
             }
         }
 
@@ -145,19 +148,29 @@ namespace SourceGit.Views
                 return;
             }
 
+            var menu = new ContextMenu();
+
+            var pipeline = new MenuItem();
+            pipeline.Icon = App.CreateMenuIcon("Icons.Action");
+            pipeline.Header = App.Text("CI.NewPipeline");
+            pipeline.Click += (_, e) =>
+            {
+                Repository.RunCIPipeline(Commit);
+                e.Handled = true;
+            };
+            menu.Items.Add(pipeline);
+
             var refetch = new MenuItem();
             refetch.Icon = App.CreateMenuIcon("Icons.Loading");
             refetch.Header = App.Text("CI.Refetch");
             refetch.Click += (_, ev) =>
             {
-                var req = GetReq(Remotes, SHA);
+                var req = GetReq(Repository.Remotes, Commit.SHA);
                 if (!string.IsNullOrEmpty(req))
                     Models.CIManager.Instance.Request(req, true);
 
                 ev.Handled = true;
             };
-
-            var menu = new ContextMenu();
             menu.Items.Add(refetch);
 
             menu.Open(this);

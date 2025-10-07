@@ -803,8 +803,8 @@ namespace SourceGit.Views
             menu.Items.Add(new MenuItem() { Header = "-" });
 
             var ci = new MenuItem();
-            ci.Icon = App.CreateMenuIcon("Icons.Action");
-            ci.Header = "CI";
+            ci.Icon = App.CreateMenuIcon("Icons.GitLab");
+            ci.Header = App.Text("CI.GitLab");
             
             var pipeline = new MenuItem();
             pipeline.Icon = App.CreateMenuIcon("Icons.Action");
