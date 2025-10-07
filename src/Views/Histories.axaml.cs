@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 
 using Avalonia;
 using Avalonia.Collections;
@@ -802,9 +803,9 @@ namespace SourceGit.Views
             menu.Items.Add(archive);
             menu.Items.Add(new MenuItem() { Header = "-" });
 
-            var ci = new MenuItem();
-            ci.Icon = App.CreateMenuIcon("Icons.GitLab");
-            ci.Header = App.Text("CI.GitLab");
+            var gitlab = new MenuItem();
+            gitlab.Icon = App.CreateMenuIcon("Icons.GitLab");
+            gitlab.Header = App.Text("CI.GitLab");
             
             var pipeline = new MenuItem();
             pipeline.Icon = App.CreateMenuIcon("Icons.Action");
@@ -814,7 +815,7 @@ namespace SourceGit.Views
                 repo.RunCIPipeline(commit);
                 e.Handled = true;
             };
-            ci.Items.Add(pipeline);
+            gitlab.Items.Add(pipeline);
 
             var refetch = new MenuItem();
             refetch.Icon = App.CreateMenuIcon("Icons.Loading");
@@ -827,9 +828,39 @@ namespace SourceGit.Views
 
                 ev.Handled = true;
             };
-            ci.Items.Add(refetch);
-            
-            menu.Items.Add(ci);
+            gitlab.Items.Add(refetch);
+
+            foreach (var d in commit.Decorators)
+            {
+                if (d.Type == Models.DecoratorType.RemoteBranchHead)
+                {
+                    var rb = repo.Branches.Find(x => !x.IsLocal && d.Name == x.FriendlyName);
+                    if (new List<string> { "default", "intopix", "master", "main" }.Contains(rb.Name))
+                        continue;
+
+                    var remote = repo.Remotes.Find(x => rb.Remote == x.Name);
+                    if (remote.TryGetVisitURL(out var link))
+                    {
+                        if (link.EndsWith(".git"))
+                            link = link.Substring(0, link.Length - 4);
+
+                        if (link.Contains("gitlab.intopix.com", StringComparison.Ordinal))
+                        {
+                            var mr = new MenuItem();
+                            mr.Icon = App.CreateMenuIcon("Icons.Merge");
+                            mr.Header = App.Text("CI.CreateMR", rb.Name);
+                            mr.Click += (_, ev) =>
+                            {
+                                Native.OS.OpenBrowser(link + "/-/merge_requests/new?merge_request%5Bsource_branch%5D=" + HttpUtility.UrlEncode(rb.Name));
+                                ev.Handled = true;
+                            };
+                            gitlab.Items.Add(mr);
+                        }
+                    }
+                }
+            }
+
+            menu.Items.Add(gitlab);
             menu.Items.Add(new MenuItem() { Header = "-" });
 
             var actions = repo.GetCustomActions(Models.CustomActionScope.Commit);
