@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SourceGit.Views;
 
 namespace SourceGit.ViewModels
 {
@@ -48,6 +49,15 @@ namespace SourceGit.ViewModels
                 Force).Use(log).RunAsync();
 
             log.Complete();
+
+            // Trigger CI status refresh
+            for (int i = 5; i > 0; i--)
+            {
+                ProgressDescription = "Refresh CI status... (" + i + ")";
+                await Task.Delay(1000);
+            }
+            CI.Refresh(_repo.Remotes, Revision.SHA);
+
             return succ;
         }
 

@@ -198,7 +198,7 @@ namespace SourceGit.ViewModels
 
             log.Complete();
 
-            // Trigger refresh
+            // Trigger CI status refresh
             for (int i = 5; i > 0; i--)
             {
                 ProgressDescription = "Refresh CI status... (" + i + ")";
