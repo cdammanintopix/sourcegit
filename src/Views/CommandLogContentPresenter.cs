@@ -151,8 +151,10 @@ namespace SourceGit.Views
             else if (change.Property == PureTextProperty)
             {
                 if (!string.IsNullOrEmpty(PureText))
+                {
                     Text = PureText;
-                ScrollToEnd();
+                    ScrollToEnd();
+                }
             }
         }
 
