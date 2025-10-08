@@ -23,10 +23,10 @@ namespace SourceGit.ViewModels
             var log = _repo.CreateLog("Run pipeline");
             Use(log);
 
-            var tagName = "run_" + Commit.SHA.Substring(0, 8);
-            var cmd = new Commands.Tag(_repo.FullPath, tagName).Use(log);
+            var branchName = "run_" + Commit.SHA.Substring(0, 8);
+            var cmd = new Commands.Branch(_repo.FullPath, branchName).Use(log);
             var succ = false;
-            succ = await cmd.AddAsync(Commit.SHA);
+            succ = await cmd.CreateAsync(Commit.SHA, true);
 
             if (succ && remotes != null)
             {
@@ -34,10 +34,10 @@ namespace SourceGit.ViewModels
                 {
                     if (remote.URL.Contains("gitlab.intopix.com"))
                     {
-                        if (await new Commands.Push(_repo.FullPath, remote.Name, $"refs/tags/{tagName}", false, CIArgs)
+                        if (await new Commands.Push(_repo.FullPath, remote.Name, $"refs/heads/{branchName}", false, CIArgs)
                             .Use(log)
                             .RunAsync())
-                            await new Commands.Push(_repo.FullPath, remote.Name, $"refs/tags/{tagName}", true)
+                            await new Commands.Push(_repo.FullPath, remote.Name, $"refs/heads/{branchName}", true)
                             .Use(log)
                             .RunAsync();
                     }
@@ -46,16 +46,19 @@ namespace SourceGit.ViewModels
 
             if (succ)
             {
-                succ = await new Commands.Tag(_repo.FullPath, tagName)
+                succ = await new Commands.Branch(_repo.FullPath, branchName)
                     .Use(log)
-                    .DeleteAsync();
+                    .DeleteLocalAsync();
             }
 
             log.Complete();
 
             // Trigger refresh
-            ProgressDescription = "Refresh CI status...";
-            await Task.Delay(3000);
+            for (int i = 5; i > 0; i--)
+            {
+                ProgressDescription = "Refresh CI status... (" + i + ")";
+                await Task.Delay(1000);
+            }
             var req = CI.GetReq(remotes, Commit.SHA);
             if (!string.IsNullOrEmpty(req))
                 Models.CIManager.Instance.Request(req, true);
