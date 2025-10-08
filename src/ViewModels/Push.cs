@@ -86,9 +86,20 @@ namespace SourceGit.ViewModels
 
         public bool CISkip
         {
-            get;
-            set;
-        } = false;
+            get => _ciSkip;
+            set
+            {
+                if (SetProperty(ref _ciSkip, value))
+                    OnPropertyChanged(nameof(IsCIArgsVisible));
+            }
+        }
+
+        public bool IsCIArgsVisible
+        {
+            get => !_ciSkip;
+        }
+
+        public string CIArgs { get; set; } = "";
 
         public bool PushAllTags
         {
@@ -182,7 +193,7 @@ namespace SourceGit.ViewModels
                 PushAllTags,
                 _repo.Submodules.Count > 0 && CheckSubmodules,
                 _isSetTrackOptionVisible && Tracking,
-                ForcePush, CISkip).Use(log).RunAsync();
+                ForcePush, _ciSkip, CIArgs).Use(log).RunAsync();
 
             log.Complete();
             return succ;
@@ -240,5 +251,6 @@ namespace SourceGit.ViewModels
         private List<Models.Branch> _remoteBranches = [];
         private Models.Branch _selectedRemoteBranch = null;
         private bool _isSetTrackOptionVisible = false;
+        private bool _ciSkip = false;
     }
 }

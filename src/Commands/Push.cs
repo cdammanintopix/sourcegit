@@ -4,7 +4,7 @@ namespace SourceGit.Commands
 {
     public class Push : Command
     {
-        public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force, bool ciSkip=false)
+        public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force, bool ciSkip=false, string ciArgs="")
         {
             _remote = remote;
 
@@ -22,6 +22,8 @@ namespace SourceGit.Commands
                 Args += "--force-with-lease ";
             if (ciSkip)
                 Args += "-o ci.skip ";
+            else if (ciArgs.Length > 0)
+                Args += "-o ci.input=\"ci-args=" + ciArgs.Replace("\"", "\\\"") + "\" ";
 
             Args += $"{remote} {local}:{remoteBranch}";
         }

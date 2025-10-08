@@ -35,14 +35,14 @@
 
     <Grid Height="32" ColumnDefinitions="150,*">
       <TextBlock Grid.Column="0"
-                 Text="CI Args"
                  HorizontalAlignment="Right" VerticalAlignment="Center"
-                 Margin="0,0,8,0"/>
+                 Margin="0,0,8,0"
+                 Text="{DynamicResource Text.CI.Args}"/>
       <TextBox Grid.Column="1"
                Height="28"
                VerticalAlignment="Center"
                CornerRadius="3"
-               Watermark="{DynamicResource Text.CI.Args}"
+               Watermark="{DynamicResource Text.CI.ArgsWatermark}"
                Text="{Binding CIArgs}"/>
     </Grid>
   </StackPanel>
