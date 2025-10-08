@@ -803,65 +803,7 @@ namespace SourceGit.Views
             menu.Items.Add(archive);
             menu.Items.Add(new MenuItem() { Header = "-" });
 
-            var gitlab = new MenuItem();
-            gitlab.Icon = App.CreateMenuIcon("Icons.GitLab");
-            gitlab.Header = App.Text("CI.GitLab");
-            
-            var pipeline = new MenuItem();
-            pipeline.Icon = App.CreateMenuIcon("Icons.Action");
-            pipeline.Header = App.Text("CI.NewPipeline");
-            pipeline.Click += (_, e) =>
-            {
-                repo.RunCIPipeline(commit);
-                e.Handled = true;
-            };
-            gitlab.Items.Add(pipeline);
-
-            var refetch = new MenuItem();
-            refetch.Icon = App.CreateMenuIcon("Icons.Loading");
-            refetch.Header = App.Text("CI.Refetch");
-            refetch.Click += (_, ev) =>
-            {
-                var req = CI.GetReq(repo.Remotes, commit.SHA);
-                if (!string.IsNullOrEmpty(req))
-                    Models.CIManager.Instance.Request(req, true);
-
-                ev.Handled = true;
-            };
-            gitlab.Items.Add(refetch);
-
-            foreach (var d in commit.Decorators)
-            {
-                if (d.Type == Models.DecoratorType.RemoteBranchHead)
-                {
-                    var rb = repo.Branches.Find(x => !x.IsLocal && d.Name == x.FriendlyName);
-                    if (new List<string> { "default", "intopix", "master", "main" }.Contains(rb.Name))
-                        continue;
-
-                    var remote = repo.Remotes.Find(x => rb.Remote == x.Name);
-                    if (remote.TryGetVisitURL(out var link))
-                    {
-                        if (link.EndsWith(".git"))
-                            link = link.Substring(0, link.Length - 4);
-
-                        if (link.Contains("gitlab.intopix.com", StringComparison.Ordinal))
-                        {
-                            var mr = new MenuItem();
-                            mr.Icon = App.CreateMenuIcon("Icons.Merge");
-                            mr.Header = App.Text("CI.CreateMR", rb.Name);
-                            mr.Click += (_, ev) =>
-                            {
-                                Native.OS.OpenBrowser(link + "/-/merge_requests/new?merge_request%5Bsource_branch%5D=" + HttpUtility.UrlEncode(rb.Name));
-                                ev.Handled = true;
-                            };
-                            gitlab.Items.Add(mr);
-                        }
-                    }
-                }
-            }
-
-            menu.Items.Add(gitlab);
-            menu.Items.Add(new MenuItem() { Header = "-" });
+            FillGitLabMenu(menu, repo, commit);
 
             var actions = repo.GetCustomActions(Models.CustomActionScope.Commit);
             if (actions.Count > 0)
@@ -956,6 +898,69 @@ namespace SourceGit.Views
             menu.Items.Add(copy);
 
             return menu;
+        }
+
+        private void FillGitLabMenu(ContextMenu menu, ViewModels.Repository repo, Models.Commit commit)
+        {
+            var gitlab = new MenuItem();
+            gitlab.Icon = App.CreateMenuIcon("Icons.GitLab");
+            gitlab.Header = App.Text("CI.GitLab");
+
+            var pipeline = new MenuItem();
+            pipeline.Icon = App.CreateMenuIcon("Icons.Action");
+            pipeline.Header = App.Text("CI.NewPipeline");
+            pipeline.Click += (_, e) =>
+            {
+                repo.RunCIPipeline(commit);
+                e.Handled = true;
+            };
+            gitlab.Items.Add(pipeline);
+
+            var refetch = new MenuItem();
+            refetch.Icon = App.CreateMenuIcon("Icons.Loading");
+            refetch.Header = App.Text("CI.Refetch");
+            refetch.Click += (_, ev) =>
+            {
+                var req = CI.GetReq(repo.Remotes, commit.SHA);
+                if (!string.IsNullOrEmpty(req))
+                    Models.CIManager.Instance.Request(req, true);
+
+                ev.Handled = true;
+            };
+            gitlab.Items.Add(refetch);
+
+            foreach (var d in commit.Decorators)
+            {
+                if (d.Type == Models.DecoratorType.RemoteBranchHead)
+                {
+                    var rb = repo.Branches.Find(x => !x.IsLocal && d.Name == x.FriendlyName);
+                    if (new List<string> { "default", "intopix", "master", "main" }.Contains(rb.Name))
+                        continue;
+
+                    var remote = repo.Remotes.Find(x => rb.Remote == x.Name);
+                    if (remote.TryGetVisitURL(out var link))
+                    {
+                        if (link.EndsWith(".git"))
+                            link = link.Substring(0, link.Length - 4);
+
+                        if (link.Contains("gitlab.intopix.com", StringComparison.Ordinal))
+                        {
+                            var mr = new MenuItem();
+                            mr.Icon = App.CreateMenuIcon("Icons.Merge");
+                            mr.Header = App.Text("CI.CreateMR", rb.Name);
+                            mr.Click += (_, ev) =>
+                            {
+                                Native.OS.OpenBrowser(link + "/-/merge_requests/new?merge_request%5Bsource_branch%5D=" + HttpUtility.UrlEncode(rb.Name));
+                                ev.Handled = true;
+                            };
+                            gitlab.Items.Add(mr);
+                        }
+                    }
+                }
+            }
+
+            menu.Items.Add(gitlab);
+            menu.Items.Add(new MenuItem() { Header = "-" });
         }
 
         private void FillCurrentBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch current)
