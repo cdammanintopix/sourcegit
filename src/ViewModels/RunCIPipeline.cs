@@ -59,9 +59,7 @@ namespace SourceGit.ViewModels
                 ProgressDescription = "Refresh CI status... (" + i + ")";
                 await Task.Delay(1000);
             }
-            var req = CI.GetReq(remotes, Commit.SHA);
-            if (!string.IsNullOrEmpty(req))
-                Models.CIManager.Instance.Request(req, true);
+            CI.Refresh(remotes, Commit.SHA);
 
             return succ;
         }

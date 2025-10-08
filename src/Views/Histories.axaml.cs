@@ -733,7 +733,7 @@ namespace SourceGit.Views
                     menu.Items.Add(new MenuItem() { Header = "-" });
                 }
 
-                var compareWithHead = new MenuItem();
+                    var compareWithHead = new MenuItem();
                 compareWithHead.Header = App.Text("CommitCM.CompareWithHead");
                 compareWithHead.Icon = App.CreateMenuIcon("Icons.Compare");
                 compareWithHead.Click += async (_, e) =>
@@ -1262,10 +1262,7 @@ namespace SourceGit.Views
             refetch.Header = App.Text("CI.Refetch");
             refetch.Click += (_, ev) =>
             {
-                var req = CI.GetReq(repo.Remotes, commit.SHA);
-                if (!string.IsNullOrEmpty(req))
-                    Models.CIManager.Instance.Request(req, true);
-
+                CI.Refresh(repo.Remotes, commit.SHA);
                 ev.Handled = true;
             };
             gitlab.Items.Add(refetch);

@@ -98,6 +98,13 @@ namespace SourceGit.Views
             return "";
         }
 
+        public static void Refresh(List<Models.Remote> remotes, string sha)
+        {
+            var req = GetReq(remotes, sha);
+            if (!string.IsNullOrEmpty(req))
+                Models.CIManager.Instance.Request(req, true);
+        }
+
         public void OnCIResourceChanged(string req, Bitmap image)
         {
             if (req.Equals(GetReq(Repository.Remotes, Commit.SHA), StringComparison.Ordinal))
