@@ -24,7 +24,7 @@
     <TrimMode>link</TrimMode>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(DisableUpdateDetection)' == 'true'">
+  <PropertyGroup Condition="'true' == 'true'">
     <DefineConstants>$(DefineConstants);DISABLE_UPDATE_DETECTION</DefineConstants>
   </PropertyGroup>
 
