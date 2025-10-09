@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -87,6 +88,8 @@ namespace SourceGit.Models
                     if (matchIntopixUser.Success) {
                         try
                         {
+                            Dns.GetHostEntry("gitlab.intopix.com"); // This raise an early exception if not connected to the VPN
+
                             using var client = new HttpClient();
                             client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", Environment.GetEnvironmentVariable("SOURCEGIT_GITLAB_TOKEN"));
                             client.Timeout = TimeSpan.FromSeconds(2);

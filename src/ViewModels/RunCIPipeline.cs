@@ -53,13 +53,16 @@ namespace SourceGit.ViewModels
 
             log.Complete();
 
-            // Trigger CI status refresh
-            for (int i = 5; i > 0; i--)
+            if (succ)
             {
-                ProgressDescription = "Refresh CI status... (" + i + ")";
-                await Task.Delay(1000);
+                // Trigger CI status refresh
+                for (int i = 5; i > 0; i--)
+                {
+                    ProgressDescription = "Refresh CI status... (" + i + ")";
+                    await Task.Delay(1000);
+                }
+                CI.Refresh(remotes, Commit.SHA);
             }
-            CI.Refresh(remotes, Commit.SHA);
 
             return succ;
         }

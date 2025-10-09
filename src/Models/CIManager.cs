@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -64,6 +65,8 @@ namespace SourceGit.Models
                     Bitmap img = null;
                     try
                     {
+                        Dns.GetHostEntry("gitlab.intopix.com"); // This raise an early exception if not connected to the VPN
+
                         using var client = new HttpClient();
                         client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", Environment.GetEnvironmentVariable("SOURCEGIT_GITLAB_TOKEN"));
                         client.Timeout = TimeSpan.FromSeconds(2);
