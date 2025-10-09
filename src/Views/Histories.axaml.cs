@@ -1250,9 +1250,6 @@ namespace SourceGit.Views
                 if (d.Type == Models.DecoratorType.RemoteBranchHead)
                 {
                     var rb = repo.Branches.Find(x => !x.IsLocal && d.Name == x.FriendlyName);
-                    if (new List<string> { "default", "intopix", "master", "main" }.Contains(rb.Name))
-                        continue;
-
                     var remote = repo.Remotes.Find(x => rb.Remote == x.Name);
                     if (remote.TryGetVisitURL(out var link))
                     {
