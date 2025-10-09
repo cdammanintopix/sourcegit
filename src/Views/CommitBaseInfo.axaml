@@ -77,7 +77,7 @@
             </Button>
 
             <Button Classes="icon_button" Width="24" Cursor="Hand" Click="OnOpenCILink" ToolTip.Tip="{DynamicResource Text.CommitDetail.Info.WebLinks}">
-              <v:CI Grid.Column="0" Width="16" Height="16" Repository="{Binding $parent[v:Histories].((vm:Histories)DataContext)?.Repository}" Commit="{Binding}" ShowDefaultIconIfNull="True"/>
+              <v:CI Grid.Column="0" Width="16" Height="16" Repository="{Binding $parent[v:Repository].((vm:Repository)DataContext)}" Commit="{Binding}" ShowDefaultIconIfNull="True"/>
             </Button>
 
             <ContentControl Content="{Binding #ThisControl.SignInfo}">
