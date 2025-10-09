@@ -63,6 +63,7 @@ namespace SourceGit.Models
                     string route = req.Substring(0, req.LastIndexOf("/"));
                     string sha = req.Substring(req.LastIndexOf("/") + 1);
                     Bitmap img = null;
+                    bool failed = false;
                     try
                     {
                         Dns.GetHostEntry("gitlab.intopix.com"); // This raise an early exception if not connected to the VPN
@@ -87,7 +88,7 @@ namespace SourceGit.Models
                     }
                     catch
                     {
-                        // ignored
+                        failed = true;
                     }
 
                     lock (_synclock)
@@ -97,8 +98,12 @@ namespace SourceGit.Models
 
                     Dispatcher.UIThread.Post(() =>
                     {
-                        _resources[req] = img;
-                        NotifyResourceChanged(req, img);
+                        if (!failed)
+                        {
+                            _resources[req] = img;
+                            NotifyResourceChanged(req, img);
+                        }
+
                     });
                 }
 
