@@ -85,6 +85,18 @@ namespace SourceGit.ViewModels
             set;
         } = true;
 
+        public bool PushAllTags
+        {
+            get => _repo.Settings.PushAllTags;
+            set => _repo.Settings.PushAllTags = value;
+        }
+
+        public bool ForcePush
+        {
+            get;
+            set;
+        }
+
         public bool CISkip
         {
             get => _ciSkip;
@@ -101,18 +113,6 @@ namespace SourceGit.ViewModels
         }
 
         public string CIArgs { get; set; } = "";
-
-        public bool PushAllTags
-        {
-            get => _repo.Settings.PushAllTags;
-            set => _repo.Settings.PushAllTags = value;
-        }
-
-        public bool ForcePush
-        {
-            get;
-            set;
-        }
 
         public Push(Repository repo, Models.Branch localBranch)
         {

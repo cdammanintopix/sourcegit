@@ -22,6 +22,23 @@ namespace SourceGit.ViewModels
             set;
         }
 
+        public bool CISkip
+        {
+            get => _ciSkip;
+            set
+            {
+                if (SetProperty(ref _ciSkip, value))
+                    OnPropertyChanged(nameof(IsCIArgsVisible));
+            }
+        }
+
+        public bool IsCIArgsVisible
+        {
+            get => !_ciSkip;
+        }
+
+        public string CIArgs { get; set; } = "";
+
         public PushRevision(Repository repo, Models.Commit revision, Models.Branch remoteBranch)
         {
             _repo = repo;
@@ -46,7 +63,7 @@ namespace SourceGit.ViewModels
                 false,
                 false,
                 false,
-                Force).Use(log).RunAsync();
+                Force, _ciSkip, CIArgs).Use(log).RunAsync();
 
             log.Complete();
 
@@ -62,5 +79,6 @@ namespace SourceGit.ViewModels
         }
 
         private readonly Repository _repo;
+        private bool _ciSkip = false;
     }
 }

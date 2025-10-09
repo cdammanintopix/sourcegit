@@ -12,7 +12,7 @@
                Classes="bold"
                Text="{DynamicResource Text.Push.Revision.Title}"/>
 
-    <Grid Margin="0,16,0,0" RowDefinitions="32,32,32" ColumnDefinitions="130,*">
+    <Grid Margin="0,16,0,0" RowDefinitions="32,32,32,32,Auto" ColumnDefinitions="130,*">
       <TextBlock Grid.Row="0" Grid.Column="0"
                  HorizontalAlignment="Right" VerticalAlignment="Center"
                  Margin="0,0,8,0"
@@ -45,6 +45,24 @@
                 Content="{DynamicResource Text.Push.Force}"
                 IsChecked="{Binding Force, Mode=TwoWay}"
                 ToolTip.Tip="--force-with-lease"/>
+
+      <CheckBox Grid.Row="3" Grid.Column="1"
+                Content="{DynamicResource Text.Push.CISkip}"
+                IsChecked="{Binding CISkip, Mode=TwoWay}"
+                ToolTip.Tip="-o ci.skip"/>
+
+      <TextBlock Grid.Row="4" Grid.Column="0"
+                 HorizontalAlignment="Right" VerticalAlignment="Center"
+                 Margin="0,0,8,0"
+                 Text="{DynamicResource Text.CI.Args}"
+                 IsVisible="{Binding IsCIArgsVisible}"/>
+      <TextBox Grid.Row="4" Grid.Column="1"
+               Height="28"
+               VerticalAlignment="Center"
+               CornerRadius="3"
+               Watermark="{DynamicResource Text.CI.ArgsWatermark}"
+               Text="{Binding CIArgs}"
+               IsVisible="{Binding IsCIArgsVisible}"/>
     </Grid>
   </StackPanel>
 </UserControl>
