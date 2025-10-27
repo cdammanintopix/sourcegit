@@ -762,7 +762,7 @@ namespace SourceGit.Views
                 menu.Items.Add(new MenuItem() { Header = "-" });
                 menu.Items.Add(compareWithCurrent);
 
-                if (repo.LocalChangesCount > 0)
+                // if (repo.LocalChangesCount > 0)
                 {
                     var compareWithWorktree = new MenuItem();
                     compareWithWorktree.Header = App.Text("BranchCM.CompareWithWorktree");
@@ -1036,7 +1036,7 @@ namespace SourceGit.Views
                 menu.Items.Add(compareWithHead);
             }
 
-            if (repo.LocalChangesCount > 0)
+            // if (repo.LocalChangesCount > 0)
             {
                 var compareWithWorktree = new MenuItem();
                 compareWithWorktree.Header = App.Text("BranchCM.CompareWithWorktree");
