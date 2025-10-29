@@ -32,6 +32,7 @@ namespace SourceGit.Models
             {
                 Supported = new List<ExternalMerger>() {
                     new ExternalMerger("git", "Use Git Settings", "", "", ""),
+                    new ExternalMerger("pycharm", "PyCharm", "pycharm64.exe", "merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"", "diff \"$LOCAL\" \"$REMOTE\""),
                     new ExternalMerger("vscode", "Visual Studio Code", "Code.exe", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
                     new ExternalMerger("vscode_insiders", "Visual Studio Code - Insiders", "Code - Insiders.exe", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
                     new ExternalMerger("vs", "Visual Studio", "vsDiffMerge.exe", "\"$REMOTE\" \"$LOCAL\" \"$BASE\" \"$MERGED\" /m", "\"$LOCAL\" \"$REMOTE\""),
@@ -64,6 +65,7 @@ namespace SourceGit.Models
             {
                 Supported = new List<ExternalMerger>() {
                     new ExternalMerger("git", "Use Git Settings", "", "", ""),
+                    new ExternalMerger("pycharm", "PyCharm", "pycharm", "merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"", "diff \"$LOCAL\" \"$REMOTE\""),
                     new ExternalMerger("vscode", "Visual Studio Code", "/usr/share/code/code", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
                     new ExternalMerger("vscode_insiders", "Visual Studio Code - Insiders", "/usr/share/code-insiders/code-insiders", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
                     new ExternalMerger("kdiff3", "KDiff3", "/usr/bin/kdiff3", "\"$REMOTE\" -b \"$BASE\" \"$LOCAL\" -o \"$MERGED\"", "\"$LOCAL\" \"$REMOTE\""),
@@ -80,6 +82,7 @@ namespace SourceGit.Models
                     new ExternalMerger("git", "Use Git Settings", "", "", ""),
                 };
             }
+//             if (ExternalToolsFinder)
         }
 
         public string[] GetPatternsToFindExecFile()
