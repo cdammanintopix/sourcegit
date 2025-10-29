@@ -82,7 +82,6 @@ namespace SourceGit.Models
                     new ExternalMerger("git", "Use Git Settings", "", "", ""),
                 };
             }
-//             if (ExternalToolsFinder)
         }
 
         public string[] GetPatternsToFindExecFile()
