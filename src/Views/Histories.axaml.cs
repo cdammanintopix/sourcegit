@@ -1273,34 +1273,6 @@ namespace SourceGit.Views
                 ev.Handled = true;
             };
             gitlab.Items.Add(refetch);
-
-            foreach (var d in commit.Decorators)
-            {
-                if (d.Type == Models.DecoratorType.RemoteBranchHead)
-                {
-                    var rb = repo.Branches.Find(x => !x.IsLocal && d.Name == x.FriendlyName);
-                    var remote = repo.Remotes.Find(x => rb.Remote == x.Name);
-                    if (remote.TryGetVisitURL(out var link))
-                    {
-                        if (link.EndsWith(".git"))
-                            link = link.Substring(0, link.Length - 4);
-
-                        if (link.Contains("gitlab.intopix.com", StringComparison.Ordinal))
-                        {
-                            var mr = new MenuItem();
-                            mr.Icon = App.CreateMenuIcon("Icons.Merge");
-                            mr.Header = App.Text("CI.CreateMR", rb.Name);
-                            mr.Click += (_, ev) =>
-                            {
-                                Native.OS.OpenBrowser(link + "/-/merge_requests/new?merge_request%5Bsource_branch%5D=" + HttpUtility.UrlEncode(rb.Name));
-                                ev.Handled = true;
-                            };
-                            gitlab.Items.Add(mr);
-                        }
-                    }
-                }
-            }
-
             menu.Items.Add(gitlab);
             menu.Items.Add(new MenuItem() { Header = "-" });
         }
