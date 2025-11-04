@@ -761,7 +761,7 @@ namespace SourceGit.Views
                     menu.Items.Add(new MenuItem() { Header = "-" });
                 }
 
-                    var compareWithHead = new MenuItem();
+                var compareWithHead = new MenuItem();
                 compareWithHead.Header = App.Text("CommitCM.CompareWithHead");
                 compareWithHead.Icon = App.CreateMenuIcon("Icons.Compare");
                 compareWithHead.Click += async (_, e) =>

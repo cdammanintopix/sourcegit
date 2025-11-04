@@ -101,6 +101,7 @@ namespace SourceGit.Views
         {
             AppendText("\n");
             AppendText(line);
+            ScrollToEnd();
         }
 
         protected override void OnLoaded(RoutedEventArgs e)

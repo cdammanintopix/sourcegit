@@ -232,6 +232,10 @@ namespace SourceGit.Views
                             repo.IsSearching = false;
                             e.Handled = true;
                             return;
+                        case Key.P when e.KeyModifiers.HasFlag(KeyModifiers.Shift):
+                            vm.OpenCommandPalette(new ViewModels.RepositoryCommandPalette(vm, repo));
+                            e.Handled = true;
+                            return;
                     }
                 }
                 else
@@ -250,8 +254,8 @@ namespace SourceGit.Views
             }
             else if (e.Key == Key.Escape)
             {
-                if (vm.QuickLauncher != null)
-                    vm.QuickLauncher = null;
+                if (vm.CommandPalette != null)
+                    vm.CancelCommandPalette();
                 else
                     vm.ActivePage.CancelPopup();
 
@@ -355,17 +359,17 @@ namespace SourceGit.Views
             e.Handled = true;
         }
 
-        private void OnOpenQuickLauncher(object sender, RoutedEventArgs e)
+        private void OnOpenPagesCommandPalette(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Launcher launcher)
-                launcher.QuickLauncher = new ViewModels.QuickLauncher(launcher);
+                launcher.OpenCommandPalette(new ViewModels.LauncherPagesCommandPalette(launcher));
             e.Handled = true;
         }
 
-        private void OnCloseQuickLauncher(object sender, PointerPressedEventArgs e)
+        private void OnCloseCommandPalette(object sender, PointerPressedEventArgs e)
         {
             if (e.Source == sender && DataContext is ViewModels.Launcher launcher)
-                launcher.QuickLauncher = null;
+                launcher.CancelCommandPalette();
             e.Handled = true;
         }
 

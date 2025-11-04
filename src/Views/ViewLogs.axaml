@@ -13,8 +13,7 @@
                     Icon="/App.ico"
                     Width="1200" Height="600"
                     CanResize="True"
-                    WindowStartupLocation="CenterOwner"
-                    Loaded="OnLoaded">
+                    WindowStartupLocation="CenterOwner">
   <Grid RowDefinitions="Auto,*,Auto">
     <!-- TitleBar -->
     <Grid Grid.Row="0" Height="28" IsVisible="{Binding !#ThisControl.UseSystemWindowFrame}">
