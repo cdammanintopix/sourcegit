@@ -1065,6 +1065,17 @@ namespace SourceGit.Views
                     e.Handled = true;
                 };
                 submenu.Items.Add(merge);
+
+                var rebase = new MenuItem();
+                rebase.Header = App.Text("BranchCM.Rebase", current.Name, branch.Name);
+                rebase.Icon = App.CreateMenuIcon("Icons.Rebase");
+                rebase.Click += (_, e) =>
+                {
+                    if (repo.CanCreatePopup())
+                        repo.ShowPopup(new ViewModels.Rebase(repo, current, branch));
+                    e.Handled = true;
+                };
+                submenu.Items.Add(rebase);
             }
 
             var rename = new MenuItem();
@@ -1158,6 +1169,17 @@ namespace SourceGit.Views
             };
 
             submenu.Items.Add(merge);
+
+            var rebase = new MenuItem();
+            rebase.Header = App.Text("BranchCM.Rebase", current.Name, name);
+            rebase.Icon = App.CreateMenuIcon("Icons.Rebase");
+            rebase.Click += (_, e) =>
+            {
+                if (repo.CanCreatePopup())
+                    repo.ShowPopup(new ViewModels.Rebase(repo, current, branch));
+                e.Handled = true;
+            };
+            submenu.Items.Add(rebase);
 
             var delete = new MenuItem();
             delete.Header = App.Text("BranchCM.Delete", name);
