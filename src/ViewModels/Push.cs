@@ -229,12 +229,8 @@ namespace SourceGit.ViewModels
             if (succ)
             {
                 // Trigger CI status refresh
-                for (int i = 5; i > 0; i--)
-                {
-                    ProgressDescription = "Refresh CI status... (" + i + ")";
-                    await Task.Delay(1000);
-                }
-                CI.Refresh(_repo.Remotes, _selectedLocalBranch.Head);
+                var head = await new Commands.QuerySingleCommit(_repo.FullPath, _selectedLocalBranch.Name).GetResultAsync();
+                CI.QueueForNextRefresh(_repo.Remotes, head.SHA);
             }
 
             return succ;

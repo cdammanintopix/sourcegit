@@ -61,9 +61,9 @@ namespace SourceGit.Views
             var rect = new Rect(0, 0, Bounds.Width, Bounds.Height);
             var clip = context.PushClip(new RoundedRect(rect, corner));
 
-            if (img != null)
+            if (!string.IsNullOrEmpty(status))
             {
-                context.DrawImage(img, rect);
+                context.DrawImage(new Bitmap(AssetLoader.Open(new Uri($"avares://SourceGit/Resources/Images/{status}.png", UriKind.RelativeOrAbsolute))), rect);
             }
             else if (ShowDefaultIconIfNull)
             {
@@ -98,6 +98,13 @@ namespace SourceGit.Views
             return "";
         }
 
+        public static void QueueForNextRefresh(List<Models.Remote> remotes, string sha)
+        {
+            var req = GetReq(remotes, sha);
+            if (!string.IsNullOrEmpty(req))
+                Models.CIManager.Instance.QueueForNextRefresh(req);
+        }
+
         public static void Refresh(List<Models.Remote> remotes, string sha)
         {
             var req = GetReq(remotes, sha);
@@ -105,11 +112,18 @@ namespace SourceGit.Views
                 Models.CIManager.Instance.Request(req, true);
         }
 
-        public void OnCIResourceChanged(string req, Bitmap image)
+        public static void Clear(List<Models.Remote> remotes)
+        {
+            var req = GetReq(remotes, "");
+            if (!string.IsNullOrEmpty(req))
+                Models.CIManager.Instance.Clear(req);
+        }
+
+        public void OnCIResourceChanged(string req, string status_)
         {
             if (req.Equals(GetReq(Repository.Remotes, Commit.SHA), StringComparison.Ordinal))
             {
-                img = image;
+                status = status_;
                 InvalidateVisual();
             }
         }
@@ -140,7 +154,7 @@ namespace SourceGit.Views
                     if (string.IsNullOrEmpty(req))
                         return;
 
-                    img = Models.CIManager.Instance.Request(req, false);
+                    status = Models.CIManager.Instance.Request(req, false);
                     InvalidateVisual();
                 }
             }
@@ -172,9 +186,7 @@ namespace SourceGit.Views
             refetch.Header = App.Text("CI.Refetch");
             refetch.Click += (_, ev) =>
             {
-                var req = GetReq(Repository.Remotes, Commit.SHA);
-                if (!string.IsNullOrEmpty(req))
-                    Models.CIManager.Instance.Request(req, true);
+                Refresh(Repository.Remotes, Commit.SHA);
 
                 ev.Handled = true;
             };
@@ -183,11 +195,11 @@ namespace SourceGit.Views
             menu.Open(this);
         }
 
-        private Bitmap _img = null;
-        private Bitmap img
+        private string _status = null;
+        private string status
         {
-            get { return _img; }
-            set { _img = value; if (Button != null) { Button.IsEnabled = _img != null; } }
+            get { return _status; }
+            set { _status = value; if (Button != null) { Button.IsEnabled = _status != null; } }
         }
     }
 }

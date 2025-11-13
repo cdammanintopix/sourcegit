@@ -70,12 +70,7 @@ namespace SourceGit.ViewModels
             if (succ)
             {
                 // Trigger CI status refresh
-                for (int i = 5; i > 0; i--)
-                {
-                    ProgressDescription = "Refresh CI status... (" + i + ")";
-                    await Task.Delay(1000);
-                }
-                CI.Refresh(_repo.Remotes, Revision.SHA);
+                CI.QueueForNextRefresh(_repo.Remotes, Revision.SHA);
             }
 
             return succ;

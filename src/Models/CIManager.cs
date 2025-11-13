@@ -1,20 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Threading;
 
 namespace SourceGit.Models
 {
     public interface ICIHost
     {
-        void OnCIResourceChanged(string req, Bitmap image);
+        void OnCIResourceChanged(string req, string status);
     }
 
     public partial class CIManager
@@ -30,23 +29,38 @@ namespace SourceGit.Models
         private static CIManager _instance = null;
 
         private readonly Lock _synclock = new();
-        private List<ICIHost> _CIs = new List<ICIHost>();
-        private Dictionary<string, Bitmap> _resources = new Dictionary<string, Bitmap>();
-        private HashSet<string> _requesting = new HashSet<string>();
+        private List<ICIHost> _CIs = [];
+        private Dictionary<string, KeyValuePair<string, bool>> _resources = [];
+        private HashSet<string> _requesting = [];
 
         [GeneratedRegex(@"^\[\{.*""status"":""([a-z]+)")]
         private static partial Regex REG_PIPELINE();
+
+        private static bool StatusNeedsRefresh(string status)
+        {
+            return new List<string> { 
+                "created",
+                "pending",
+                "canceling",
+                "running"
+            }.Contains(status);
+        }
 
         public void Start()
         {
             Task.Run(async () =>
             {
+                var lastRefresh = DateTime.Now;
                 while (true)
                 {
                     string req = null;
 
                     lock (_synclock)
                     {
+                        if (DateTime.Now - lastRefresh >= TimeSpan.FromSeconds(5))
+                        {
+                            _resources.Where(res => res.Value.Value).ToList().ForEach(res => _requesting.Add(res.Key));
+                        }
                         foreach (var one in _requesting)
                         {
                             req = one;
@@ -60,9 +74,10 @@ namespace SourceGit.Models
                         continue;
                     }
 
-                    string route = req.Substring(0, req.LastIndexOf("/"));
-                    string sha = req.Substring(req.LastIndexOf("/") + 1);
-                    Bitmap img = null;
+                    string route = req[..req.LastIndexOf("/")];
+                    string sha = req[(req.LastIndexOf("/") + 1)..];
+                    string status = null;
+                    bool needsRefresh = _resources.TryGetValue(req, out var value) ? value.Value : false;
                     bool failed = false;
                     try
                     {
@@ -77,12 +92,13 @@ namespace SourceGit.Models
                             var pipelines = await rsp.Content.ReadAsStringAsync();
                             int firstEnd = pipelines.IndexOf("},{");
                             if (firstEnd > 0) {
-                                pipelines = pipelines.Substring(0, firstEnd);
+                                pipelines = pipelines[..firstEnd];
                             }
                             var matchPipeline = REG_PIPELINE().Match(pipelines);
                             if (matchPipeline.Success)
                             {
-                                img = new Bitmap(AssetLoader.Open(new Uri($"avares://SourceGit/Resources/Images/{matchPipeline.Groups[1].Value}.png", UriKind.RelativeOrAbsolute)));
+                                status = matchPipeline.Groups[1].Value;
+                                needsRefresh = StatusNeedsRefresh(status);
                             }
                         }
                     }
@@ -96,14 +112,15 @@ namespace SourceGit.Models
                         _requesting.Remove(req);
                     }
 
+                    lastRefresh = DateTime.Now;
+
                     Dispatcher.UIThread.Post(() =>
                     {
                         if (!failed)
                         {
-                            _resources[req] = img;
-                            NotifyResourceChanged(req, img);
+                            _resources[req] = new KeyValuePair<string, bool>(status, needsRefresh);
+                            NotifyResourceChanged(req, status);
                         }
-
                     });
                 }
 
@@ -121,8 +138,15 @@ namespace SourceGit.Models
             _CIs.Remove(host);
         }
 
-        public Bitmap Request(string req, bool forceRefetch)
+        public void QueueForNextRefresh(string req)
         {
+            _resources[req] = new KeyValuePair<string, bool>(null, true);
+        }
+
+        public string Request(string req, bool forceRefetch)
+        {
+            string status = null;
+
             if (forceRefetch)
             {
                 _resources.Remove(req);
@@ -131,7 +155,13 @@ namespace SourceGit.Models
             else
             {
                 if (_resources.TryGetValue(req, out var value))
-                    return value;
+                {
+                    status = value.Key;
+                    if (!value.Value)
+                    {
+                        return status;
+                    }
+                }
             }
 
             lock (_synclock)
@@ -139,13 +169,28 @@ namespace SourceGit.Models
                 _requesting.Add(req);
             }
 
-            return null;
+            return status;
         }
 
-        private void NotifyResourceChanged(string req, Bitmap image)
+        public void Clear(string req_prefix = "")
+        {
+            if (!string.IsNullOrEmpty(req_prefix))
+            {
+                foreach (var req in _resources.Keys.Where(k => k.StartsWith(req_prefix, StringComparison.OrdinalIgnoreCase)).ToList())
+                {
+                    _resources.Remove(req);
+                }
+            }
+            else
+            {
+                _resources.Clear();
+            }
+        }
+
+        private void NotifyResourceChanged(string req, string status)
         {
             foreach (var ci in _CIs)
-                ci.OnCIResourceChanged(req, image);
+                ci.OnCIResourceChanged(req, status);
         }
     }
 }

@@ -755,6 +755,7 @@ namespace SourceGit.ViewModels
             RefreshWorktrees();
             RefreshWorkingCopyChanges();
             RefreshStashes();
+            RefreshCI();
 
             Task.Run(async () =>
             {
@@ -1458,6 +1459,11 @@ namespace SourceGit.ViewModels
                     StashesCount = stashes.Count;
                 });
             }, token);
+        }
+
+        public void RefreshCI()
+        {
+            Views.CI.Clear(Remotes);
         }
 
         public void ToggleHistoryShowFlag(Models.HistoryShowFlags flag)
