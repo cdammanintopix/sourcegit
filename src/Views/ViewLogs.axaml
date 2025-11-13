@@ -33,7 +33,7 @@
                  IsHitTestVisible="False"/>
 
       <v:CaptionButtons HorizontalAlignment="Right"
-                        IsCloseButtonOnly="True"
+                        IsCloseButtonOnly="False"
                         IsVisible="{OnPlatform True, macOS=False}"/>
     </Grid>
 

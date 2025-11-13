@@ -451,11 +451,11 @@ namespace SourceGit.Views
             ev.Handled = true;
         }
 
-        private async void OpenGitLogs(object sender, RoutedEventArgs e)
+        private void OpenGitLogs(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
             {
-                await App.ShowDialog(new ViewModels.ViewLogs(repo));
+                App.ShowWindow(new ViewModels.ViewLogs(repo));
                 e.Handled = true;
             }
         }
