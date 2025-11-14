@@ -60,14 +60,16 @@ namespace SourceGit.Views
             var corner = (float)Math.Max(2, Bounds.Width / 16);
             var rect = new Rect(0, 0, Bounds.Width, Bounds.Height);
             var clip = context.PushClip(new RoundedRect(rect, corner));
-
-            if (!string.IsNullOrEmpty(status))
-            {
-                context.DrawImage(new Bitmap(AssetLoader.Open(new Uri($"avares://SourceGit/Resources/Images/{status}.png", UriKind.RelativeOrAbsolute))), rect);
+            
+            bool drawn = false;
+            if (!string.IsNullOrEmpty(status)) {
+                try {
+                    context.DrawImage(new Bitmap(AssetLoader.Open(new Uri($"avares://SourceGit/Resources/Images/GitLabCI/{status}.png", UriKind.RelativeOrAbsolute))), rect);
+                    drawn = true;
+                } catch (System.IO.FileNotFoundException) {}
             }
-            else if (ShowDefaultIconIfNull)
-            {
-                context.DrawImage(new Bitmap(AssetLoader.Open(new Uri($"avares://SourceGit/Resources/Images/gitlab.png", UriKind.RelativeOrAbsolute))), rect);
+            if (!drawn && ShowDefaultIconIfNull) {
+                context.DrawImage(new Bitmap(AssetLoader.Open(new Uri($"avares://SourceGit/Resources/Images/GitLabCI/gitlab.png", UriKind.RelativeOrAbsolute))), rect);
             }
 
             clip.Dispose();

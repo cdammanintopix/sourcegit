@@ -36,6 +36,7 @@
     <AvaloniaResource Include="Resources/Images/ExternalToolIcons/*" />
     <AvaloniaResource Include="Resources/Images/ExternalToolIcons/JetBrains/*" />
     <AvaloniaResource Include="Resources/Images/ShellIcons/*" />
+    <AvaloniaResource Include="Resources/Images/GitLabCI/*" />
   </ItemGroup>
 
   <ItemGroup>
