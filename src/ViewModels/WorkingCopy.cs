@@ -776,7 +776,10 @@ namespace SourceGit.ViewModels
                 InProgressContext = null;
 
             if (_inProgressContext == null)
+            {
+                LoadCommitMessageFromFile(Path.Combine(_repo.GitDir, "MERGE_MSG"));
                 return;
+            }
 
             if (_inProgressContext.GetType() == oldType && !string.IsNullOrEmpty(_commitMessage))
                 return;
@@ -829,7 +832,7 @@ namespace SourceGit.ViewModels
             {
                 var o = old[idx];
                 var c = cur[idx];
-                if (o.Path != c.Path || o.Index != c.Index || o.WorkTree != c.WorkTree)
+                if (o.Path.Equals(c.Path, StringComparison.Ordinal) || o.Index != c.Index || o.WorkTree != c.WorkTree)
                     return true;
             }
 

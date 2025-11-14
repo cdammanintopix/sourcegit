@@ -6,35 +6,9 @@ This document shows the translation status of each locale file in the repository
 
 ### ![en_US](https://img.shields.io/badge/en__US-%E2%88%9A-brightgreen)
 
-### ![de__DE](https://img.shields.io/badge/de__DE-99.11%25-yellow)
+### ![de__DE](https://img.shields.io/badge/de__DE-%E2%88%9A-brightgreen)
 
-<details>
-<summary>Missing keys in de_DE.axaml</summary>
-
-- Text.CommitMessageTextBox.Placeholder
-- Text.FileCM.CustomAction
-- Text.GitLFS.Locks.UnlockAllMyLocks
-- Text.GitLFS.Locks.UnlockAllMyLocks.Confirm
-- Text.Hotkeys.Repo.OpenCommandPalette
-- Text.Launcher.Commands
-- Text.Open
-- Text.Open.SystemDefaultEditor
-
-</details>
-
-### ![es__ES](https://img.shields.io/badge/es__ES-99.34%25-yellow)
-
-<details>
-<summary>Missing keys in es_ES.axaml</summary>
-
-- Text.CommitMessageTextBox.Placeholder
-- Text.FileCM.CustomAction
-- Text.GitLFS.Locks.UnlockAllMyLocks
-- Text.GitLFS.Locks.UnlockAllMyLocks.Confirm
-- Text.Open
-- Text.Open.SystemDefaultEditor
-
-</details>
+### ![es__ES](https://img.shields.io/badge/es__ES-%E2%88%9A-brightgreen)
 
 ### ![fr__FR](https://img.shields.io/badge/fr__FR-99.78%25-yellow)
 

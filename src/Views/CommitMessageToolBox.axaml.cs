@@ -11,12 +11,52 @@ using Avalonia.Layout;
 using Avalonia.Media;
 
 using AvaloniaEdit;
+using AvaloniaEdit.CodeCompletion;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Rendering;
+using AvaloniaEdit.Utils;
 
 namespace SourceGit.Views
 {
+    public class CommitMessageCodeCompletionData : ICompletionData
+    {
+        public IImage Image
+        {
+            get => null;
+        }
+
+        public string Text
+        {
+            get;
+        }
+
+        public object Content
+        {
+            get => Text;
+        }
+
+        public object Description
+        {
+            get => null;
+        }
+
+        public double Priority
+        {
+            get => 0;
+        }
+
+        public CommitMessageCodeCompletionData(string text)
+        {
+            Text = text;
+        }
+
+        public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
+        {
+            textArea.Document.Replace(completionSegment, Text);
+        }
+    }
+
     public class CommitMessageTextEditor : TextEditor
     {
         public static readonly StyledProperty<string> CommitMessageProperty =
@@ -26,6 +66,15 @@ namespace SourceGit.Views
         {
             get => GetValue(CommitMessageProperty);
             set => SetValue(CommitMessageProperty, value);
+        }
+
+        public static readonly StyledProperty<string> PlaceholderProperty =
+            AvaloniaProperty.Register<CommitMessageTextEditor, string>(nameof(Placeholder), string.Empty);
+
+        public string Placeholder
+        {
+            get => GetValue(PlaceholderProperty);
+            set => SetValue(PlaceholderProperty, value);
         }
 
         public static readonly StyledProperty<int> SubjectLengthProperty =
@@ -69,20 +118,25 @@ namespace SourceGit.Views
             var w = Bounds.Width;
             var pen = new Pen(SubjectLineBrush) { DashStyle = DashStyle.Dash };
 
-            if (SubjectLength == 0 || CommitMessage.Trim().Length == 0)
+            if (SubjectLength == 0)
             {
-                var placeholder = new FormattedText(
-                    App.Text("CommitMessageTextBox.Placeholder"),
-                    CultureInfo.CurrentCulture,
-                    FlowDirection.LeftToRight,
-                    new Typeface(FontFamily),
-                    FontSize,
-                    Brushes.Gray);
+                var placeholder = Placeholder;
+                if (!string.IsNullOrEmpty(placeholder))
+                {
+                    var formatted = new FormattedText(
+                        Placeholder,
+                        CultureInfo.CurrentCulture,
+                        FlowDirection.LeftToRight,
+                        new Typeface(FontFamily),
+                        FontSize,
+                        Brushes.Gray);
 
-                context.DrawText(placeholder, new Point(4, 2));
+                    context.DrawText(formatted, new Point(4, 2));
 
-                var y = 6 + placeholder.Height;
-                context.DrawLine(pen, new Point(0, y), new Point(w, y));
+                    var y = 6 + formatted.Height;
+                    context.DrawLine(pen, new Point(0, y), new Point(w, y));
+                }
+
                 return;
             }
 
@@ -103,20 +157,16 @@ namespace SourceGit.Views
 
             lines.Sort((l, r) => l.StartOffset - r.StartOffset);
 
-            var lastSubjectLine = lines[0];
-            if (lastSubjectLine.StartOffset > SubjectLength)
-                return;
-
-            for (var i = 1; i < lines.Count; i++)
+            for (var i = 0; i < lines.Count; i++)
             {
-                if (lines[i].StartOffset > SubjectLength)
-                    break;
-
-                lastSubjectLine = lines[i];
+                var line = lines[i];
+                if (line.FirstDocumentLine.LineNumber == _subjectEndLine)
+                {
+                    var y = line.GetTextLineVisualYPosition(line.TextLines[^1], VisualYPosition.LineBottom) - view.VerticalOffset + 4;
+                    context.DrawLine(pen, new Point(0, y), new Point(w, y));
+                    return;
+                }
             }
-
-            var endY = lastSubjectLine.GetTextLineVisualYPosition(lastSubjectLine.TextLines[^1], VisualYPosition.LineBottom) - view.VerticalOffset + 4;
-            context.DrawLine(pen, new Point(0, endY), new Point(w, endY));
         }
 
         protected override void OnLoaded(RoutedEventArgs e)
@@ -144,38 +194,39 @@ namespace SourceGit.Views
                 if (!_isEditing)
                     Text = CommitMessage;
 
-                var chars = CommitMessage.ToCharArray();
-                var lastLinebreakIndex = 0;
-                var lastLinebreakCount = 0;
+                var lines = CommitMessage.ReplaceLineEndings("\n").Split('\n');
+                var subjectLen = 0;
                 var foundSubjectEnd = false;
-                for (var i = 0; i < chars.Length; i++)
-                {
-                    var ch = chars[i];
-                    if (ch == '\r')
-                        continue;
 
-                    if (ch == '\n')
+                for (var i = 0; i < lines.Length; i++)
+                {
+                    var line = lines[i];
+                    if (string.IsNullOrWhiteSpace(line))
                     {
-                        if (lastLinebreakCount > 0)
-                        {
-                            SetCurrentValue(SubjectLengthProperty, lastLinebreakIndex);
-                            foundSubjectEnd = true;
-                            break;
-                        }
-                        else
-                        {
-                            lastLinebreakIndex = i;
-                            lastLinebreakCount = 1;
-                        }
+                        if (subjectLen == 0)
+                            continue;
+
+                        _subjectEndLine = i;
+                        foundSubjectEnd = true;
+                        break;
                     }
+
+                    var validCharLen = line.TrimEnd().Length;
+                    if (subjectLen > 0)
+                        subjectLen += (validCharLen + 1);
                     else
-                    {
-                        lastLinebreakCount = 0;
-                    }
+                        subjectLen = validCharLen;
                 }
 
                 if (!foundSubjectEnd)
-                    SetCurrentValue(SubjectLengthProperty, CommitMessage?.Length ?? 0);
+                    _subjectEndLine = lines.Length;
+
+                SetCurrentValue(SubjectLengthProperty, subjectLen);
+            }
+            else if (change.Property == PlaceholderProperty && IsLoaded)
+            {
+                if (string.IsNullOrWhiteSpace(CommitMessage))
+                    InvalidateVisual();
             }
         }
 
@@ -183,9 +234,57 @@ namespace SourceGit.Views
         {
             base.OnTextChanged(e);
 
+            if (!IsLoaded)
+                return;
+
             _isEditing = true;
             SetCurrentValue(CommitMessageProperty, Text);
             _isEditing = false;
+
+            var caretOffset = CaretOffset;
+            var start = caretOffset;
+            for (; start > 0; start--)
+            {
+                var ch = Text[start - 1];
+                if (ch == '\n')
+                    break;
+
+                if (!char.IsAscii(ch))
+                    return;
+            }
+
+            if (caretOffset < start + 2)
+            {
+                _completionWnd?.Close();
+                return;
+            }
+
+            var word = Text.Substring(start, caretOffset - start);
+            var matches = new List<CommitMessageCodeCompletionData>();
+            foreach (var keyword in _keywords)
+            {
+                if (keyword.StartsWith(word, StringComparison.OrdinalIgnoreCase) && keyword.Length != word.Length)
+                    matches.Add(new(keyword));
+            }
+
+            if (matches.Count > 0)
+            {
+                if (_completionWnd == null)
+                {
+                    _completionWnd = new CompletionWindow(TextArea);
+                    _completionWnd.Closed += (_, ev) => _completionWnd = null;
+                    _completionWnd.Show();
+                }
+
+                _completionWnd.CompletionList.CompletionData.Clear();
+                _completionWnd.CompletionList.CompletionData.AddRange(matches);
+                _completionWnd.StartOffset = start;
+                _completionWnd.EndOffset = caretOffset;
+            }
+            else
+            {
+                _completionWnd?.Close();
+            }
         }
 
         private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
@@ -235,7 +334,10 @@ namespace SourceGit.Views
             InvalidateVisual();
         }
 
+        private readonly List<string> _keywords = ["Acked-by: ", "Co-authored-by: ", "Reviewed-by: ", "Signed-off-by: ", "on-behalf-of: @", "BREAKING CHANGE: ", "Refs: "];
         private bool _isEditing = false;
+        private int _subjectEndLine = 0;
+        private CompletionWindow _completionWnd = null;
     }
 
     public partial class CommitMessageToolBox : UserControl
@@ -427,7 +529,7 @@ namespace SourceGit.Views
             e.Handled = true;
         }
 
-        private async void OnOpenConventionalCommitHelper(object _, RoutedEventArgs e)
+        private void OnOpenConventionalCommitHelper(object _, RoutedEventArgs e)
         {
             var owner = TopLevel.GetTopLevel(this) as Window;
             if (owner == null)
@@ -443,7 +545,7 @@ namespace SourceGit.Views
 
             var vm = new ViewModels.ConventionalCommitMessageBuilder(conventionalTypesOverride, text => CommitMessage = text);
             var builder = new ConventionalCommitMessageBuilder() { DataContext = vm };
-            await builder.ShowDialog(owner);
+            builder.Show(owner);
 
             e.Handled = true;
         }
