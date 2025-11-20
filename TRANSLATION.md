@@ -6,21 +6,42 @@ This document shows the translation status of each locale file in the repository
 
 ### ![en_US](https://img.shields.io/badge/en__US-%E2%88%9A-brightgreen)
 
-### ![de__DE](https://img.shields.io/badge/de__DE-%E2%88%9A-brightgreen)
+### ![de__DE](https://img.shields.io/badge/de__DE-99.89%25-yellow)
 
-### ![es__ES](https://img.shields.io/badge/es__ES-%E2%88%9A-brightgreen)
+<details>
+<summary>Missing keys in de_DE.axaml</summary>
 
-### ![fr__FR](https://img.shields.io/badge/fr__FR-99.78%25-yellow)
+- Text.OpenFile
+
+</details>
+
+### ![es__ES](https://img.shields.io/badge/es__ES-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in es_ES.axaml</summary>
+
+- Text.BranchCM.EditDescription
+- Text.EditBranchDescription
+- Text.EditBranchDescription.Target
+- Text.OpenFile
+
+</details>
+
+### ![fr__FR](https://img.shields.io/badge/fr__FR-99.34%25-yellow)
 
 <details>
 <summary>Missing keys in fr_FR.axaml</summary>
 
+- Text.BranchCM.EditDescription
 - Text.CommitMessageTextBox.Placeholder
+- Text.EditBranchDescription
+- Text.EditBranchDescription.Target
 - Text.FileCM.CustomAction
+- Text.OpenFile
 
 </details>
 
-### ![id__ID](https://img.shields.io/badge/id__ID-97.56%25-yellow)
+### ![id__ID](https://img.shields.io/badge/id__ID-97.14%25-yellow)
 
 <details>
 <summary>Missing keys in id_ID.axaml</summary>
@@ -29,6 +50,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Blame.BlameOnPreviousRevision
 - Text.BranchCM.CreatePR
 - Text.BranchCM.CreatePRForUpstream
+- Text.BranchCM.EditDescription
 - Text.CommitCM.Drop
 - Text.CommitMessageTextBox.Placeholder
 - Text.Configure.CommitMessageTemplate.BuiltinVars
@@ -37,6 +59,8 @@ This document shows the translation status of each locale file in the repository
 - Text.DropHead
 - Text.DropHead.Commit
 - Text.DropHead.NewHead
+- Text.EditBranchDescription
+- Text.EditBranchDescription.Target
 - Text.FileCM.CustomAction
 - Text.GitLFS.Locks.UnlockAllMyLocks
 - Text.GitLFS.Locks.UnlockAllMyLocks.Confirm
@@ -45,12 +69,13 @@ This document shows the translation status of each locale file in the repository
 - Text.Launcher.OpenRepository
 - Text.Open
 - Text.Open.SystemDefaultEditor
+- Text.OpenFile
 - Text.PushToNewBranch
 - Text.PushToNewBranch.Title
 
 </details>
 
-### ![it__IT](https://img.shields.io/badge/it__IT-94.91%25-yellow)
+### ![it__IT](https://img.shields.io/badge/it__IT-94.49%25-yellow)
 
 <details>
 <summary>Missing keys in it_IT.axaml</summary>
@@ -59,6 +84,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Blame.BlameOnPreviousRevision
 - Text.BranchCM.CreatePR
 - Text.BranchCM.CreatePRForUpstream
+- Text.BranchCM.EditDescription
 - Text.BranchCM.SwitchToWorktree
 - Text.BranchTree.Ahead
 - Text.BranchTree.AheadBehind
@@ -80,6 +106,8 @@ This document shows the translation status of each locale file in the repository
 - Text.DropHead
 - Text.DropHead.Commit
 - Text.DropHead.NewHead
+- Text.EditBranchDescription
+- Text.EditBranchDescription.Target
 - Text.FileCM.CustomAction
 - Text.GitLFS.Locks.UnlockAllMyLocks
 - Text.GitLFS.Locks.UnlockAllMyLocks.Confirm
@@ -88,6 +116,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Launcher.OpenRepository
 - Text.Open
 - Text.Open.SystemDefaultEditor
+- Text.OpenFile
 - Text.Preferences.AI.ReadApiKeyFromEnv
 - Text.Preferences.Appearance.UseAutoHideScrollBars
 - Text.Preferences.General.EnableCompactFolders
@@ -104,7 +133,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ja__JP](https://img.shields.io/badge/ja__JP-76.30%25-yellow)
+### ![ja__JP](https://img.shields.io/badge/ja__JP-75.99%25-yellow)
 
 <details>
 <summary>Missing keys in ja_JP.axaml</summary>
@@ -128,6 +157,7 @@ This document shows the translation status of each locale file in the repository
 - Text.BranchCM.CompareWithCurrent
 - Text.BranchCM.CreatePR
 - Text.BranchCM.CreatePRForUpstream
+- Text.BranchCM.EditDescription
 - Text.BranchCM.ResetToSelectedCommit
 - Text.BranchCM.SwitchToWorktree
 - Text.BranchTree.Ahead
@@ -219,6 +249,8 @@ This document shows the translation status of each locale file in the repository
 - Text.DropHead
 - Text.DropHead.Commit
 - Text.DropHead.NewHead
+- Text.EditBranchDescription
+- Text.EditBranchDescription.Target
 - Text.ExecuteCustomAction.Target
 - Text.ExecuteCustomAction.Repository
 - Text.FileCM.CustomAction
@@ -240,6 +272,7 @@ This document shows the translation status of each locale file in the repository
 - Text.MoveSubmodule.Submodule
 - Text.Open
 - Text.Open.SystemDefaultEditor
+- Text.OpenFile
 - Text.Preferences.AI.ReadApiKeyFromEnv
 - Text.Preferences.Appearance.UseAutoHideScrollBars
 - Text.Preferences.General.EnableCompactFolders
@@ -326,7 +359,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ko__KR](https://img.shields.io/badge/ko__KR-98.01%25-yellow)
+### ![ko__KR](https://img.shields.io/badge/ko__KR-97.47%25-yellow)
 
 <details>
 <summary>Missing keys in ko_KR.axaml</summary>
@@ -335,9 +368,12 @@ This document shows the translation status of each locale file in the repository
 - Text.Blame.TypeNotSupported
 - Text.BranchCM.CreatePR
 - Text.BranchCM.CreatePRForUpstream
+- Text.BranchCM.EditDescription
 - Text.CommitMessageTextBox.Placeholder
 - Text.Configure.Git.ConventionalTypesOverride
 - Text.ConfigureCustomActionControls.StringValue.Tip
+- Text.EditBranchDescription
+- Text.EditBranchDescription.Target
 - Text.FileCM.CustomAction
 - Text.GitLFS.Locks.UnlockAllMyLocks
 - Text.GitLFS.Locks.UnlockAllMyLocks.Confirm
@@ -346,13 +382,15 @@ This document shows the translation status of each locale file in the repository
 - Text.Launcher.OpenRepository
 - Text.Open
 - Text.Open.SystemDefaultEditor
+- Text.OpenFile
+- Text.Preferences.Appearance.UseFixedTabWidth
 - Text.PushToNewBranch
 - Text.PushToNewBranch.Title
 - Text.Submodule.Status.Unmerged
 
 </details>
 
-### ![pt__BR](https://img.shields.io/badge/pt__BR-69.99%25-red)
+### ![pt__BR](https://img.shields.io/badge/pt__BR-69.71%25-red)
 
 <details>
 <summary>Missing keys in pt_BR.axaml</summary>
@@ -382,6 +420,7 @@ This document shows the translation status of each locale file in the repository
 - Text.BranchCM.CreatePR
 - Text.BranchCM.CreatePRForUpstream
 - Text.BranchCM.CustomAction
+- Text.BranchCM.EditDescription
 - Text.BranchCM.MergeMultiBranches
 - Text.BranchCM.ResetToSelectedCommit
 - Text.BranchCM.SwitchToWorktree
@@ -489,6 +528,8 @@ This document shows the translation status of each locale file in the repository
 - Text.DropHead
 - Text.DropHead.Commit
 - Text.DropHead.NewHead
+- Text.EditBranchDescription
+- Text.EditBranchDescription.Target
 - Text.ExecuteCustomAction.Target
 - Text.ExecuteCustomAction.Repository
 - Text.Fetch.Force
@@ -522,6 +563,7 @@ This document shows the translation status of each locale file in the repository
 - Text.MoveSubmodule.Submodule
 - Text.Open
 - Text.Open.SystemDefaultEditor
+- Text.OpenFile
 - Text.Preferences.AI.ReadApiKeyFromEnv
 - Text.Preferences.AI.Streaming
 - Text.Preferences.Appearance.EditorTabWidth
@@ -631,9 +673,19 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ru__RU](https://img.shields.io/badge/ru__RU-%E2%88%9A-brightgreen)
+### ![ru__RU](https://img.shields.io/badge/ru__RU-99.56%25-yellow)
 
-### ![ta__IN](https://img.shields.io/badge/ta__IN-76.41%25-yellow)
+<details>
+<summary>Missing keys in ru_RU.axaml</summary>
+
+- Text.BranchCM.EditDescription
+- Text.EditBranchDescription
+- Text.EditBranchDescription.Target
+- Text.OpenFile
+
+</details>
+
+### ![ta__IN](https://img.shields.io/badge/ta__IN-76.10%25-yellow)
 
 <details>
 <summary>Missing keys in ta_IN.axaml</summary>
@@ -657,6 +709,7 @@ This document shows the translation status of each locale file in the repository
 - Text.BranchCM.CompareWithCurrent
 - Text.BranchCM.CreatePR
 - Text.BranchCM.CreatePRForUpstream
+- Text.BranchCM.EditDescription
 - Text.BranchCM.ResetToSelectedCommit
 - Text.BranchCM.SwitchToWorktree
 - Text.BranchTree.Ahead
@@ -748,6 +801,8 @@ This document shows the translation status of each locale file in the repository
 - Text.DropHead
 - Text.DropHead.Commit
 - Text.DropHead.NewHead
+- Text.EditBranchDescription
+- Text.EditBranchDescription.Target
 - Text.ExecuteCustomAction.Target
 - Text.ExecuteCustomAction.Repository
 - Text.FileCM.CustomAction
@@ -769,6 +824,7 @@ This document shows the translation status of each locale file in the repository
 - Text.MoveSubmodule.Submodule
 - Text.Open
 - Text.Open.SystemDefaultEditor
+- Text.OpenFile
 - Text.Preferences.AI.ReadApiKeyFromEnv
 - Text.Preferences.Appearance.UseAutoHideScrollBars
 - Text.Preferences.General.EnableCompactFolders
@@ -854,7 +910,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![uk__UA](https://img.shields.io/badge/uk__UA-77.52%25-yellow)
+### ![uk__UA](https://img.shields.io/badge/uk__UA-77.20%25-yellow)
 
 <details>
 <summary>Missing keys in uk_UA.axaml</summary>
@@ -877,6 +933,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Blame.BlameOnPreviousRevision
 - Text.BranchCM.CreatePR
 - Text.BranchCM.CreatePRForUpstream
+- Text.BranchCM.EditDescription
 - Text.BranchCM.ResetToSelectedCommit
 - Text.BranchCM.SwitchToWorktree
 - Text.BranchTree.Ahead
@@ -964,6 +1021,8 @@ This document shows the translation status of each locale file in the repository
 - Text.DropHead
 - Text.DropHead.Commit
 - Text.DropHead.NewHead
+- Text.EditBranchDescription
+- Text.EditBranchDescription.Target
 - Text.ExecuteCustomAction.Target
 - Text.ExecuteCustomAction.Repository
 - Text.FileCM.CustomAction
@@ -985,6 +1044,7 @@ This document shows the translation status of each locale file in the repository
 - Text.MoveSubmodule.Submodule
 - Text.Open
 - Text.Open.SystemDefaultEditor
+- Text.OpenFile
 - Text.Preferences.AI.ReadApiKeyFromEnv
 - Text.Preferences.Appearance.UseAutoHideScrollBars
 - Text.Preferences.General.EnableCompactFolders
