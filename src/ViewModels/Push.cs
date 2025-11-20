@@ -98,6 +98,12 @@ namespace SourceGit.ViewModels
             set;
         }
 
+        public bool CreateMR
+        {
+            get;
+            set;
+        }
+
         public bool CISkip
         {
             get => _ciSkip;
@@ -222,7 +228,7 @@ namespace SourceGit.ViewModels
                 PushAllTags,
                 _repo.Submodules.Count > 0 && CheckSubmodules,
                 _isSetTrackOptionVisible && _tracking,
-                ForcePush, _ciSkip, CIArgs).Use(log).RunAsync();
+                ForcePush, CreateMR, CISkip, CIArgs).Use(log).RunAsync();
 
             log.Complete();
 

@@ -4,7 +4,7 @@ namespace SourceGit.Commands
 {
     public class Push : Command
     {
-        public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force, bool ciSkip=false, string ciArgs="")
+        public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force, bool createMR = false, bool ciSkip = false, string ciArgs ="")
         {
             _remote = remote;
 
@@ -20,6 +20,8 @@ namespace SourceGit.Commands
                 Args += "-u ";
             if (force)
                 Args += "--force-with-lease ";
+            if (createMR)
+                Args += "-o merge_request.create -o merge_request.draft -o merge_request.assign=me ";
             if (ciSkip)
                 Args += "-o ci.skip ";
             else if (ciArgs.Length > 0)

@@ -22,6 +22,12 @@ namespace SourceGit.ViewModels
             set;
         }
 
+        public bool CreateMR
+        {
+            get;
+            set;
+        }
+
         public bool CISkip
         {
             get => _ciSkip;
@@ -63,7 +69,7 @@ namespace SourceGit.ViewModels
                 false,
                 false,
                 false,
-                Force, _ciSkip, CIArgs).Use(log).RunAsync();
+                Force, CreateMR, CISkip, CIArgs).Use(log).RunAsync();
 
             log.Complete();
 
