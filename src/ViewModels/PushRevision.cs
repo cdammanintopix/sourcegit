@@ -21,12 +21,26 @@ namespace SourceGit.ViewModels
             get;
             set;
         }
-
         public bool CreateMR
+        {
+            get => _createMR;
+            set
+            {
+                if (SetProperty(ref _createMR, value))
+                    OnPropertyChanged(nameof(IsDraftMRVisible));
+            }
+        }
+
+        public bool IsDraftMRVisible
+        {
+            get => _createMR;
+        }
+
+        public bool DraftMR
         {
             get;
             set;
-        }
+        } = true;
 
         public bool CISkip
         {
@@ -69,7 +83,7 @@ namespace SourceGit.ViewModels
                 false,
                 false,
                 false,
-                Force, CreateMR, CISkip, CIArgs).Use(log).RunAsync();
+                Force, CreateMR, DraftMR, CISkip, CIArgs).Use(log).RunAsync();
 
             log.Complete();
 
@@ -83,6 +97,7 @@ namespace SourceGit.ViewModels
         }
 
         private readonly Repository _repo;
+        private bool _createMR = false;
         private bool _ciSkip = false;
     }
 }

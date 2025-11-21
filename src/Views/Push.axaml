@@ -122,10 +122,17 @@
                 IsChecked="{Binding ForcePush, Mode=TwoWay}"
                 ToolTip.Tip="--force-with-lease"/>
 
-      <CheckBox Grid.Row="7" Grid.Column="1"
-                Content="{DynamicResource Text.Push.CreateMR}"
-                IsChecked="{Binding CreateMR, Mode=TwoWay}"
-                ToolTip.Tip="-o merge_request.create -o merge_request.draft -o merge_request.assign=me"/>
+      <Grid Grid.Row="7" Grid.Column="1" ColumnDefinitions="Auto,*">
+        <CheckBox Grid.Column="0"
+                  Content="{DynamicResource Text.Push.CreateMR}"
+                  IsChecked="{Binding CreateMR, Mode=TwoWay}"
+                  ToolTip.Tip="-o merge_request.create -o merge_request.assign=me"/>
+        <CheckBox Grid.Column="1" Margin="8,0,0,0"
+                  Content="{DynamicResource Text.Push.DraftMR}"
+                  IsChecked="{Binding DraftMR, Mode=TwoWay}"
+                  ToolTip.Tip="-o merge_request.draft"
+                  IsVisible="{Binding IsDraftMRVisible}"/>
+      </Grid>
 
       <CheckBox Grid.Row="8" Grid.Column="1"
                 Content="{DynamicResource Text.Push.CISkip}"

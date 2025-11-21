@@ -659,7 +659,8 @@
   <x:String x:Key="Text.Push.Title" xml:space="preserve">Push Changes To Remote</x:String>
   <x:String x:Key="Text.Push.To" xml:space="preserve">Remote Branch:</x:String>
   <x:String x:Key="Text.Push.Tracking" xml:space="preserve">Set as tracking branch</x:String>
-  <x:String x:Key="Text.Push.CreateMR" xml:space="preserve">Create draft MR</x:String>
+  <x:String x:Key="Text.Push.CreateMR" xml:space="preserve">Create MR</x:String>
+  <x:String x:Key="Text.Push.DraftMR" xml:space="preserve">As draft</x:String>
   <x:String x:Key="Text.Push.CISkip" xml:space="preserve">Skip CI</x:String>
   <x:String x:Key="Text.Push.WithAllTags" xml:space="preserve">Push all tags</x:String>
   <x:String x:Key="Text.PushTag" xml:space="preserve">Push Tag To Remote</x:String>

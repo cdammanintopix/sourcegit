@@ -100,9 +100,24 @@ namespace SourceGit.ViewModels
 
         public bool CreateMR
         {
+            get => _createMR;
+            set
+            {
+                if (SetProperty(ref _createMR, value))
+                    OnPropertyChanged(nameof(IsDraftMRVisible));
+            }
+        }
+
+        public bool IsDraftMRVisible
+        {
+            get => _createMR;
+        }
+
+        public bool DraftMR
+        {
             get;
             set;
-        }
+        } = true;
 
         public bool CISkip
         {
@@ -228,7 +243,7 @@ namespace SourceGit.ViewModels
                 PushAllTags,
                 _repo.Submodules.Count > 0 && CheckSubmodules,
                 _isSetTrackOptionVisible && _tracking,
-                ForcePush, CreateMR, CISkip, CIArgs).Use(log).RunAsync();
+                ForcePush, CreateMR, DraftMR, CISkip, CIArgs).Use(log).RunAsync();
 
             log.Complete();
 
@@ -295,6 +310,7 @@ namespace SourceGit.ViewModels
         private Models.Branch _selectedRemoteBranch = null;
         private bool _isSetTrackOptionVisible = false;
         private bool _tracking = true;
+        private bool _createMR = false;
         private bool _ciSkip = false;
     }
 }
