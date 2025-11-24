@@ -732,8 +732,7 @@ namespace SourceGit.Views
                         interactiveRebase.Icon = App.CreateMenuIcon("Icons.InteractiveRebase");
                         interactiveRebase.Click += async (_, e) =>
                         {
-                            var parent = await new Commands.QuerySingleCommit(repo.FullPath, $"{commit.SHA}~").GetResultAsync();
-                            await App.ShowDialog(new ViewModels.InteractiveRebase(repo, parent));
+                            await App.ShowDialog(new ViewModels.InteractiveRebase(repo, commit));
                             e.Handled = true;
                         };
 
