@@ -91,7 +91,7 @@ namespace SourceGit.Models
                             Dns.GetHostEntry("gitlab.intopix.com"); // This raise an early exception if not connected to the VPN
 
                             using var client = new HttpClient();
-                            client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", Environment.GetEnvironmentVariable("SOURCEGIT_GITLAB_TOKEN"));
+                            client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", CIManager.GITLAB_TOKEN);
                             client.Timeout = TimeSpan.FromSeconds(2);
                             var rsp = await client.GetAsync($"https://gitlab.intopix.com/api/v4/users?search={matchIntopixUser.Groups[0].Value}");
                             if (rsp.IsSuccessStatusCode)

@@ -26,6 +26,17 @@ namespace SourceGit.Models
             }
         }
 
+        public static string GITLAB_TOKEN
+        {
+            get
+            {
+                string token = Environment.GetEnvironmentVariable("SOURCEGIT_GITLAB_TOKEN");
+                if (string.IsNullOrEmpty(token))
+                    token = "glpat-_PCkkQqvCwmuSO8Sy9OrI286MQp1OmkH.01.0w0rf8f00";
+                return token;
+            }
+        }
+
         private static CIManager _instance = null;
 
         private readonly Lock _synclock = new();
@@ -84,7 +95,7 @@ namespace SourceGit.Models
                         Dns.GetHostEntry("gitlab.intopix.com"); // This raise an early exception if not connected to the VPN
 
                         using var client = new HttpClient();
-                        client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", Environment.GetEnvironmentVariable("SOURCEGIT_GITLAB_TOKEN"));
+                        client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", GITLAB_TOKEN);
                         client.Timeout = TimeSpan.FromSeconds(2);
                         var rsp = await client.GetAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipelines?sha={sha}");
                         if (rsp.IsSuccessStatusCode)
