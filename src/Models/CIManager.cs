@@ -26,14 +26,29 @@ namespace SourceGit.Models
             }
         }
 
+        private static string _GITLAB_TOKEN = null;
         public static string GITLAB_TOKEN
         {
             get
             {
-                string token = Environment.GetEnvironmentVariable("SOURCEGIT_GITLAB_TOKEN");
-                if (string.IsNullOrEmpty(token))
-                    token = "glpat-_PCkkQqvCwmuSO8Sy9OrI286MQp1OmkH.01.0w0rf8f00";
-                return token;
+                if (string.IsNullOrEmpty(_GITLAB_TOKEN)) {
+                    string token = Environment.GetEnvironmentVariable("SOURCEGIT_GITLAB_TOKEN");
+                    if (!string.IsNullOrEmpty(token)) {
+                        try {
+                            using var client = new HttpClient();
+                            client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", token);
+                            client.Timeout = TimeSpan.FromSeconds(2);
+                            var rsp = client.GetAsync("https://gitlab.intopix.com/api/v4/user").Result;
+                            if (rsp.IsSuccessStatusCode) {
+                                _GITLAB_TOKEN = token;
+                            }
+                        } catch { }
+                    }
+                    if (string.IsNullOrEmpty(_GITLAB_TOKEN)) {
+                        _GITLAB_TOKEN = "glpat-_PCkkQqvCwmuSO8Sy9OrI286MQp1OmkH.01.0w0rf8f00";
+                    }
+                }
+                return _GITLAB_TOKEN;
             }
         }
 
