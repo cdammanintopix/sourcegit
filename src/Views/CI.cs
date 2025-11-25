@@ -123,7 +123,7 @@ namespace SourceGit.Views
 
         public void OnCIResourceChanged(string req, string status_)
         {
-            if (req.Equals(GetReq(Repository.Remotes, Commit.SHA), StringComparison.Ordinal))
+            if (Repository != null && req.Equals(GetReq(Repository.Remotes, Commit.SHA), StringComparison.Ordinal))
             {
                 status = status_;
                 InvalidateVisual();
