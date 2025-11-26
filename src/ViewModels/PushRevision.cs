@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using SourceGit.Views;
 
@@ -89,6 +90,14 @@ namespace SourceGit.ViewModels
 
             if (succ)
             {
+                string remoteMessage = string.Join("\n    ", log.Content.Split('\n')
+                    .Where(line => line.StartsWith("remote: "))
+                    .Select(line => line.Substring(8).Trim())
+                    .Where(line => !string.IsNullOrEmpty(line)));
+                if (!string.IsNullOrEmpty(remoteMessage))
+                {
+                    App.SendNotification(_repo.FullPath, "Message from remote:\n\n    " + remoteMessage + "\n");
+                }
                 // Trigger CI status refresh
                 CI.QueueForNextRefresh(_repo.Remotes, Revision.SHA);
             }
