@@ -510,7 +510,7 @@ namespace SourceGit.ViewModels
             }
 
             _lastFetchTime = DateTime.Now;
-            _autoFetchTimer = new Timer(FetchInBackground, null, 5000, 5000);
+            _autoFetchTimer = new Timer(AutoFetchByTimer, null, 5000, 5000);
             RefreshAll();
         }
 
@@ -1825,9 +1825,14 @@ namespace SourceGit.ViewModels
             return null;
         }
 
-        private void FetchInBackground(object sender)
+        private void AutoFetchByTimer(object sender)
         {
-            Dispatcher.UIThread.Invoke(async Task () =>
+            Dispatcher.UIThread.Invoke(AutoFetchOnUIThread);
+        }
+
+        private async Task AutoFetchOnUIThread()
+        {
+            try
             {
                 if (_settings is not { EnableAutoFetch: true })
                     return;
@@ -1869,7 +1874,11 @@ namespace SourceGit.ViewModels
 
                 _lastFetchTime = DateTime.Now;
                 IsAutoFetching = false;
-            });
+            }
+            catch
+            {
+                // Ignore all exceptions.
+            }
         }
 
         private readonly bool _isWorktree = false;
