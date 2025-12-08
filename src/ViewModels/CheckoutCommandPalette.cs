@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SourceGit.ViewModels
 {
-    public class BranchCompareCommandPalette : ICommandPalette
+    public class CheckoutCommandPalette : ICommandPalette
     {
         public List<Models.Branch> Branches
         {
@@ -27,7 +28,7 @@ namespace SourceGit.ViewModels
             }
         }
 
-        public BranchCompareCommandPalette(Launcher launcher, Repository repo)
+        public CheckoutCommandPalette(Launcher launcher, Repository repo)
         {
             _launcher = launcher;
             _repo = repo;
@@ -48,11 +49,15 @@ namespace SourceGit.ViewModels
             Filter = string.Empty;
         }
 
-        public void Launch()
+        public async Task ExecAsync()
         {
+            _launcher.CommandPalette = null;
+
             if (_selectedBranch != null)
-                App.ShowWindow(new BranchCompare(_repo.FullPath, _selectedBranch, _repo.CurrentBranch));
-            _launcher?.CancelCommandPalette();
+                await _repo.CheckoutBranchAsync(_selectedBranch);
+
+            Dispose();
+            GC.Collect();
         }
 
         private void UpdateBranches()

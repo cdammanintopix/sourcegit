@@ -3,28 +3,28 @@ using Avalonia.Input;
 
 namespace SourceGit.Views
 {
-    public partial class RepositoryCommandPalette : UserControl
+    public partial class CheckoutCommandPalette : UserControl
     {
-        public RepositoryCommandPalette()
+        public CheckoutCommandPalette()
         {
             InitializeComponent();
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+        protected override async void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
 
-            if (DataContext is not ViewModels.RepositoryCommandPalette vm)
+            if (DataContext is not ViewModels.CheckoutCommandPalette vm)
                 return;
 
             if (e.Key == Key.Enter)
             {
-                vm.Exec();
+                await vm.ExecAsync();
                 e.Handled = true;
             }
             else if (e.Key == Key.Up)
             {
-                if (CmdListBox.IsKeyboardFocusWithin)
+                if (BranchListBox.IsKeyboardFocusWithin)
                 {
                     FilterTextBox.Focus(NavigationMethod.Directional);
                     e.Handled = true;
@@ -35,14 +35,14 @@ namespace SourceGit.Views
             {
                 if (FilterTextBox.IsKeyboardFocusWithin)
                 {
-                    if (vm.VisibleCmds.Count > 0)
-                        CmdListBox.Focus(NavigationMethod.Directional);
+                    if (vm.Branches.Count > 0)
+                        BranchListBox.Focus(NavigationMethod.Directional);
 
                     e.Handled = true;
                     return;
                 }
 
-                if (CmdListBox.IsKeyboardFocusWithin && e.Key == Key.Tab)
+                if (BranchListBox.IsKeyboardFocusWithin && e.Key == Key.Tab)
                 {
                     FilterTextBox.Focus(NavigationMethod.Directional);
                     e.Handled = true;
@@ -51,11 +51,11 @@ namespace SourceGit.Views
             }
         }
 
-        private void OnItemTapped(object sender, TappedEventArgs e)
+        private async void OnItemTapped(object sender, TappedEventArgs e)
         {
-            if (DataContext is ViewModels.RepositoryCommandPalette vm)
+            if (DataContext is ViewModels.CheckoutCommandPalette vm)
             {
-                vm.Exec();
+                await vm.ExecAsync();
                 e.Handled = true;
             }
         }
