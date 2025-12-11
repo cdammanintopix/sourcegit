@@ -6,18 +6,32 @@ This document shows the translation status of each locale file in the repository
 
 ### ![en_US](https://img.shields.io/badge/en__US-%E2%88%9A-brightgreen)
 
-### ![de__DE](https://img.shields.io/badge/de__DE-%E2%88%9A-brightgreen)
+### ![de__DE](https://img.shields.io/badge/de__DE-99.56%25-yellow)
 
-### ![es__ES](https://img.shields.io/badge/es__ES-99.89%25-yellow)
+<details>
+<summary>Missing keys in de_DE.axaml</summary>
+
+- Text.PageTabBar.Tab.MoveToWorkspace
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
+
+</details>
+
+### ![es__ES](https://img.shields.io/badge/es__ES-99.45%25-yellow)
 
 <details>
 <summary>Missing keys in es_ES.axaml</summary>
 
+- Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
 
 </details>
 
-### ![fr__FR](https://img.shields.io/badge/fr__FR-99.23%25-yellow)
+### ![fr__FR](https://img.shields.io/badge/fr__FR-98.79%25-yellow)
 
 <details>
 <summary>Missing keys in fr_FR.axaml</summary>
@@ -28,11 +42,15 @@ This document shows the translation status of each locale file in the repository
 - Text.EditBranchDescription.Target
 - Text.FileCM.CustomAction
 - Text.OpenFile
+- Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
 
 </details>
 
-### ![id__ID](https://img.shields.io/badge/id__ID-97.03%25-yellow)
+### ![id__ID](https://img.shields.io/badge/id__ID-96.60%25-yellow)
 
 <details>
 <summary>Missing keys in id_ID.axaml</summary>
@@ -61,13 +79,17 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.PushToNewBranch
 - Text.PushToNewBranch.Title
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
 
 </details>
 
-### ![it__IT](https://img.shields.io/badge/it__IT-94.39%25-yellow)
+### ![it__IT](https://img.shields.io/badge/it__IT-93.97%25-yellow)
 
 <details>
 <summary>Missing keys in it_IT.axaml</summary>
@@ -109,6 +131,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.ReadApiKeyFromEnv
 - Text.Preferences.Appearance.UseAutoHideScrollBars
@@ -119,6 +142,9 @@ This document shows the translation status of each locale file in the repository
 - Text.PushToNewBranch
 - Text.PushToNewBranch.Title
 - Text.ScanRepositories.UseCustomDir
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
 - Text.WorkingCopy.ClearCommitHistories
 - Text.WorkingCopy.ClearCommitHistories.Confirm
 - Text.WorkingCopy.NoVerify
@@ -126,7 +152,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ja__JP](https://img.shields.io/badge/ja__JP-75.91%25-yellow)
+### ![ja__JP](https://img.shields.io/badge/ja__JP-75.44%25-yellow)
 
 <details>
 <summary>Missing keys in ja_JP.axaml</summary>
@@ -184,6 +210,7 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitCM.PushRevision
 - Text.CommitCM.Rebase
 - Text.CommitCM.Reset
+- Text.CommitCM.Fixup
 - Text.CommitDetail.Changes.Count
 - Text.CommitDetail.Info.CopyEmail
 - Text.CommitDetail.Info.CopyName
@@ -266,6 +293,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.ReadApiKeyFromEnv
 - Text.Preferences.Appearance.UseAutoHideScrollBars
@@ -309,6 +337,9 @@ This document shows the translation status of each locale file in the repository
 - Text.SetSubmoduleBranch.Current
 - Text.SetSubmoduleBranch.New
 - Text.SetSubmoduleBranch.New.Tip
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
 - Text.Stash.Mode
 - Text.StashCM.CopyMessage
 - Text.Submodule.Branch
@@ -353,7 +384,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ko__KR](https://img.shields.io/badge/ko__KR-97.36%25-yellow)
+### ![ko__KR](https://img.shields.io/badge/ko__KR-96.93%25-yellow)
 
 <details>
 <summary>Missing keys in ko_KR.axaml</summary>
@@ -377,15 +408,19 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.Appearance.UseFixedTabWidth
 - Text.PushToNewBranch
 - Text.PushToNewBranch.Title
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
 - Text.Submodule.Status.Unmerged
 
 </details>
 
-### ![pt__BR](https://img.shields.io/badge/pt__BR-69.64%25-red)
+### ![pt__BR](https://img.shields.io/badge/pt__BR-69.19%25-red)
 
 <details>
 <summary>Missing keys in pt_BR.axaml</summary>
@@ -453,6 +488,7 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitCM.PushRevision
 - Text.CommitCM.Rebase
 - Text.CommitCM.Reset
+- Text.CommitCM.Fixup
 - Text.CommitDetail.Changes.Count
 - Text.CommitDetail.Files.Search
 - Text.CommitDetail.Info.Children
@@ -559,6 +595,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.ReadApiKeyFromEnv
 - Text.Preferences.AI.Streaming
@@ -622,6 +659,9 @@ This document shows the translation status of each locale file in the repository
 - Text.SetUpstream.Unset
 - Text.SetUpstream.Upstream
 - Text.SHALinkCM.NavigateTo
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
 - Text.Stash.Mode
 - Text.StashCM.CopyMessage
 - Text.StashCM.SaveAsPatch
@@ -669,16 +709,20 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ru__RU](https://img.shields.io/badge/ru__RU-99.89%25-yellow)
+### ![ru__RU](https://img.shields.io/badge/ru__RU-99.45%25-yellow)
 
 <details>
 <summary>Missing keys in ru_RU.axaml</summary>
 
+- Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
 
 </details>
 
-### ![ta__IN](https://img.shields.io/badge/ta__IN-76.02%25-yellow)
+### ![ta__IN](https://img.shields.io/badge/ta__IN-75.55%25-yellow)
 
 <details>
 <summary>Missing keys in ta_IN.axaml</summary>
@@ -736,6 +780,7 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitCM.PushRevision
 - Text.CommitCM.Rebase
 - Text.CommitCM.Reset
+- Text.CommitCM.Fixup
 - Text.CommitDetail.Changes.Count
 - Text.CommitDetail.Info.CopyEmail
 - Text.CommitDetail.Info.CopyName
@@ -818,6 +863,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.ReadApiKeyFromEnv
 - Text.Preferences.Appearance.UseAutoHideScrollBars
@@ -860,6 +906,9 @@ This document shows the translation status of each locale file in the repository
 - Text.SetSubmoduleBranch.Current
 - Text.SetSubmoduleBranch.New
 - Text.SetSubmoduleBranch.New.Tip
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
 - Text.Stash.Mode
 - Text.StashCM.CopyMessage
 - Text.Submodule.Branch
@@ -904,7 +953,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![uk__UA](https://img.shields.io/badge/uk__UA-77.12%25-yellow)
+### ![uk__UA](https://img.shields.io/badge/uk__UA-76.64%25-yellow)
 
 <details>
 <summary>Missing keys in uk_UA.axaml</summary>
@@ -961,6 +1010,7 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitCM.PushRevision
 - Text.CommitCM.Rebase
 - Text.CommitCM.Reset
+- Text.CommitCM.Fixup
 - Text.CommitDetail.Changes.Count
 - Text.CommitDetail.Info.CopyEmail
 - Text.CommitDetail.Info.CopyName
@@ -1039,6 +1089,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.ReadApiKeyFromEnv
 - Text.Preferences.Appearance.UseAutoHideScrollBars
@@ -1081,6 +1132,9 @@ This document shows the translation status of each locale file in the repository
 - Text.SetSubmoduleBranch.Current
 - Text.SetSubmoduleBranch.New
 - Text.SetSubmoduleBranch.New.Tip
+- Text.SquashOrFixup.Squash
+- Text.SquashOrFixup.Fixup
+- Text.SquashOrFixup.Into
 - Text.Stash.Mode
 - Text.StashCM.CopyMessage
 - Text.Submodule.Branch
