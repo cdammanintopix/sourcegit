@@ -481,6 +481,7 @@
   <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">切换到上一个页面</x:String>
   <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">新建页面</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">打开偏好设置面板</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">显示工作区下拉菜单</x:String>
   <x:String x:Key="Text.Hotkeys.Global.SwitchTab" xml:space="preserve">切换显示页面</x:String>
   <x:String x:Key="Text.Hotkeys.Repo" xml:space="preserve">仓库页面快捷键</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Commit" xml:space="preserve">提交暂存区更改</x:String>
@@ -593,6 +594,10 @@
   <x:String x:Key="Text.Preferences.Appearance.UseFixedTabWidth" xml:space="preserve">主标签使用固定宽度</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseNativeWindowFrame" xml:space="preserve">使用系统默认窗体样式</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge" xml:space="preserve">对比/合并工具</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs" xml:space="preserve">对比命令参数</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs.Tip" xml:space="preserve">可用参数：$LOCAL, $REMOTE</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.MergeArgs" xml:space="preserve">合并命令参数</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.MergeArgs.Tip" xml:space="preserve">可用参数：$BASE, $LOCAL, $REMOTE, $MERGED</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.Path" xml:space="preserve">安装路径</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.Path.Placeholder" xml:space="preserve">填写工具可执行文件所在位置</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.Type" xml:space="preserve">工具</x:String>
@@ -633,6 +638,8 @@
   <x:String x:Key="Text.Preferences.GPG.UserKey.Placeholder" xml:space="preserve">输入签名提交所使用的KEY</x:String>
   <x:String x:Key="Text.Preferences.Integration" xml:space="preserve">第三方工具集成</x:String>
   <x:String x:Key="Text.Preferences.Shell" xml:space="preserve">终端/SHELL</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Args" xml:space="preserve">启动参数</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">请使用 '.' 来指定工作目录</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">安装路径</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">终端/SHELL</x:String>
   <x:String x:Key="Text.PruneRemote" xml:space="preserve">清理远程已删除分支</x:String>
