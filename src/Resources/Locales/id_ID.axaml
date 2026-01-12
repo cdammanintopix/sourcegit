@@ -57,8 +57,6 @@
   <x:String x:Key="Text.Blame" xml:space="preserve">Blame</x:String>
   <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">BLAME PADA BERKAS INI TIDAK DIDUKUNG!!!</x:String>
   <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">Checkout ${0}$...</x:String>
-  <x:String x:Key="Text.BranchCM.CompareWithCurrent" xml:space="preserve">Bandingkan dengan ${0}$</x:String>
-  <x:String x:Key="Text.BranchCM.CompareWithWorktree" xml:space="preserve">Bandingkan dengan Worktree</x:String>
   <x:String x:Key="Text.BranchCM.CopyName" xml:space="preserve">Salin Nama Branch</x:String>
   <x:String x:Key="Text.BranchCM.CustomAction" xml:space="preserve">Aksi Kustom</x:String>
   <x:String x:Key="Text.BranchCM.Delete" xml:space="preserve">Hapus ${0}$...</x:String>
@@ -76,7 +74,6 @@
   <x:String x:Key="Text.BranchCM.ResetToSelectedCommit" xml:space="preserve">Reset ${0}$ ke ${1}$...</x:String>
   <x:String x:Key="Text.BranchCM.SwitchToWorktree" xml:space="preserve">Pindah ke ${0}$ (worktree)</x:String>
   <x:String x:Key="Text.BranchCM.Tracking" xml:space="preserve">Atur Tracking Branch...</x:String>
-  <x:String x:Key="Text.BranchCompare" xml:space="preserve">Perbandingan Branch</x:String>
   <x:String x:Key="Text.BranchTree.Ahead" xml:space="preserve">{0} commit di depan</x:String>
   <x:String x:Key="Text.BranchTree.AheadBehind" xml:space="preserve">{0} commit di depan, {1} commit di belakang</x:String>
   <x:String x:Key="Text.BranchTree.Behind" xml:space="preserve">{0} commit di belakang</x:String>
@@ -104,7 +101,6 @@
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Perubahan Lokal:</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges.Discard" xml:space="preserve">Buang</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges.StashAndReapply" xml:space="preserve">Stash &amp; Terapkan Ulang</x:String>
-  <x:String x:Key="Text.Checkout.RecurseSubmodules" xml:space="preserve">Perbarui semua submodule</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Branch:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">HEAD saat ini mengandung commit yang tidak terhubung ke branch/tag manapun! Lanjutkan?</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Checkout &amp; Fast-Forward</x:String>
@@ -180,6 +176,7 @@
   <x:String x:Key="Text.CommitDetail.Info.Signer" xml:space="preserve">Penanda Tangan:</x:String>
   <x:String x:Key="Text.CommitDetail.Info.WebLinks" xml:space="preserve">Buka di Browser</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.SubjectCount" xml:space="preserve">SUBJEK</x:String>
+  <x:String x:Key="Text.Compare" xml:space="preserve">Perbandingan</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Konfigurasi Repositori</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE COMMIT</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Konten Template:</x:String>
@@ -612,7 +609,6 @@
   <x:String x:Key="Text.Pull.LocalChanges" xml:space="preserve">Perubahan Lokal:</x:String>
   <x:String x:Key="Text.Pull.LocalChanges.Discard" xml:space="preserve">Buang</x:String>
   <x:String x:Key="Text.Pull.LocalChanges.StashAndReapply" xml:space="preserve">Stash &amp; Terapkan Ulang</x:String>
-  <x:String x:Key="Text.Pull.RecurseSubmodules" xml:space="preserve">Perbarui semua submodule</x:String>
   <x:String x:Key="Text.Pull.Remote" xml:space="preserve">Remote:</x:String>
   <x:String x:Key="Text.Pull.Title" xml:space="preserve">Pull (Fetch &amp; Merge)</x:String>
   <x:String x:Key="Text.Pull.UseRebase" xml:space="preserve">Gunakan rebase alih-alih merge</x:String>

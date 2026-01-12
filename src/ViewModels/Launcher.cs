@@ -150,14 +150,14 @@ namespace SourceGit.ViewModels
                 OpenRepositoryInTab(node, null);
             }
 
-            _ignoreIndexChange = false;
-
             var activeIdx = to.ActiveIdx;
             if (activeIdx >= 0 && activeIdx < Pages.Count)
                 ActivePage = Pages[activeIdx];
             else
                 ActivePage = Pages[0];
 
+            _ignoreIndexChange = false;
+            PostActivePageChanged();
             Preferences.Instance.Save();
             GC.Collect();
         }
@@ -442,45 +442,24 @@ namespace SourceGit.ViewModels
             if (_ignoreIndexChange)
                 return;
 
-            var builder = new StringBuilder(512);
-            if (_activeWorkspace != null)
-            {
-                var workspaces = Preferences.Instance.Workspaces;
-                if (workspaces.Count == 0 || workspaces.Count > 1 || workspaces[0] != _activeWorkspace)
-                    builder.Append('[').Append(_activeWorkspace.Name).Append("] ");
-            }
-
             if (_activePage is { Data: Repository repo })
-            {
                 _activeWorkspace.ActiveIdx = _activeWorkspace.Repositories.IndexOf(repo.FullPath);
 
-                var node = _activePage.Node;
-                var name = node.Name;
-                var path = node.Id;
+            var builder = new StringBuilder(512);
+            builder.Append(string.IsNullOrEmpty(_activePage.Node.Name) ? "Repositories" : _activePage.Node.Name);
 
-                if (!OperatingSystem.IsWindows())
-                {
-                    var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                    var prefixLen = home.EndsWith('/') ? home.Length - 1 : home.Length;
-                    if (path.StartsWith(home, StringComparison.Ordinal))
-                        path = $"~{path.AsSpan(prefixLen)}";
-                }
+            var workspaces = Preferences.Instance.Workspaces;
+            if (workspaces.Count == 0 || workspaces.Count > 1 || workspaces[0] != _activeWorkspace)
+                builder.Append(" - ").Append(_activeWorkspace.Name);
 
-                builder.Append(name).Append(" (").Append(path).Append(')');
-            }
-            else
-            {
-                builder.Append("Repositories");
-            }
-
-            CancelCommandPalette();
             Title = builder.ToString();
+            CancelCommandPalette();
         }
 
-        private Workspace _activeWorkspace = null;
-        private LauncherPage _activePage = null;
-        private bool _ignoreIndexChange = false;
+        private Workspace _activeWorkspace;
+        private LauncherPage _activePage;
+        private bool _ignoreIndexChange;
         private string _title = string.Empty;
-        private ICommandPalette _commandPalette = null;
+        private ICommandPalette _commandPalette;
     }
 }
