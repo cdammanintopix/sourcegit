@@ -25,7 +25,7 @@ namespace SourceGit.ViewModels
         {
             get;
             set;
-        }
+        } = false;
 
         public AddSubmodule(Repository repo)
         {
