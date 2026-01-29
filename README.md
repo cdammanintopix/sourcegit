@@ -6,6 +6,21 @@
 [![latest](https://img.shields.io/github/v/release/sourcegit-scm/sourcegit.svg)](https://github.com/sourcegit-scm/sourcegit/releases/latest)
 [![downloads](https://img.shields.io/github/downloads/sourcegit-scm/sourcegit/total)](https://github.com/sourcegit-scm/sourcegit/releases)
 
+## How to update intoPIX fork
+
+* Merge `upstream/develop` into `origin/intopix`
+* Create a M.R. to merge `intopix` into `release`
+* Once the release is deployed, you will find the RPM / DEB installers in `/mnt/IPXWarehouse/Hardware/SourceGit/<date>_<version>_<hash>/` (check the full path in the[ GitLab Releases page](https://gitlab.intopix.com/hw/tools/sourcegit/-/releases))
+* Connect on the IPX-HardCore server with a user that has admin rights
+* Install the update using either
+  ```
+  sudo dnf install --nogpgcheck -y /mnt/IPXWarehouse/Hardware/SourceGit/<date>_<version>_<hash>/sourcegit-v<version>-1.x86_64.rpm
+  ```
+  or if the version did not changed since the last update
+  ```
+  sudo dnf reinstall --nogpgcheck -y /mnt/IPXWarehouse/Hardware/SourceGit/<date>_<version>_<hash>/sourcegit-v<version>-1.x86_64.rpm
+  ```
+
 ## Screenshots
 
 * Dark Theme
