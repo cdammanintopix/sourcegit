@@ -96,7 +96,7 @@ namespace SourceGit.ViewModels
                     .Where(line => !string.IsNullOrEmpty(line)));
                 if (!string.IsNullOrEmpty(remoteMessage))
                 {
-                    App.SendNotification(_repo.FullPath, "Message from remote:\n\n    " + remoteMessage + "\n");
+                    Models.Notification.Send(_repo.FullPath, "Message from remote:\n\n    " + remoteMessage + "\n");
                 }
                 // Trigger CI status refresh
                 CI.QueueForNextRefresh(_repo.Remotes, Revision.SHA);

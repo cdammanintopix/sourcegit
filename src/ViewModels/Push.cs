@@ -89,8 +89,8 @@ namespace SourceGit.ViewModels
 
         public bool PushAllTags
         {
-            get => _repo.Settings.PushAllTags;
-            set => _repo.Settings.PushAllTags = value;
+            get => _repo.UIStates.PushAllTags;
+            set => _repo.UIStates.PushAllTags = value;
         }
 
         public bool ForcePush
@@ -256,7 +256,7 @@ namespace SourceGit.ViewModels
                     .Where(line => !string.IsNullOrEmpty(line)));
                 if (!string.IsNullOrEmpty(remoteMessage))
                 {
-                    App.SendNotification(_repo.FullPath, "Message from remote:\n\n    " + remoteMessage + "\n");
+                    Models.Notification.Send(_repo.FullPath, "Message from remote:\n\n    " + remoteMessage + "\n");
                 }
                 // Trigger CI status refresh
                 var head = await new Commands.QuerySingleCommit(_repo.FullPath, _selectedLocalBranch.Name).GetResultAsync();

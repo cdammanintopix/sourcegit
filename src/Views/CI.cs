@@ -171,7 +171,7 @@ namespace SourceGit.Views
             var menu = new ContextMenu();
 
             var pipeline = new MenuItem();
-            pipeline.Icon = App.CreateMenuIcon("Icons.Action");
+            pipeline.Icon = this.CreateMenuIcon("Icons.Action");
             pipeline.Header = App.Text("CI.NewPipeline");
             pipeline.Click += (_, e) =>
             {
@@ -181,7 +181,7 @@ namespace SourceGit.Views
             menu.Items.Add(pipeline);
 
             var refetch = new MenuItem();
-            refetch.Icon = App.CreateMenuIcon("Icons.Loading");
+            refetch.Icon = this.CreateMenuIcon("Icons.Loading");
             refetch.Header = App.Text("CI.Refetch");
             refetch.Click += (_, ev) =>
             {

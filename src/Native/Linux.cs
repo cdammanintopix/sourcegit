@@ -33,6 +33,40 @@ namespace SourceGit.Native
             }
         }
 
+        public string GetDataDir()
+        {
+            // AppImage supports portable mode
+            var appImage = Environment.GetEnvironmentVariable("APPIMAGE");
+            if (!string.IsNullOrEmpty(appImage) && File.Exists(appImage))
+            {
+                var portableDir = Path.Combine(Path.GetDirectoryName(appImage)!, "data");
+                if (Directory.Exists(portableDir))
+                    return portableDir;
+            }
+
+            // Runtime data dir: ~/.sourcegit
+            var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            var dataDir = Path.Combine(home, ".sourcegit");
+            if (Directory.Exists(dataDir))
+                return dataDir;
+
+            // Migrate old data: ~/.config/SourceGit
+            var oldDataDir = Path.Combine(home, ".config", "SourceGit");
+            if (Directory.Exists(oldDataDir))
+            {
+                try
+                {
+                    Directory.Move(oldDataDir, dataDir);
+                }
+                catch
+                {
+                    // Ignore errors
+                }
+            }
+
+            return dataDir;
+        }
+
         public string FindGitExecutable()
         {
             return FindExecutable("git");
@@ -72,7 +106,7 @@ namespace SourceGit.Native
             Process.Start(browser, url.Quoted());
         }
 
-        public void OpenInFileManager(string path, bool select)
+        public void OpenInFileManager(string path)
         {
             if (Directory.Exists(path))
             {
@@ -102,7 +136,7 @@ namespace SourceGit.Native
             }
             catch (Exception e)
             {
-                App.RaiseException(workdir, $"Failed to start '{OS.ShellOrTerminal}'. Reason: {e.Message}");
+                Models.Notification.Send(workdir, $"Failed to start '{OS.ShellOrTerminal}'. Reason: {e.Message}", true);
             }
         }
 
@@ -114,7 +148,7 @@ namespace SourceGit.Native
                 proc.WaitForExit();
 
                 if (proc.ExitCode != 0)
-                    App.RaiseException("", $"Failed to open: {file}");
+                    Models.Notification.Send("", $"Failed to open: {file}", true);
 
                 proc.Close();
             }

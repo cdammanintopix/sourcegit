@@ -64,14 +64,14 @@ namespace SourceGit.Models
         {
             url = null;
 
-            if (URL.StartsWith("http", StringComparison.Ordinal))
+            if (URL.StartsWith("http://", StringComparison.Ordinal) || URL.StartsWith("https://", StringComparison.Ordinal))
             {
-                var uri = new Uri(URL.EndsWith(".git", StringComparison.Ordinal) ? URL.Substring(0, URL.Length - 4) : URL);
+                var trimmed = URL.EndsWith(".git", StringComparison.Ordinal) ? URL.Substring(0, URL.Length - 4) : URL;
+                var uri = new Uri(trimmed);
                 if (uri.Port != 80 && uri.Port != 443)
-                    url = $"{uri.Scheme}://{uri.Host}:{uri.Port}{uri.LocalPath}";
+                    url = $"{uri.Scheme}://{uri.Host}:{uri.Port}{uri.AbsolutePath}";
                 else
-                    url = $"{uri.Scheme}://{uri.Host}{uri.LocalPath}";
-
+                    url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}";
                 return true;
             }
 
@@ -97,7 +97,6 @@ namespace SourceGit.Models
 
             var uri = new Uri(baseURL);
             var host = uri.Host;
-            var route = uri.AbsolutePath.TrimStart('/');
             var encodedBranch = HttpUtility.UrlEncode(mergeBranch);
 
             if (host.Contains("github.com", StringComparison.Ordinal))
@@ -130,7 +129,8 @@ namespace SourceGit.Models
                 return true;
             }
 
-            if (host.Contains("azure.com", StringComparison.Ordinal))
+            if (host.Contains("azure.com", StringComparison.Ordinal) ||
+                host.Contains("visualstudio.com", StringComparison.Ordinal))
             {
                 url = $"{baseURL}/pullrequestcreate?sourceRef={encodedBranch}";
                 return true;

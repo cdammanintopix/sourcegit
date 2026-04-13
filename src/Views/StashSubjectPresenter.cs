@@ -120,13 +120,14 @@ namespace SourceGit.Views
             var typeface = new Typeface(FontFamily);
             var test = new FormattedText("fgl|", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, typeface, FontSize, Brushes.White);
             var h = Math.Max(18, test.Height);
-            return new Size(availableSize.Width, h);
+            var w = double.IsInfinity(availableSize.Width) ? 0 : availableSize.Width;
+            return new Size(w, h);
         }
 
         [GeneratedRegex(@"^On ([^\s]+)\: ")]
         private static partial Regex REG_KEYWORD_ON();
 
-        [GeneratedRegex(@"^WIP on ([^\s]+)\: ([a-f0-9]{6,40}) ")]
+        [GeneratedRegex(@"^WIP on ([^\s]+)\: ([a-f0-9]{6,64}) ")]
         private static partial Regex REG_KEYWORD_WIP();
     }
 }

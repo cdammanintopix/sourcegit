@@ -18,6 +18,45 @@ namespace SourceGit.ViewModels
             set => SetProperty(ref _isLoading, value);
         }
 
+        public bool IsAuthorColumnVisible
+        {
+            get => _repo.UIStates.IsAuthorColumnVisibleInHistory;
+            set
+            {
+                if (_repo.UIStates.IsAuthorColumnVisibleInHistory != value)
+                {
+                    _repo.UIStates.IsAuthorColumnVisibleInHistory = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsSHAColumnVisible
+        {
+            get => _repo.UIStates.IsSHAColumnVisibleInHistory;
+            set
+            {
+                if (_repo.UIStates.IsSHAColumnVisibleInHistory != value)
+                {
+                    _repo.UIStates.IsSHAColumnVisibleInHistory = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsDateTimeColumnVisible
+        {
+            get => _repo.UIStates.IsDateTimeColumnVisibleInHistory;
+            set
+            {
+                if (_repo.UIStates.IsDateTimeColumnVisibleInHistory != value)
+                {
+                    _repo.UIStates.IsDateTimeColumnVisibleInHistory = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public List<Models.Commit> Commits
         {
             get => _commits;
@@ -27,7 +66,7 @@ namespace SourceGit.ViewModels
                 if (SetProperty(ref _commits, value))
                 {
                     if (value.Count > 0 && lastSelected != null)
-                        SelectedCommit = value.Find(x => x.SHA == lastSelected.SHA);
+                        SelectedCommit = value.Find(x => x.SHA.Equals(lastSelected.SHA, StringComparison.Ordinal));
                 }
             }
         }
@@ -189,8 +228,8 @@ namespace SourceGit.ViewModels
             else if (commits.Count == 1)
             {
                 var commit = (commits[0] as Models.Commit)!;
-                if (_repo.SearchCommitContext.Selected == null || _repo.SearchCommitContext.Selected.SHA != commit.SHA)
-                    _repo.SearchCommitContext.Selected = _repo.SearchCommitContext.Results?.Find(x => x.SHA == commit.SHA);
+                if (_repo.SearchCommitContext.Selected == null || !_repo.SearchCommitContext.Selected.SHA.Equals(commit.SHA, StringComparison.Ordinal))
+                    _repo.SearchCommitContext.Selected = _repo.SearchCommitContext.Results?.Find(x => x.SHA.Equals(commit.SHA, StringComparison.Ordinal));
 
                 SelectedCommit = commit;
                 NavigationId = _navigationId + 1;
@@ -219,6 +258,13 @@ namespace SourceGit.ViewModels
                 _repo.SearchCommitContext.Selected = null;
                 DetailContext = new Models.Count(commits.Count);
             }
+        }
+
+        public async Task<Models.Commit> GetCommitAsync(string sha)
+        {
+            return await new Commands.QuerySingleCommit(_repo.FullPath, sha)
+                .GetResultAsync()
+                .ConfigureAwait(false);
         }
 
         public async Task<bool> CheckoutBranchByDecoratorAsync(Models.Decorator decorator)
@@ -326,7 +372,7 @@ namespace SourceGit.ViewModels
                     var parents = new List<Models.Commit>();
                     foreach (var sha in commit.Parents)
                     {
-                        var parent = _commits.Find(x => x.SHA == sha);
+                        var parent = _commits.Find(x => x.SHA.Equals(sha, StringComparison.Ordinal));
                         if (parent == null)
                             parent = await new Commands.QuerySingleCommit(_repo.FullPath, sha).GetResultAsync();
 
@@ -389,7 +435,7 @@ namespace SourceGit.ViewModels
 
             var on = await new Commands.QuerySingleCommit(_repo.FullPath, start).GetResultAsync();
             if (on == null)
-                App.RaiseException(_repo.FullPath, $"Can not squash current commit into parent!");
+                _repo.SendNotification($"Can not squash current commit into parent!", true);
             else
                 await App.ShowDialog(new InteractiveRebase(_repo, on, prefill));
         }

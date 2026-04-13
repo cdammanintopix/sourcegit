@@ -60,27 +60,9 @@ namespace SourceGit.ViewModels
                 .RenameAsync(_name);
 
             if (succ)
-            {
-                foreach (var filter in _repo.HistoryFilterCollection.Filters)
-                {
-                    if (filter.Type == Models.FilterType.LocalBranch &&
-                        filter.Pattern.Equals(oldName, StringComparison.Ordinal))
-                    {
-                        filter.Pattern = $"refs/heads/{_name}";
-                        break;
-                    }
-                }
-            }
+                _repo.RefreshAfterRenameBranch(Target, _name);
 
             log.Complete();
-            _repo.MarkBranchesDirtyManually();
-
-            if (isCurrent)
-            {
-                ProgressDescription = "Waiting for branch updated...";
-                await Task.Delay(400);
-            }
-
             return succ;
         }
 

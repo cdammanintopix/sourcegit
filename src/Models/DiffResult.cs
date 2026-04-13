@@ -55,6 +55,8 @@ namespace SourceGit.Models
     {
         public List<TextDiffLine> Lines { get; set; } = new List<TextDiffLine>();
         public int MaxLineNumber = 0;
+        public int AddedLines { get; set; } = 0;
+        public int DeletedLines { get; set; } = 0;
 
         public TextDiffSelection MakeSelection(int startLine, int endLine, bool isCombined, bool isOldSide)
         {
@@ -124,9 +126,9 @@ namespace SourceGit.Models
                         continue;
 
                     if (i >= selection.StartLine - 1 && i < selection.EndLine)
-                        writer.WriteLine($"+{line.Content}");
+                        WriteLine(writer, '+', line);
                     else
-                        writer.WriteLine($" {line.Content}");
+                        WriteLine(writer, ' ', line);
                 }
             }
             else
@@ -137,11 +139,10 @@ namespace SourceGit.Models
                     var line = Lines[i];
                     if (line.Type != TextDiffLineType.Added)
                         continue;
-                    writer.WriteLine($"+{line.Content}");
+                    WriteLine(writer, '+', line);
                 }
             }
 
-            writer.WriteLine("\\ No newline at end of file");
             writer.Flush();
         }
 
@@ -255,7 +256,8 @@ namespace SourceGit.Models
                 }
             }
 
-            writer.WriteLine($" {tail}");
+            if (!string.IsNullOrEmpty(tail))
+                writer.WriteLine($" {tail}");
             writer.Flush();
         }
 
@@ -406,7 +408,8 @@ namespace SourceGit.Models
                 }
             }
 
-            writer.WriteLine($" {tail}");
+            if (!string.IsNullOrEmpty(tail))
+                writer.WriteLine($" {tail}");
             writer.Flush();
         }
 

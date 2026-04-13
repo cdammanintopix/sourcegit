@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -155,6 +156,19 @@ namespace SourceGit.ViewModels
             }
         }
 
+        public bool Use24Hours
+        {
+            get => Models.DateTimeFormat.Use24Hours;
+            set
+            {
+                if (value != Models.DateTimeFormat.Use24Hours)
+                {
+                    Models.DateTimeFormat.Use24Hours = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public bool UseFixedTabWidth
         {
             get => _useFixedTabWidth;
@@ -197,23 +211,11 @@ namespace SourceGit.ViewModels
             set => SetProperty(ref _ignoreUpdateTag, value);
         }
 
-        public bool ShowTagsAsTree
-        {
-            get;
-            set;
-        } = false;
-
         public bool ShowTagsInGraph
         {
             get => _showTagsInGraph;
             set => SetProperty(ref _showTagsInGraph, value);
         }
-
-        public bool ShowSubmodulesAsTree
-        {
-            get;
-            set;
-        } = false;
 
         public bool UseTwoColumnsLayoutInHistories
         {
@@ -251,6 +253,18 @@ namespace SourceGit.ViewModels
                 }
             }
         }
+
+        public bool EnableAutoFetch
+        {
+            get;
+            set;
+        } = false;
+
+        public int AutoFetchInterval
+        {
+            get;
+            set;
+        } = 10;
 
         public bool IgnoreWhitespaceChangesInDiff
         {
@@ -479,7 +493,7 @@ namespace SourceGit.ViewModels
             set;
         } = [];
 
-        public AvaloniaList<Models.OpenAIService> OpenAIServices
+        public AvaloniaList<AI.Service> OpenAIServices
         {
             get;
             set;
@@ -613,6 +627,21 @@ namespace SourceGit.ViewModels
         public void AutoRemoveInvalidNode()
         {
             RemoveInvalidRepositoriesRecursive(RepositoryNodes);
+        }
+
+        public async Task UpdateAvailableAIModelsAsync()
+        {
+            foreach (var service in OpenAIServices)
+            {
+                try
+                {
+                    await service.FetchAvailableModelsAsync();
+                }
+                catch
+                {
+                    // Ignore errors.
+                }
+            }
         }
 
         public void Save()
