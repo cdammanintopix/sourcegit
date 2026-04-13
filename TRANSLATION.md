@@ -6,7 +6,7 @@ This document shows the translation status of each locale file in the repository
 
 ### ![en_US](https://img.shields.io/badge/en__US-%E2%88%9A-brightgreen)
 
-### ![de__DE](https://img.shields.io/badge/de__DE-97.53%25-yellow)
+### ![de__DE](https://img.shields.io/badge/de__DE-96.84%25-yellow)
 
 <details>
 <summary>Missing keys in de_DE.axaml</summary>
@@ -16,6 +16,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutBranchFromStash
 - Text.CheckoutBranchFromStash.Branch
 - Text.CheckoutBranchFromStash.Stash
+- Text.Clone.Bookmark
+- Text.Clone.Group
 - Text.CommandPalette.Branches
 - Text.CommandPalette.BranchesAndTags
 - Text.CommandPalette.RepositoryActions
@@ -24,10 +26,15 @@ This document shows the translation status of each locale file in the repository
 - Text.ConfirmEmptyCommit.StageSelectedThenCommit
 - Text.Discard.IncludeModified
 - Text.GotoRevisionSelector
+- Text.Hotkeys.Global.OpenLocalRepository
 - Text.Hotkeys.Repo.CreateBranch
 - Text.Hotkeys.Repo.GoToChild
 - Text.Init.CommandTip
 - Text.Init.ErrorMessageTip
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
 - Text.Preferences.AI.AdditionalPrompt
 - Text.Preferences.General.Use24Hours
 - Text.StashCM.ApplyFileChanges
@@ -38,9 +45,22 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![es__ES](https://img.shields.io/badge/es__ES-%E2%88%9A-brightgreen)
+### ![es__ES](https://img.shields.io/badge/es__ES-99.29%25-yellow)
 
-### ![fr__FR](https://img.shields.io/badge/fr__FR-91.37%25-yellow)
+<details>
+<summary>Missing keys in es_ES.axaml</summary>
+
+- Text.Clone.Bookmark
+- Text.Clone.Group
+- Text.Hotkeys.Global.OpenLocalRepository
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
+
+</details>
+
+### ![fr__FR](https://img.shields.io/badge/fr__FR-90.71%25-yellow)
 
 <details>
 <summary>Missing keys in fr_FR.axaml</summary>
@@ -60,6 +80,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutBranchFromStash
 - Text.CheckoutBranchFromStash.Branch
 - Text.CheckoutBranchFromStash.Stash
+- Text.Clone.Bookmark
+- Text.Clone.Group
 - Text.CommandPalette.Branches
 - Text.CommandPalette.BranchesAndTags
 - Text.CommandPalette.RepositoryActions
@@ -76,6 +98,7 @@ This document shows the translation status of each locale file in the repository
 - Text.GotoRevisionSelector
 - Text.Histories.Header.DateTime
 - Text.Histories.ShowColumns
+- Text.Hotkeys.Global.OpenLocalRepository
 - Text.Hotkeys.Global.ShowWorkspaceDropdownMenu
 - Text.Hotkeys.Global.Zoom
 - Text.Hotkeys.Repo.CreateBranch
@@ -101,6 +124,10 @@ This document shows the translation status of each locale file in the repository
 - Text.MergeConflictEditor.Undo
 - Text.No
 - Text.OpenFile
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
 - Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.AdditionalPrompt
@@ -132,7 +159,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![id__ID](https://img.shields.io/badge/id__ID-89.21%25-yellow)
+### ![id__ID](https://img.shields.io/badge/id__ID-88.57%25-yellow)
 
 <details>
 <summary>Missing keys in id_ID.axaml</summary>
@@ -156,6 +183,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutBranchFromStash
 - Text.CheckoutBranchFromStash.Branch
 - Text.CheckoutBranchFromStash.Stash
+- Text.Clone.Bookmark
+- Text.Clone.Group
 - Text.CommandPalette.Branches
 - Text.CommandPalette.BranchesAndTags
 - Text.CommandPalette.RepositoryActions
@@ -182,6 +211,7 @@ This document shows the translation status of each locale file in the repository
 - Text.GotoRevisionSelector
 - Text.Histories.Header.DateTime
 - Text.Histories.ShowColumns
+- Text.Hotkeys.Global.OpenLocalRepository
 - Text.Hotkeys.Global.ShowWorkspaceDropdownMenu
 - Text.Hotkeys.Global.Zoom
 - Text.Hotkeys.Repo.CreateBranch
@@ -212,6 +242,10 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
 - Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.AdditionalPrompt
@@ -245,7 +279,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![it__IT](https://img.shields.io/badge/it__IT-96.92%25-yellow)
+### ![it__IT](https://img.shields.io/badge/it__IT-96.22%25-yellow)
 
 <details>
 <summary>Missing keys in it_IT.axaml</summary>
@@ -256,6 +290,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutBranchFromStash
 - Text.CheckoutBranchFromStash.Branch
 - Text.CheckoutBranchFromStash.Stash
+- Text.Clone.Bookmark
+- Text.Clone.Group
 - Text.CommandPalette.Branches
 - Text.CommandPalette.BranchesAndTags
 - Text.CommandPalette.RepositoryActions
@@ -266,11 +302,16 @@ This document shows the translation status of each locale file in the repository
 - Text.GotoRevisionSelector
 - Text.Histories.Header.DateTime
 - Text.Histories.ShowColumns
+- Text.Hotkeys.Global.OpenLocalRepository
 - Text.Hotkeys.Repo.CreateBranch
 - Text.Hotkeys.Repo.GoToChild
 - Text.Hotkeys.Repo.GoToParent
 - Text.Init.CommandTip
 - Text.Init.ErrorMessageTip
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
 - Text.Preferences.AI.AdditionalPrompt
 - Text.Preferences.General.Use24Hours
 - Text.SelfUpdate.CurrentVersion
@@ -283,7 +324,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ja__JP](https://img.shields.io/badge/ja__JP-97.84%25-yellow)
+### ![ja__JP](https://img.shields.io/badge/ja__JP-97.14%25-yellow)
 
 <details>
 <summary>Missing keys in ja_JP.axaml</summary>
@@ -293,6 +334,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutBranchFromStash
 - Text.CheckoutBranchFromStash.Branch
 - Text.CheckoutBranchFromStash.Stash
+- Text.Clone.Bookmark
+- Text.Clone.Group
 - Text.CommandPalette.Branches
 - Text.CommandPalette.BranchesAndTags
 - Text.CommandPalette.RepositoryActions
@@ -300,9 +343,14 @@ This document shows the translation status of each locale file in the repository
 - Text.ConfirmEmptyCommit.StageSelectedThenCommit
 - Text.DealWithLocalChanges.DoNothing
 - Text.Discard.IncludeModified
+- Text.Hotkeys.Global.OpenLocalRepository
 - Text.Hotkeys.Repo.CreateBranch
 - Text.Init.CommandTip
 - Text.Init.ErrorMessageTip
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
 - Text.Preferences.AI.AdditionalPrompt
 - Text.Preferences.General.Use24Hours
 - Text.StashCM.Branch
@@ -312,7 +360,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ko__KR](https://img.shields.io/badge/ko__KR-89.52%25-yellow)
+### ![ko__KR](https://img.shields.io/badge/ko__KR-88.88%25-yellow)
 
 <details>
 <summary>Missing keys in ko_KR.axaml</summary>
@@ -336,6 +384,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutBranchFromStash
 - Text.CheckoutBranchFromStash.Branch
 - Text.CheckoutBranchFromStash.Stash
+- Text.Clone.Bookmark
+- Text.Clone.Group
 - Text.CommandPalette.Branches
 - Text.CommandPalette.BranchesAndTags
 - Text.CommandPalette.RepositoryActions
@@ -357,6 +407,7 @@ This document shows the translation status of each locale file in the repository
 - Text.GotoRevisionSelector
 - Text.Histories.Header.DateTime
 - Text.Histories.ShowColumns
+- Text.Hotkeys.Global.OpenLocalRepository
 - Text.Hotkeys.Global.ShowWorkspaceDropdownMenu
 - Text.Hotkeys.Global.Zoom
 - Text.Hotkeys.Repo.CreateBranch
@@ -387,6 +438,10 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
 - Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.AdditionalPrompt
@@ -422,7 +477,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![pt__BR](https://img.shields.io/badge/pt__BR-67.73%25-red)
+### ![pt__BR](https://img.shields.io/badge/pt__BR-67.24%25-red)
 
 <details>
 <summary>Missing keys in pt_BR.axaml</summary>
@@ -449,6 +504,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutBranchFromStash
 - Text.CheckoutBranchFromStash.Branch
 - Text.CheckoutBranchFromStash.Stash
+- Text.Clone.Bookmark
+- Text.Clone.Group
 - Text.Clone.RecurseSubmodules
 - Text.CommandPalette.Branches
 - Text.CommandPalette.BranchesAndTags
@@ -562,6 +619,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Histories.Header.DateTime
 - Text.Histories.ShowColumns
 - Text.Hotkeys.Global.Clone
+- Text.Hotkeys.Global.OpenLocalRepository
 - Text.Hotkeys.Global.ShowWorkspaceDropdownMenu
 - Text.Hotkeys.Global.SwitchTab
 - Text.Hotkeys.Global.Zoom
@@ -610,6 +668,10 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
 - Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.AdditionalPrompt
@@ -744,9 +806,22 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ru__RU](https://img.shields.io/badge/ru__RU-%E2%88%9A-brightgreen)
+### ![ru__RU](https://img.shields.io/badge/ru__RU-99.29%25-yellow)
 
-### ![ta__IN](https://img.shields.io/badge/ta__IN-69.78%25-red)
+<details>
+<summary>Missing keys in ru_RU.axaml</summary>
+
+- Text.Clone.Bookmark
+- Text.Clone.Group
+- Text.Hotkeys.Global.OpenLocalRepository
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
+
+</details>
+
+### ![ta__IN](https://img.shields.io/badge/ta__IN-69.29%25-red)
 
 <details>
 <summary>Missing keys in ta_IN.axaml</summary>
@@ -802,6 +877,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutBranchFromStash
 - Text.CheckoutBranchFromStash.Branch
 - Text.CheckoutBranchFromStash.Stash
+- Text.Clone.Bookmark
+- Text.Clone.Group
 - Text.CommandPalette.Branches
 - Text.CommandPalette.BranchesAndTags
 - Text.CommandPalette.RepositoryActions
@@ -898,6 +975,7 @@ This document shows the translation status of each locale file in the repository
 - Text.GotoRevisionSelector
 - Text.Histories.Header.DateTime
 - Text.Histories.ShowColumns
+- Text.Hotkeys.Global.OpenLocalRepository
 - Text.Hotkeys.Global.ShowWorkspaceDropdownMenu
 - Text.Hotkeys.Global.SwitchTab
 - Text.Hotkeys.Global.Zoom
@@ -937,6 +1015,10 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
 - Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.AdditionalPrompt
@@ -1048,7 +1130,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![uk__UA](https://img.shields.io/badge/uk__UA-70.61%25-red)
+### ![uk__UA](https://img.shields.io/badge/uk__UA-70.10%25-red)
 
 <details>
 <summary>Missing keys in uk_UA.axaml</summary>
@@ -1104,6 +1186,8 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutBranchFromStash
 - Text.CheckoutBranchFromStash.Branch
 - Text.CheckoutBranchFromStash.Stash
+- Text.Clone.Bookmark
+- Text.Clone.Group
 - Text.CommandPalette.Branches
 - Text.CommandPalette.BranchesAndTags
 - Text.CommandPalette.RepositoryActions
@@ -1196,6 +1280,7 @@ This document shows the translation status of each locale file in the repository
 - Text.GotoRevisionSelector
 - Text.Histories.Header.DateTime
 - Text.Histories.ShowColumns
+- Text.Hotkeys.Global.OpenLocalRepository
 - Text.Hotkeys.Global.ShowWorkspaceDropdownMenu
 - Text.Hotkeys.Global.SwitchTab
 - Text.Hotkeys.Global.Zoom
@@ -1235,6 +1320,10 @@ This document shows the translation status of each locale file in the repository
 - Text.Open
 - Text.Open.SystemDefaultEditor
 - Text.OpenFile
+- Text.OpenLocalRepository
+- Text.OpenLocalRepository.Bookmark
+- Text.OpenLocalRepository.Group
+- Text.OpenLocalRepository.Path
 - Text.PageTabBar.Tab.MoveToWorkspace
 - Text.PageTabBar.Tab.Refresh
 - Text.Preferences.AI.AdditionalPrompt
