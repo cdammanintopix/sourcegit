@@ -78,6 +78,7 @@ Rocky9_x64_Release_build:
     - export DOTNET_CLI_TELEMETRY_OPTOUT=1
     - export DOTNET_ROOT=$HOME/.dotnet
     - export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+    - update-crypto-policies --set DEFAULT:SHA1
     - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64 -p:DisableUpdateDetection=true
     - rm -f build/SourceGit/*.dbg
     - mv build/SourceGit/SourceGit build/SourceGit/sourcegit
