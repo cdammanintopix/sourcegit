@@ -106,7 +106,7 @@ namespace SourceGit.Views
                 Activate();
         }
 
-        protected override async void OnOpened(EventArgs e)
+        protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
 
@@ -114,8 +114,6 @@ namespace SourceGit.Views
             var state = preferences.Layout.LauncherWindowState;
             if (state == WindowState.Maximized || state == WindowState.FullScreen)
                 WindowState = WindowState.Maximized;
-
-            await preferences.UpdateAvailableAIModelsAsync();
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -174,14 +172,14 @@ namespace SourceGit.Views
             {
                 if (e is { KeyModifiers: KeyModifiers.Control, Key: Key.OemComma })
                 {
-                    await App.ShowDialog(new Preferences());
+                    await this.ShowDialogAsync(new Preferences());
                     e.Handled = true;
                     return;
                 }
 
                 if (e is { KeyModifiers: KeyModifiers.None, Key: Key.F1 })
                 {
-                    await App.ShowDialog(new Hotkeys());
+                    await this.ShowDialogAsync(new Hotkeys());
                     e.Handled = true;
                     return;
                 }
@@ -340,10 +338,17 @@ namespace SourceGit.Views
             base.OnClosing(e);
 
             if (!Design.IsDesignMode && DataContext is ViewModels.Launcher launcher)
-            {
+                launcher.CloseAll();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            if (!Design.IsDesignMode)
                 ViewModels.Preferences.Instance.Save();
-                launcher.Quit();
-            }
+
+            App.Quit(0);
         }
 
         private void OnPositionChanged(object sender, PixelPointEventArgs e)
@@ -406,7 +411,7 @@ namespace SourceGit.Views
                 configure.Header = App.Text("Workspace.Configure");
                 configure.Click += async (_, ev) =>
                 {
-                    await App.ShowDialog(new ViewModels.ConfigureWorkspace());
+                    await this.ShowDialogAsync(new ViewModels.ConfigureWorkspace());
                     ev.Handled = true;
                 };
                 menu.Items.Add(configure);

@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 using Avalonia;
@@ -839,7 +840,7 @@ namespace SourceGit.Views
                             if (succ)
                             {
                                 var parent = await new Commands.QuerySingleCommit(repo.FullPath, $"{commit.SHA}~").GetResultAsync();
-                                await App.ShowDialog(new ViewModels.InteractiveRebase(repo, parent));
+                                await this.ShowDialogAsync(new ViewModels.InteractiveRebase(repo, parent));
                             }
                             e.Handled = true;
                         };
@@ -850,8 +851,11 @@ namespace SourceGit.Views
                         manually.Icon = this.CreateMenuIcon("Icons.InteractiveRebase");
                         manually.Click += async (_, e) =>
                         {
-                            var parent = await new Commands.QuerySingleCommit(repo.FullPath, $"{commit.SHA}~").GetResultAsync();
-                            await App.ShowDialog(new ViewModels.InteractiveRebase(repo, parent));
+                            var on = await new Commands.QuerySingleCommit(repo.FullPath, $"{commit.SHA}~").GetResultAsync();
+                            if (on == null)
+                                repo.SendNotification($"Commit '{on}' is not a valid revision for `git rebase -i`!", true);
+                            else
+                                await this.ShowDialogAsync(new ViewModels.InteractiveRebase(repo, commit));
                             e.Handled = true;
                         };
 
@@ -860,7 +864,7 @@ namespace SourceGit.Views
                         reword.Icon = this.CreateMenuIcon("Icons.Rename");
                         reword.Click += async (_, e) =>
                         {
-                            await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Reword);
+                            await InteractiveRebaseWithPrefillActionAsync(repo, commit, Models.InteractiveRebaseAction.Reword);
                             e.Handled = true;
                         };
 
@@ -869,7 +873,7 @@ namespace SourceGit.Views
                         edit.Icon = this.CreateMenuIcon("Icons.Edit");
                         edit.Click += async (_, e) =>
                         {
-                            await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Edit);
+                            await InteractiveRebaseWithPrefillActionAsync(repo, commit, Models.InteractiveRebaseAction.Edit);
                             e.Handled = true;
                         };
 
@@ -878,7 +882,7 @@ namespace SourceGit.Views
                         squash.Icon = this.CreateMenuIcon("Icons.SquashIntoParent");
                         squash.Click += async (_, e) =>
                         {
-                            await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Squash);
+                            await InteractiveRebaseWithPrefillActionAsync(repo, commit, Models.InteractiveRebaseAction.Squash);
                             e.Handled = true;
                         };
 
@@ -887,7 +891,7 @@ namespace SourceGit.Views
                         fixup.Icon = this.CreateMenuIcon("Icons.Fix");
                         fixup.Click += async (_, e) =>
                         {
-                            await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Fixup);
+                            await InteractiveRebaseWithPrefillActionAsync(repo, commit, Models.InteractiveRebaseAction.Fixup);
                             e.Handled = true;
                         };
 
@@ -896,7 +900,7 @@ namespace SourceGit.Views
                         drop.Icon = this.CreateMenuIcon("Icons.Clear");
                         drop.Click += async (_, e) =>
                         {
-                            await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Drop);
+                            await InteractiveRebaseWithPrefillActionAsync(repo, commit, Models.InteractiveRebaseAction.Drop);
                             e.Handled = true;
                         };
 
@@ -921,7 +925,7 @@ namespace SourceGit.Views
                         interactiveRebase.Icon = this.CreateMenuIcon("Icons.InteractiveRebase");
                         interactiveRebase.Click += async (_, e) =>
                         {
-                            await App.ShowDialog(new ViewModels.InteractiveRebase(repo, commit));
+                            await this.ShowDialogAsync(new ViewModels.InteractiveRebase(repo, commit));
                             e.Handled = true;
                         };
 
@@ -1460,6 +1464,22 @@ namespace SourceGit.Views
             menu.Items.Add(submenu);
         }
 
+        private async Task InteractiveRebaseWithPrefillActionAsync(ViewModels.Repository repo, Models.Commit target, Models.InteractiveRebaseAction action)
+        {
+            var prefill = new ViewModels.InteractiveRebasePrefill(target.SHA, action);
+            var start = action switch
+            {
+                Models.InteractiveRebaseAction.Squash or Models.InteractiveRebaseAction.Fixup => $"{target.SHA}~~",
+                _ => $"{target.SHA}~",
+            };
+
+            var on = await new Commands.QuerySingleCommit(repo.FullPath, start).GetResultAsync();
+            if (on == null)
+                repo.SendNotification($"Commit '{start}' is not a valid revision for `git rebase -i`!", true);
+            else
+                await this.ShowDialogAsync(new ViewModels.InteractiveRebase(repo, on, prefill));
+        }
+
         private void FillGitLabMenu(ContextMenu menu, ViewModels.Repository repo, Models.Commit commit)
         {
             var gitlab = new MenuItem();
@@ -1539,3 +1559,4 @@ namespace SourceGit.Views
         private double _lastGraphRowHeight = 0;
     }
 }
+
