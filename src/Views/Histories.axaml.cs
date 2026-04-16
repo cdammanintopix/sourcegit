@@ -828,6 +828,23 @@ namespace SourceGit.Views
 
                     if (commit.IsMerged && commit.Parents.Count > 0)
                     {
+                        var fixupWithStaged = new MenuItem();
+                        fixupWithStaged.Header = App.Text("CommitCM.FixupWithStaged");
+                        fixupWithStaged.Icon = this.CreateMenuIcon("Icons.Fix");
+                        fixupWithStaged.Click += async (_, e) =>
+                        {
+                            var log = repo.CreateLog("Commit");
+                            var succ = await new Commands.Commit(repo.FullPath, $"fixup! {commit.Subject}", false, false, false, false).Use(log).RunAsync();
+                            log.Complete();
+                            if (succ)
+                            {
+                                var parent = await new Commands.QuerySingleCommit(repo.FullPath, $"{commit.SHA}~").GetResultAsync();
+                                await App.ShowDialog(new ViewModels.InteractiveRebase(repo, parent));
+                            }
+                            e.Handled = true;
+                        };
+                        menu.Items.Add(fixupWithStaged);
+
                         var manually = new MenuItem();
                         manually.Header = App.Text("CommitCM.InteractiveRebase.Manually", current.Name, target);
                         manually.Icon = this.CreateMenuIcon("Icons.InteractiveRebase");

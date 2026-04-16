@@ -410,7 +410,12 @@ namespace SourceGit.ViewModels
                 }
 
                 if (_repo.CanCreatePopup())
-                    _repo.ShowPopup(new SquashOrFixupHead(_repo, parent, message, fixup));
+                {
+                    if (!fixup)
+                        _repo.ShowPopup(new SquashOrFixupHead(_repo, parent, message, fixup));
+                    else
+                        await _repo.ShowAndStartPopupAsync(new SquashOrFixupHead(_repo, parent, message, fixup));
+                }
             }
         }
 

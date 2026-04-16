@@ -177,6 +177,7 @@
   <x:String x:Key="Text.CommitCM.SaveAsPatch" xml:space="preserve">Save as Patch...</x:String>
   <x:String x:Key="Text.CommitCM.Squash" xml:space="preserve">Squash into Parent</x:String>
   <x:String x:Key="Text.CommitCM.Fixup" xml:space="preserve">Fixup into Parent</x:String>
+  <x:String x:Key="Text.CommitCM.FixupWithStaged" xml:space="preserve">Fixup Commit with Staged Files</x:String>
   <x:String x:Key="Text.CommitDetail.Changes" xml:space="preserve">CHANGES</x:String>
   <x:String x:Key="Text.CommitDetail.Changes.Count" xml:space="preserve">changed file(s)</x:String>
   <x:String x:Key="Text.CommitDetail.Changes.Search" xml:space="preserve">Search Changes...</x:String>
