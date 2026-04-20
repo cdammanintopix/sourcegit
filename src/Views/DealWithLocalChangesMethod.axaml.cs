@@ -7,7 +7,7 @@ namespace SourceGit.Views
     public partial class DealWithLocalChangesMethod : UserControl
     {
         public static readonly StyledProperty<Models.DealWithLocalChanges> MethodProperty =
-            AvaloniaProperty.Register<DealWithLocalChangesMethod, Models.DealWithLocalChanges>(nameof(Method), Models.DealWithLocalChanges.DoNothing);
+            AvaloniaProperty.Register<DealWithLocalChangesMethod, Models.DealWithLocalChanges>(nameof(Method), Models.DealWithLocalChanges.StashAndReapply);
 
         public Models.DealWithLocalChanges Method
         {
