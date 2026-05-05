@@ -64,20 +64,41 @@ namespace SourceGit.ViewModels
             {
                 if (SetProperty(ref _selectedViewIndex, value))
                 {
-                    SelectedView = value switch
-                    {
-                        1 => _workingCopy,
-                        2 => _stashesPage,
-                        _ => _histories,
-                    };
+                    OnPropertyChanged(nameof(IsHistoriesVisible));
+                    OnPropertyChanged(nameof(IsWorkingCopyVisible));
+                    OnPropertyChanged(nameof(IsStashesVisible));
                 }
             }
         }
 
-        public object SelectedView
+        public Histories Histories
         {
-            get => _selectedView;
-            set => SetProperty(ref _selectedView, value);
+            get => _histories;
+        }
+
+        public WorkingCopy WorkingCopy
+        {
+            get => _workingCopy;
+        }
+
+        public StashesPage StashesPage
+        {
+            get => _stashesPage;
+        }
+
+        public bool IsHistoriesVisible
+        {
+            get => SelectedViewIndex == 0;
+        }
+
+        public bool IsWorkingCopyVisible
+        {
+            get => SelectedViewIndex == 1;
+        }
+
+        public bool IsStashesVisible
+        {
+            get => SelectedViewIndex == 2;
         }
 
         public bool EnableTopoOrderInHistory
@@ -106,17 +127,10 @@ namespace SourceGit.ViewModels
             }
         }
 
-        public bool OnlyHighlightCurrentBranchInHistory
+        public bool HighlightCurrentBranchOnlyInHistory
         {
-            get => _uiStates.OnlyHighlightCurrentBranchInHistory;
-            set
-            {
-                if (value != _uiStates.OnlyHighlightCurrentBranchInHistory)
-                {
-                    _uiStates.OnlyHighlightCurrentBranchInHistory = value;
-                    OnPropertyChanged();
-                }
-            }
+            get => _histories.HighlightCurrentBranchOnly;
+            set => _histories.HighlightCurrentBranchOnly = value;
         }
 
         public string Filter
@@ -153,9 +167,10 @@ namespace SourceGit.ViewModels
             private set
             {
                 var oldHead = _currentBranch?.Head;
-                if (SetProperty(ref _currentBranch, value) && value != null)
+                if (SetProperty(ref _currentBranch, value))
                 {
-                    if (oldHead != _currentBranch.Head && _workingCopy is { UseAmend: true })
+                    _histories.NotifyCurrentBranchChanged();
+                    if (value != null && !value.Head.Equals(oldHead, StringComparison.Ordinal) && _workingCopy is { UseAmend: true })
                         _workingCopy.UseAmend = false;
                 }
             }
@@ -465,18 +480,7 @@ namespace SourceGit.ViewModels
             _workingCopy = new WorkingCopy(this) { CommitMessage = _uiStates.LastCommitMessage };
             _stashesPage = new StashesPage(this);
             _searchCommitContext = new SearchCommitContext(this);
-
-            if (Preferences.Instance.ShowLocalChangesByDefault)
-            {
-                _selectedView = _workingCopy;
-                _selectedViewIndex = 1;
-            }
-            else
-            {
-                _selectedView = _histories;
-                _selectedViewIndex = 0;
-            }
-
+            _selectedViewIndex = Preferences.Instance.ShowLocalChangesByDefault ? 1 : 0;
             _lastFetchTime = DateTime.Now;
             _autoFetchTimer = new Timer(AutoFetchByTimer, null, 5000, 5000);
             RefreshAll();
@@ -484,10 +488,12 @@ namespace SourceGit.ViewModels
 
         public void Close()
         {
-            SelectedView = null; // Do NOT modify. Used to remove exists widgets for GC.Collect
-            Logs.Clear();
+            var commitMessage = _workingCopy.CommitMessage;
+            if (!string.IsNullOrEmpty(commitMessage) && _workingCopy.InProgressContext != null)
+                File.WriteAllText(Path.Combine(GitDir, "MERGE_MSG"), commitMessage);
 
-            _uiStates.Unload(_workingCopy.CommitMessage);
+            _uiStates.LastCommitMessage = commitMessage;
+            _uiStates.Save();
 
             if (_cancellationRefreshBranches is { IsCancellationRequested: false })
                 _cancellationRefreshBranches.Cancel();
@@ -500,35 +506,8 @@ namespace SourceGit.ViewModels
             if (_cancellationRefreshStashes is { IsCancellationRequested: false })
                 _cancellationRefreshStashes.Cancel();
 
-            _autoFetchTimer.Dispose();
-            _autoFetchTimer = null;
-
-            _settings = null;
-            _uiStates = null;
-            _historyFilterMode = Models.FilterMode.None;
-
             _watcher?.Dispose();
-            _histories.Dispose();
-            _workingCopy.Dispose();
-            _stashesPage.Dispose();
-            _searchCommitContext.Dispose();
-
-            _watcher = null;
-            _histories = null;
-            _workingCopy = null;
-            _stashesPage = null;
-
-            _localChangesCount = 0;
-            _stashesCount = 0;
-
-            _remotes.Clear();
-            _branches.Clear();
-            _localBranchTrees.Clear();
-            _remoteBranchTrees.Clear();
-            _tags.Clear();
-            _visibleTags = null;
-            _submodules.Clear();
-            _visibleSubmodules = null;
+            _autoFetchTimer.Dispose();
         }
 
         public void SendNotification(string message, bool isError = false)
@@ -1507,6 +1486,14 @@ namespace SourceGit.ViewModels
                 ShowPopup(new DeleteRemote(this, remote));
         }
 
+        public async Task ToggleAutoFetchOnRemoteAsync(Models.Remote remote)
+        {
+            var val = remote.DisableAutoFetch ? "false" : "true";
+            var succ = await new Commands.Config(FullPath).SetAsync($"remote.{remote.Name.Quoted()}.disableautofetch", val);
+            if (succ)
+                remote.DisableAutoFetch = !remote.DisableAutoFetch;
+        }
+
         public void AddSubmodule()
         {
             if (CanCreatePopup())
@@ -1893,7 +1880,7 @@ namespace SourceGit.ViewModels
 
         private async Task AutoFetchOnUIThread()
         {
-            if (_uiStates == null)
+            if (IsAutoFetching)
                 return;
 
             CommandLog log = null;
@@ -1917,7 +1904,10 @@ namespace SourceGit.ViewModels
 
                 var remotes = new List<string>();
                 foreach (var r in _remotes)
-                    remotes.Add(r.Name);
+                {
+                    if (!r.DisableAutoFetch)
+                        remotes.Add(r.Name);
+                }
 
                 if (remotes.Count == 0)
                     return;
@@ -1925,19 +1915,8 @@ namespace SourceGit.ViewModels
                 IsAutoFetching = true;
                 log = CreateLog("Auto-Fetch");
 
-                if (_uiStates.FetchAllRemotes)
-                {
-                    foreach (var remote in remotes)
-                        await new Commands.Fetch(FullPath, remote).Use(log).RunAsync();
-                }
-                else
-                {
-                    var remote = string.IsNullOrEmpty(_settings.DefaultRemote) ?
-                        remotes.Find(x => x.Equals(_settings.DefaultRemote, StringComparison.Ordinal)) :
-                        remotes[0];
-
+                foreach (var remote in remotes)
                     await new Commands.Fetch(FullPath, remote).Use(log).RunAsync();
-                }
 
                 _lastFetchTime = DateTime.Now;
                 IsAutoFetching = false;
@@ -1962,7 +1941,6 @@ namespace SourceGit.ViewModels
         private WorkingCopy _workingCopy = null;
         private StashesPage _stashesPage = null;
         private int _selectedViewIndex = 0;
-        private object _selectedView = null;
 
         private int _localBranchesCount = 0;
         private int _localChangesCount = 0;
