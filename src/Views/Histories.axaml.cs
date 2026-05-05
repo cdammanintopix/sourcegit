@@ -962,7 +962,7 @@ namespace SourceGit.Views
                             if (on == null)
                                 repo.SendNotification($"Commit '{on}' is not a valid revision for `git rebase -i`!", true);
                             else
-                                await this.ShowDialogAsync(new ViewModels.InteractiveRebase(repo, commit));
+                                await this.ShowDialogAsync(new ViewModels.InteractiveRebase(repo, on));
                             e.Handled = true;
                         };
 
