@@ -30,7 +30,7 @@ namespace SourceGit.ViewModels
             _repo = repo;
             LocalBranch = localBranch;
             RemoteBranch = remoteBranch;
-            DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+            DealWithLocalChanges = Models.DealWithLocalChanges.StashAndReapply;
         }
 
         public override async Task<bool> Sure()

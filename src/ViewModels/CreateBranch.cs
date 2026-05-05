@@ -77,7 +77,7 @@ namespace SourceGit.ViewModels
                 Name = branch.Name;
 
             BasedOn = branch;
-            DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+            DealWithLocalChanges = Models.DealWithLocalChanges.StashAndReapply;
             UpdateOverrideTip();
         }
 
@@ -89,7 +89,7 @@ namespace SourceGit.ViewModels
             _head = commit.SHA;
 
             BasedOn = commit;
-            DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+            DealWithLocalChanges = Models.DealWithLocalChanges.StashAndReapply;
             UpdateOverrideTip();
         }
 
@@ -101,7 +101,7 @@ namespace SourceGit.ViewModels
             _head = tag.SHA;
 
             BasedOn = tag;
-            DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+            DealWithLocalChanges = Models.DealWithLocalChanges.StashAndReapply;
             UpdateOverrideTip();
         }
 

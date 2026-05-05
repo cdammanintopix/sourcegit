@@ -47,7 +47,7 @@ namespace SourceGit.ViewModels
         {
             get;
             set;
-        } = Models.DealWithLocalChanges.DoNothing;
+        } = Models.DealWithLocalChanges.StashAndReapply;
 
         public bool UseRebase
         {
