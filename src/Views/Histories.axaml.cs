@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 using Avalonia;
 using Avalonia.Collections;
@@ -1661,6 +1660,19 @@ namespace SourceGit.Views
                 ev.Handled = true;
             };
             gitlab.Items.Add(refetch);
+        
+            var link = new MenuItem();
+            link.Icon = this.CreateMenuIcon("Icons.Link");
+            link.Header = App.Text("IssueLinkCM.CopyLink");
+            link.Click += (_, ev) =>
+            {
+                var req = CI.GetReq(repo.Remotes, commit.SHA);
+                (string route, string sha) = CI.GetRouteSha(req);
+                _ = this.CopyTextAsync($"https://gitlab.intopix.com/{route}/-/commit/{sha}/pipelines");
+                ev.Handled = true;
+            };
+            gitlab.Items.Add(link);
+            
             menu.Items.Add(gitlab);
             menu.Items.Add(new MenuItem() { Header = "-" });
         }

@@ -97,6 +97,13 @@ namespace SourceGit.Views
             return "";
         }
 
+        public static (string, string) GetRouteSha(string req)
+        {
+            string route = req[..req.LastIndexOf("/")];
+            string sha = req[(req.LastIndexOf("/") + 1)..];
+            return (route, sha);
+        }
+
         public static void QueueForNextRefresh(List<Models.Remote> remotes, string sha)
         {
             var req = GetReq(remotes, sha);
@@ -209,6 +216,17 @@ namespace SourceGit.Views
                 ev.Handled = true;
             };
             menu.Items.Add(refetch);
+
+            var link = new MenuItem();
+            link.Icon = this.CreateMenuIcon("Icons.Link");
+            link.Header = App.Text("IssueLinkCM.CopyLink");
+            link.Click += (_, ev) =>
+            {
+                (string route, string sha) = CI.GetRouteSha(Req);
+                _ = this.CopyTextAsync($"https://gitlab.intopix.com/{route}/-/commit/{sha}/pipelines");
+                ev.Handled = true;
+            };
+            menu.Items.Add(link);
 
             menu.Open(this);
         }

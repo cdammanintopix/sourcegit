@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Avalonia.Threading;
+using SourceGit.Views;
 
 namespace SourceGit.Models
 {
@@ -100,8 +101,7 @@ namespace SourceGit.Models
                         continue;
                     }
 
-                    string route = req[..req.LastIndexOf("/")];
-                    string sha = req[(req.LastIndexOf("/") + 1)..];
+                    (string route, string sha) = CI.GetRouteSha(req);
 
                     (bool failed, bool found, int id, string status) = await GetPipeline(route, sha);
 
@@ -174,8 +174,7 @@ namespace SourceGit.Models
         public async Task<bool> CancelPipeline(string req)
         {
             bool success = false;
-            string route = req[..req.LastIndexOf("/")];
-            string sha = req[(req.LastIndexOf("/") + 1)..];
+            (string route, string sha) = CI.GetRouteSha(req);
 
             (bool failed, bool found, int id, string status) = await GetPipeline(route, sha);
 
