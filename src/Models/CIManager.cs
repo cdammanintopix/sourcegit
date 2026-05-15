@@ -45,7 +45,7 @@ namespace SourceGit.Models
                         } catch { }
                     }
                     if (string.IsNullOrEmpty(_GITLAB_TOKEN)) {
-                        _GITLAB_TOKEN = "glpat-_PCkkQqvCwmuSO8Sy9OrI286MQp1OmkH.01.0w0rf8f00";
+                        _GITLAB_TOKEN = "glpat-apjxosLzdl36O1qdCtVyrW86MQp1OmkH.01.0w03wsnf8";
                     }
                 }
                 return _GITLAB_TOKEN;
@@ -59,7 +59,7 @@ namespace SourceGit.Models
         private Dictionary<string, KeyValuePair<string, bool>> _resources = [];
         private HashSet<string> _requesting = [];
 
-        [GeneratedRegex(@"^\[\{.*""status"":""([a-z]+)")]
+        [GeneratedRegex(@"^\[\{""id"":(\d+).*""status"":""([a-z]+)")]
         private static partial Regex REG_PIPELINE();
 
         private static bool StatusNeedsRefresh(string status)
@@ -102,35 +102,13 @@ namespace SourceGit.Models
 
                     string route = req[..req.LastIndexOf("/")];
                     string sha = req[(req.LastIndexOf("/") + 1)..];
-                    string status = null;
-                    bool needsRefresh = _resources.TryGetValue(req, out var value) ? value.Value : false;
-                    bool failed = false;
-                    try
-                    {
-                        Dns.GetHostEntry("gitlab.intopix.com"); // This raise an early exception if not connected to the VPN
 
-                        using var client = new HttpClient();
-                        client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", GITLAB_TOKEN);
-                        client.Timeout = TimeSpan.FromSeconds(2);
-                        var rsp = await client.GetAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipelines?sha={sha}");
-                        if (rsp.IsSuccessStatusCode)
-                        {
-                            var pipelines = await rsp.Content.ReadAsStringAsync();
-                            int firstEnd = pipelines.IndexOf("},{");
-                            if (firstEnd > 0) {
-                                pipelines = pipelines[..firstEnd];
-                            }
-                            var matchPipeline = REG_PIPELINE().Match(pipelines);
-                            if (matchPipeline.Success)
-                            {
-                                status = matchPipeline.Groups[1].Value;
-                                needsRefresh = StatusNeedsRefresh(status);
-                            }
-                        }
-                    }
-                    catch
+                    (bool failed, bool found, int id, string status) = await GetPipeline(route, sha);
+
+                    bool needsRefresh = _resources.TryGetValue(req, out var value) ? value.Value : false;
+                    if (found)
                     {
-                        failed = true;
+                        needsRefresh = StatusNeedsRefresh(status);
                     }
 
                     lock (_synclock)
@@ -152,6 +130,77 @@ namespace SourceGit.Models
 
                 // ReSharper disable once FunctionNeverReturns
             });
+        }
+
+        public async Task<(bool, bool, int, string)> GetPipeline(string route, string sha)
+        {
+            bool failed = false;
+            bool found = false;
+            int id = 0;
+            string status = null;
+            try
+            {
+                Dns.GetHostEntry("gitlab.intopix.com"); // This raise an early exception if not connected to the VPN
+
+                using var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", GITLAB_TOKEN);
+                client.Timeout = TimeSpan.FromSeconds(2);
+                var rsp = await client.GetAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipelines?sha={sha}");
+                if (rsp.IsSuccessStatusCode)
+                {
+                    var pipelines = await rsp.Content.ReadAsStringAsync();
+                    int firstEnd = pipelines.IndexOf("},{");
+                    if (firstEnd > 0)
+                    {
+                        pipelines = pipelines[..firstEnd];
+                    }
+                    var matchPipeline = REG_PIPELINE().Match(pipelines);
+                    if (matchPipeline.Success)
+                    {
+                        id = Int32.Parse(matchPipeline.Groups[1].Value);
+                        status = matchPipeline.Groups[2].Value;
+                        found = true;
+                    }
+                }
+            }
+            catch
+            {
+                failed = true;
+            }
+
+            return (failed, found, id, status);
+        }
+
+        public async Task<bool> CancelPipeline(string req)
+        {
+            bool success = false;
+            string route = req[..req.LastIndexOf("/")];
+            string sha = req[(req.LastIndexOf("/") + 1)..];
+
+            (bool failed, bool found, int id, string status) = await GetPipeline(route, sha);
+
+            if (found)
+            {
+                try
+                {
+                    using var client = new HttpClient();
+                    client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", GITLAB_TOKEN);
+                    client.Timeout = TimeSpan.FromSeconds(2);
+                    var rsp = await client.PostAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipelines/{id}/cancel", null);
+                    success = rsp.IsSuccessStatusCode;
+                }
+                catch
+                {
+                    success = false;
+                }
+            }
+
+            if (success)
+            {
+                Request(req, true);
+            }
+
+            return success;
         }
 
         public void Subscribe(ICIHost host)

@@ -1642,6 +1642,16 @@ namespace SourceGit.Views
             };
             gitlab.Items.Add(pipeline);
 
+            var cancel = new MenuItem();
+            cancel.Icon = this.CreateMenuIcon("Icons.Close");
+            cancel.Header = App.Text("CI.CancelPipeline");
+            cancel.Click += (_, e) =>
+            {
+                CI.CancelPipeline(repo.Remotes, commit.SHA);
+                e.Handled = true;
+            };
+            gitlab.Items.Add(cancel);
+
             var refetch = new MenuItem();
             refetch.Icon = this.CreateMenuIcon("Icons.Loading");
             refetch.Header = App.Text("CI.Refetch");

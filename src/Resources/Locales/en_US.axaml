@@ -50,6 +50,7 @@
   <x:String x:Key="Text.CI.GitLab" xml:space="preserve">GitLab</x:String>
   <x:String x:Key="Text.CI.Refetch" xml:space="preserve">Refresh CI</x:String>
   <x:String x:Key="Text.CI.NewPipeline" xml:space="preserve">New Pipeline</x:String>
+  <x:String x:Key="Text.CI.CancelPipeline" xml:space="preserve">Cancel Pipeline</x:String>
   <x:String x:Key="Text.CI.Args" xml:space="preserve">CI Args</x:String>
   <x:String x:Key="Text.CI.ArgsWatermark" xml:space="preserve">CI Arguments. Optional</x:String>
   <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">BINARY FILE NOT SUPPORTED!!!</x:String>

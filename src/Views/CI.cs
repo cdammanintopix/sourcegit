@@ -111,6 +111,13 @@ namespace SourceGit.Views
                 Models.CIManager.Instance.Request(req, true);
         }
 
+        public static void CancelPipeline(List<Models.Remote> remotes, string sha)
+        {
+            var req = GetReq(remotes, sha);
+            if (!string.IsNullOrEmpty(req))
+                _ = Models.CIManager.Instance.CancelPipeline(req);
+        }
+
         public static void Clear(List<Models.Remote> remotes)
         {
             var req = GetReq(remotes, "");
@@ -179,6 +186,17 @@ namespace SourceGit.Views
                 e.Handled = true;
             };
             menu.Items.Add(pipeline);
+
+            var cancel = new MenuItem();
+            cancel.Icon = this.CreateMenuIcon("Icons.Close");
+            cancel.Header = App.Text("CI.CancelPipeline");
+            cancel.Click += (_, e) =>
+            {
+                if (!string.IsNullOrEmpty(Req))
+                    _ = Models.CIManager.Instance.CancelPipeline(Req);
+                e.Handled = true;
+            };
+            menu.Items.Add(cancel);
 
             var refetch = new MenuItem();
             refetch.Icon = this.CreateMenuIcon("Icons.Loading");
