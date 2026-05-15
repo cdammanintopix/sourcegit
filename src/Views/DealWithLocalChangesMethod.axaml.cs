@@ -7,7 +7,7 @@ namespace SourceGit.Views
     public partial class DealWithLocalChangesMethod : UserControl
     {
         public static readonly StyledProperty<Models.DealWithLocalChanges> MethodProperty =
-            AvaloniaProperty.Register<DealWithLocalChangesMethod, Models.DealWithLocalChanges>(nameof(Method), Models.DealWithLocalChanges.StashAndReapply);
+            AvaloniaProperty.Register<DealWithLocalChangesMethod, Models.DealWithLocalChanges>(nameof(Method), Models.DealWithLocalChanges.DoNothing);
 
         public Models.DealWithLocalChanges Method
         {
@@ -18,7 +18,14 @@ namespace SourceGit.Views
         public DealWithLocalChangesMethod()
         {
             InitializeComponent();
-            UpdateRadioButtons();
+        }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == MethodProperty)
+                UpdateRadioButtons();
         }
 
         private void OnRadioButtonClicked(object sender, RoutedEventArgs e)

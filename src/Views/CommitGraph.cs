@@ -77,30 +77,28 @@ namespace SourceGit.Views
             var grayedPen = new Pen(new SolidColorBrush(Colors.Gray, 0.4), Models.CommitGraph.Pens[0].Thickness);
             var onlyHighlightCurrentBranch = OnlyHighlightCurrentBranch;
 
-            if (onlyHighlightCurrentBranch)
+            foreach (var link in graph.Links)
             {
-                foreach (var link in graph.Links)
+                var startY = link.Start.Y * rowHeight;
+                var endY = link.End.Y * rowHeight;
+
+                if (endY < top)
+                    continue;
+                if (startY > bottom)
+                    break;
+
+                var pen = Models.CommitGraph.Pens[link.Color];
+                if (onlyHighlightCurrentBranch && !link.IsMerged)
+                    pen = grayedPen;
+
+                var geo = new StreamGeometry();
+                using (var ctx = geo.Open())
                 {
-                    if (link.IsMerged)
-                        continue;
-
-                    var startY = link.Start.Y * rowHeight;
-                    var endY = link.End.Y * rowHeight;
-
-                    if (endY < top)
-                        continue;
-                    if (startY > bottom)
-                        break;
-
-                    var geo = new StreamGeometry();
-                    using (var ctx = geo.Open())
-                    {
-                        ctx.BeginFigure(new Point(link.Start.X, startY), false);
-                        ctx.QuadraticBezierTo(new Point(link.Control.X, link.Control.Y * rowHeight), new Point(link.End.X, endY));
-                    }
-
-                    context.DrawGeometry(null, grayedPen, geo);
+                    ctx.BeginFigure(new Point(link.Start.X, startY), false);
+                    ctx.QuadraticBezierTo(new Point(link.Control.X, link.Control.Y * rowHeight), new Point(link.End.X, endY));
                 }
+
+                context.DrawGeometry(null, pen, geo);
             }
 
             foreach (var line in graph.Paths)
@@ -173,29 +171,6 @@ namespace SourceGit.Views
                     context.DrawGeometry(null, grayedPen, geo);
                 else
                     context.DrawGeometry(null, pen, geo);
-            }
-
-            foreach (var link in graph.Links)
-            {
-                if (onlyHighlightCurrentBranch && !link.IsMerged)
-                    continue;
-
-                var startY = link.Start.Y * rowHeight;
-                var endY = link.End.Y * rowHeight;
-
-                if (endY < top)
-                    continue;
-                if (startY > bottom)
-                    break;
-
-                var geo = new StreamGeometry();
-                using (var ctx = geo.Open())
-                {
-                    ctx.BeginFigure(new Point(link.Start.X, startY), false);
-                    ctx.QuadraticBezierTo(new Point(link.Control.X, link.Control.Y * rowHeight), new Point(link.End.X, endY));
-                }
-
-                context.DrawGeometry(null, Models.CommitGraph.Pens[link.Color], geo);
             }
         }
 

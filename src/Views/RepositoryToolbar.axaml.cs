@@ -512,4 +512,3 @@ namespace SourceGit.Views
         }
     }
 }
-

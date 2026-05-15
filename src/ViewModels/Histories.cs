@@ -86,7 +86,11 @@ namespace SourceGit.ViewModels
         public object DetailContext
         {
             get => _detailContext;
-            set => SetProperty(ref _detailContext, value);
+            set
+            {
+                if (SetProperty(ref _detailContext, value))
+                    OnPropertyChanged(nameof(IsOpenAsStandaloneVisible));
+            }
         }
 
         public Models.Bisect Bisect
@@ -138,8 +142,30 @@ namespace SourceGit.ViewModels
 
         public GridLength BottomArea
         {
-            get => _bottomArea;
-            set => SetProperty(ref _bottomArea, value);
+            get => _isCollapseDetails ? new GridLength(28, GridUnitType.Pixel) : _bottomArea;
+            set
+            {
+                if (!Preferences.Instance.UseTwoColumnsLayoutInHistories && !_isCollapseDetails)
+                    SetProperty(ref _bottomArea, value);
+            }
+        }
+
+        public bool IsOpenAsStandaloneVisible
+        {
+            get => DetailContext is CommitDetail or RevisionCompare;
+        }
+
+        public bool IsCollapseDetails
+        {
+            get => _isCollapseDetails;
+            set
+            {
+                if (!Preferences.Instance.UseTwoColumnsLayoutInHistories && SetProperty(ref _isCollapseDetails, value))
+                {
+                    OnPropertyChanged(nameof(TopArea));
+                    OnPropertyChanged(nameof(BottomArea));
+                }
+            }
         }
 
         public Repository Repository
@@ -351,50 +377,6 @@ namespace SourceGit.ViewModels
             }
         }
 
-        public async Task RewordHeadAsync(Models.Commit head)
-        {
-            if (_repo.CanCreatePopup())
-            {
-                var message = await new Commands.QueryCommitFullMessage(_repo.FullPath, head.SHA).GetResultAsync();
-                _repo.ShowPopup(new Reword(_repo, head, message));
-            }
-        }
-
-        public async Task SquashOrFixupHeadAsync(Models.Commit head, bool fixup)
-        {
-            if (head.Parents.Count == 1)
-            {
-                var parent = await new Commands.QuerySingleCommit(_repo.FullPath, head.Parents[0]).GetResultAsync();
-                if (parent == null)
-                    return;
-
-                string message = await new Commands.QueryCommitFullMessage(_repo.FullPath, head.Parents[0]).GetResultAsync();
-                if (!fixup)
-                {
-                    var headMessage = await new Commands.QueryCommitFullMessage(_repo.FullPath, head.SHA).GetResultAsync();
-                    message = $"{message}\n\n{headMessage}";
-                }
-
-                if (_repo.CanCreatePopup())
-                {
-                    if (!fixup)
-                        _repo.ShowPopup(new SquashOrFixupHead(_repo, parent, message, fixup));
-                    else
-                        await _repo.ShowAndStartPopupAsync(new SquashOrFixupHead(_repo, parent, message, fixup));
-                }
-            }
-        }
-
-        public async Task DropHeadAsync(Models.Commit head)
-        {
-            var parent = _commits.Find(x => x.SHA.Equals(head.Parents[0]));
-            if (parent == null)
-                parent = await new Commands.QuerySingleCommit(_repo.FullPath, head.Parents[0]).GetResultAsync();
-
-            if (parent != null && _repo.CanCreatePopup())
-                _repo.ShowPopup(new DropHead(_repo, head, parent));
-        }
-
         public async Task<string> GetCommitFullMessageAsync(Models.Commit commit)
         {
             return await new Commands.QueryCommitFullMessage(_repo.FullPath, commit.SHA)
@@ -428,7 +410,7 @@ namespace SourceGit.ViewModels
             if (_selectedCommits.Count == 0)
                 return;
 
-            if (_commits.Count == 0 || _selectedCommits.Count > 2)
+            if (_commits.Count == 0 || _selectedCommits.Count > 20)
             {
                 SelectedCommits = [];
                 return;
@@ -504,5 +486,6 @@ namespace SourceGit.ViewModels
         private GridLength _rightArea = new GridLength(1, GridUnitType.Star);
         private GridLength _topArea = new GridLength(1, GridUnitType.Star);
         private GridLength _bottomArea = new GridLength(1, GridUnitType.Star);
+        private bool _isCollapseDetails = false;
     }
 }

@@ -254,6 +254,12 @@ namespace SourceGit.ViewModels
             }
         }
 
+        public bool UseStashAndReapplyByDefault
+        {
+            get;
+            set;
+        } = true;
+
         public bool EnableAutoFetch
         {
             get;
