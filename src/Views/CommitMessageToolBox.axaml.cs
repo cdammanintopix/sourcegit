@@ -648,5 +648,26 @@ namespace SourceGit.Views
             var view = new AIAssistant() { DataContext = assistant };
             view.Show(owner);
         }
+
+        private async void OnPrependBranchName(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && DataContext is ViewModels.WorkingCopy vm && vm.Repository.CurrentBranch != null)
+            {
+                string branchPrefix = "[" + vm.Repository.CurrentBranch.Name + "]";
+                if (vm.CommitMessage[..branchPrefix.Length] != branchPrefix)
+                {
+                    if (vm.CommitMessage.Length == 0 || vm.CommitMessage[0] != '[')
+                    {
+                        branchPrefix += " ";
+                    }
+                    var caretOffset = Editor.CaretOffset + branchPrefix.Length;
+                    vm.CommitMessage = branchPrefix + vm.CommitMessage;
+                    Editor.CaretOffset = caretOffset;
+                }
+                Editor.TextArea.Focus();
+            }
+
+            e.Handled = true;
+        }
     }
 }

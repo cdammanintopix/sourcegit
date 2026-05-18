@@ -106,6 +106,16 @@
                        VerticalAlignment="Center"/>
             <Path Width="10" Height="10" Margin="4,0,0,0" Data="{StaticResource Icons.Error}" Fill="DarkGoldenrod" IsVisible="{Binding #Editor.IsSubjectWarningIconVisible, Mode=OneWay}"/>
           </StackPanel>
+
+          <Button Grid.Column="4"
+                  Classes="icon_button"
+                  Width="28"
+                  Margin="0,0,4,0" Padding="0"
+                  Click="OnPrependBranchName"
+                  IsVisible="{Binding #ThisControl.((vm:WorkingCopy)DataContext).Repository.CurrentBranch, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                  ToolTip.Tip="Prepend with [branchName]">
+            <Path Width="13" Height="13" Data="{StaticResource Icons.Branch.Add}"/>
+          </Button>
         </Grid>
       </Border>
     </Grid>
