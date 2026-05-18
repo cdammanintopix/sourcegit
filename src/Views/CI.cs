@@ -73,7 +73,7 @@ namespace SourceGit.Views
         }
 
         public static string GetGitlabRoute(List<Models.Remote> remotes)
-            {
+        {
             if (remotes == null)
             {
                 return null;
@@ -111,8 +111,8 @@ namespace SourceGit.Views
         {
             if (remotes == null || string.IsNullOrEmpty(sha))
             {
-            return "";
-        }
+                return "";
+            }
             return GetReq(GetGitlabRoute(remotes), sha);
         }
 
@@ -139,9 +139,9 @@ namespace SourceGit.Views
 
         public static void CancelPipeline(List<Models.Remote> remotes, string sha)
         {
-            var req = GetReq(remotes, sha);
-            if (!string.IsNullOrEmpty(req))
-                _ = Models.CIManager.Instance.CancelPipeline(req);
+            var route = GetGitlabRoute(remotes);
+            if (!string.IsNullOrEmpty(route))
+                _ = Models.CIManager.Instance.CancelPipelinesForSha(route, sha);
         }
 
         public static void Clear(List<Models.Remote> remotes)
@@ -219,7 +219,10 @@ namespace SourceGit.Views
             cancel.Click += (_, e) =>
             {
                 if (!string.IsNullOrEmpty(Req))
-                    _ = Models.CIManager.Instance.CancelPipeline(Req);
+                {
+                    (string route, string sha) = GetRouteSha(Req);
+                    _ = Models.CIManager.Instance.CancelPipelinesForSha(route, sha);
+                }
                 e.Handled = true;
             };
             menu.Items.Add(cancel);

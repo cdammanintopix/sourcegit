@@ -57,10 +57,10 @@ namespace SourceGit.Models
 
         private readonly Lock _synclock = new();
         private List<ICIHost> _CIs = [];
-        private Dictionary<string, KeyValuePair<string, bool>> _resources = [];
+        private Dictionary<string, (bool, List<(int, string)>)> _resources = [];
         private HashSet<string> _requesting = [];
 
-        [GeneratedRegex(@"^\[\{""id"":(\d+).*""status"":""([a-z]+)")]
+        [GeneratedRegex(@"\{""id"":(\d+).*""status"":""([a-z]+)")]
         private static partial Regex REG_PIPELINE();
 
         private static bool StatusNeedsRefresh(string status)
@@ -69,6 +69,15 @@ namespace SourceGit.Models
                 "created",
                 "pending",
                 "canceling",
+                "running"
+            }.Contains(status);
+        }
+
+        private static bool StatusIsCancellable(string status)
+        {
+            return new List<string> {
+                "created",
+                "pending",
                 "running"
             }.Contains(status);
         }
@@ -86,7 +95,7 @@ namespace SourceGit.Models
                     {
                         if (DateTime.Now - lastRefresh >= TimeSpan.FromSeconds(5))
                         {
-                            _resources.Where(res => res.Value.Value).ToList().ForEach(res => _requesting.Add(res.Key));
+                            _resources.Where(res => res.Value.Item1).ToList().ForEach(res => _requesting.Add(res.Key));
                         }
                         foreach (var one in _requesting)
                         {
@@ -103,13 +112,8 @@ namespace SourceGit.Models
 
                     (string route, string sha) = CI.GetRouteSha(req);
 
-                    (bool failed, bool found, int id, string status) = await GetPipeline(route, sha);
-
-                    bool needsRefresh = _resources.TryGetValue(req, out var value) ? value.Value : false;
-                    if (found)
-                    {
-                        needsRefresh = StatusNeedsRefresh(status);
-                    }
+                    (bool failed, bool found, List<(int, string)> pipelines) = await GetPipelinesForSha(route, sha);
+                    bool needsRefresh = _resources.TryGetValue(req, out var value) ? value.Item1 : false;
 
                     lock (_synclock)
                     {
@@ -120,10 +124,11 @@ namespace SourceGit.Models
 
                     Dispatcher.UIThread.Post(() =>
                     {
-                        if (!failed)
+                        if (found)
                         {
-                            _resources[req] = new KeyValuePair<string, bool>(status, needsRefresh);
-                            NotifyResourceChanged(req, status);
+                            needsRefresh = pipelines.Any(x => StatusNeedsRefresh(x.Item2));
+                            _resources[req] = (needsRefresh, pipelines);
+                            NotifyResourceChanged(req, pipelines[0].Item2);
                         }
                     });
                 }
@@ -132,12 +137,36 @@ namespace SourceGit.Models
             });
         }
 
-        public async Task<(bool, bool, int, string)> GetPipeline(string route, string sha)
+        private static (bool, List<(int, string)>) ParsePipelinesJson(string pipelinesJson)
+        {
+            bool found = false;
+            List<(int, string)> pipelines = [];
+            for (int nextBegin = 0; pipelinesJson.Length > 0; pipelinesJson = pipelinesJson[nextBegin..])
+            {
+                int firstEnd = pipelinesJson.IndexOf("},{");
+                nextBegin = firstEnd + 2;
+                if (firstEnd < 0)
+                {
+                    firstEnd = nextBegin = pipelinesJson.Length;
+                }
+
+                var matchPipeline = REG_PIPELINE().Match(pipelinesJson[..firstEnd]);
+                if (matchPipeline.Success)
+                {
+                    int id = Int32.Parse(matchPipeline.Groups[1].Value);
+                    string status = matchPipeline.Groups[2].Value;
+                    pipelines.Add((id, status));
+                    found = true;
+                }
+            }
+            return (found, pipelines);
+        }
+
+        public static async Task<(bool, bool, List<(int, string)>)> GetPipelinesForSha(string route, string sha)
         {
             bool failed = false;
             bool found = false;
-            int id = 0;
-            string status = null;
+            List<(int, string)> pipelines = [];
             try
             {
                 Dns.GetHostEntry("gitlab.intopix.com"); // This raise an early exception if not connected to the VPN
@@ -148,19 +177,7 @@ namespace SourceGit.Models
                 var rsp = await client.GetAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipelines?sha={sha}");
                 if (rsp.IsSuccessStatusCode)
                 {
-                    var pipelines = await rsp.Content.ReadAsStringAsync();
-                    int firstEnd = pipelines.IndexOf("},{");
-                    if (firstEnd > 0)
-                    {
-                        pipelines = pipelines[..firstEnd];
-                    }
-                    var matchPipeline = REG_PIPELINE().Match(pipelines);
-                    if (matchPipeline.Success)
-                    {
-                        id = Int32.Parse(matchPipeline.Groups[1].Value);
-                        status = matchPipeline.Groups[2].Value;
-                        found = true;
-                    }
+                    (found, pipelines) = ParsePipelinesJson(await rsp.Content.ReadAsStringAsync());
                 }
             }
             catch
@@ -168,38 +185,103 @@ namespace SourceGit.Models
                 failed = true;
             }
 
-            return (failed, found, id, status);
+            return (failed, found, pipelines);
         }
 
-        public async Task<bool> CancelPipeline(string req)
+        public static async Task<(bool, bool, List<(int, string)>)> GetPipelinesForBranch(string route, string branch)
         {
-            bool success = false;
-            (string route, string sha) = CI.GetRouteSha(req);
-
-            (bool failed, bool found, int id, string status) = await GetPipeline(route, sha);
-
-            if (found)
+            bool failed = false;
+            bool found = false;
+            List<(int, string)> pipelines = [];
+            try
             {
-                try
+                Dns.GetHostEntry("gitlab.intopix.com"); // This raise an early exception if not connected to the VPN
+
+                using var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", GITLAB_TOKEN);
+                client.Timeout = TimeSpan.FromSeconds(2);
+                var rsp = await client.GetAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipelines?ref={HttpUtility.UrlEncode(branch)}&status=created,waiting_for_resource,preparing,pending,running");
+                if (rsp.IsSuccessStatusCode)
                 {
+                    (found, pipelines) = ParsePipelinesJson(await rsp.Content.ReadAsStringAsync());
+                }
+            }
+            catch
+            {
+                failed = true;
+            }
+
+            return (failed, found, pipelines);
+        }
+
+        public async Task<bool> CancelPipelinesForSha(string route, string sha)
+        {
+            string req = CI.GetReq(route, sha);
+            List<(int, string)> pipelines = [];
+            if (_resources.TryGetValue(req, out var value))
+            {
+                pipelines = value.Item2;
+            }
+            else
+            {
+                (_, _, pipelines) = await GetPipelinesForSha(route, sha);
+            }
+
+            if (pipelines.Count == 0)
+            {
+                return false;
+            }
+
+            bool updateNeeded = false;
+            foreach ((int id, string status) in pipelines)
+            {
+                if (!StatusIsCancellable(status))
+                {
+                    continue;
+                }
+
+                try {
                     using var client = new HttpClient();
                     client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", GITLAB_TOKEN);
                     client.Timeout = TimeSpan.FromSeconds(2);
-                    var rsp = await client.PostAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipelines/{id}/cancel", null);
-                    success = rsp.IsSuccessStatusCode;
-                }
-                catch
-                {
-                    success = false;
-                }
+                    await client.PostAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipelines/{id}/cancel", null);
+                    updateNeeded = true;
+                } catch { }
             }
 
-            if (success)
+            if (updateNeeded)
             {
                 Request(req, true);
             }
 
-            return success;
+            return true;
+        }
+
+        public static async Task<bool> RunPipelineForBranch(string route, string branch, string ciArgs="")
+        {
+            if (string.IsNullOrEmpty(route) || string.IsNullOrEmpty(branch))
+            {
+                return false;
+            }
+
+            try
+            {
+                using var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", GITLAB_TOKEN);
+                client.Timeout = TimeSpan.FromSeconds(2);
+                var content = new
+                {
+                    inputs = new Dictionary<string, object> {
+                        ["ci-args"] = ciArgs
+                    }
+                };
+                var rsp = await client.PostAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipeline?ref={HttpUtility.UrlEncode(branch)}", null);
+                return rsp.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void Subscribe(ICIHost host)
@@ -214,7 +296,7 @@ namespace SourceGit.Models
 
         public void QueueForNextRefresh(string req)
         {
-            _resources[req] = new KeyValuePair<string, bool>(null, true);
+            _resources[req] = (true, []);
         }
 
         public string Request(string req, bool forceRefetch)
@@ -228,10 +310,10 @@ namespace SourceGit.Models
             }
             else
             {
-                if (_resources.TryGetValue(req, out var value))
+                if (_resources.TryGetValue(req, out var value) && value.Item2.Count > 0)
                 {
-                    status = value.Key;
-                    if (!value.Value)
+                    status = value.Item2[0].Item2; // status of the last pipeline (first in list)
+                    if (!value.Item1) // !needsRefresh
                     {
                         return status;
                     }
