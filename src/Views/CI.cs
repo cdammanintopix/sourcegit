@@ -72,10 +72,11 @@ namespace SourceGit.Views
             clip.Dispose();
         }
 
-        public static string GetReq(List<Models.Remote> remotes, string sha) {
-            if (remotes == null || sha == null)
+        public static string GetGitlabRoute(List<Models.Remote> remotes)
             {
-                return "";
+            if (remotes == null)
+            {
+                return null;
             }
             foreach (var remote in remotes)
             {
@@ -90,11 +91,29 @@ namespace SourceGit.Views
 
                     if (host.Contains("gitlab.intopix.com", StringComparison.Ordinal))
                     {
-                        return route + '/' + sha;
+                        return route;
                     }
                 }
             }
+            return null;
+        }
+
+        public static string GetReq(string route, string sha)
+        {
+            if (string.IsNullOrEmpty(route) || string.IsNullOrEmpty(sha))
+            {
+                return "";
+            }
+            return route + '/' + sha;
+        }
+
+        public static string GetReq(List<Models.Remote> remotes, string sha)
+        {
+            if (remotes == null || string.IsNullOrEmpty(sha))
+            {
             return "";
+        }
+            return GetReq(GetGitlabRoute(remotes), sha);
         }
 
         public static (string, string) GetRouteSha(string req)
