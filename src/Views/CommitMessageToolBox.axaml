@@ -51,7 +51,7 @@
                   Width="28"
                   Margin="0,0,4,0" Padding="0"
                   Click="OnOpenOpenAIHelper"
-                  IsVisible="{Binding #ThisControl.ShowAdvancedOptions}"
+                  IsVisible="False"
                   ToolTip.Tip="{DynamicResource Text.AIAssistant.Tip}">
             <Path Width="13" Height="13" Data="{StaticResource Icons.AIAssist}"/>
           </Button>
