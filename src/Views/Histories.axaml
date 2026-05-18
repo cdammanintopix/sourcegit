@@ -124,14 +124,8 @@
                                            Foreground="{DynamicResource Brush.FG1}"
                                            ShowTags="{Binding Source={x:Static vm:Preferences.Instance}, Path=ShowTagsInGraph}"
                                            FontSize="12"
-                                           VerticalAlignment="Center">
-                      <v:CommitRefsPresenter.UseGraphColor>
-                        <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                          <Binding Path="IsMerged"/>
-                          <Binding Path="$parent[v:Histories].OnlyHighlightCurrentBranch" Converter="{x:Static BoolConverters.Not}"/>
-                        </MultiBinding>
-                      </v:CommitRefsPresenter.UseGraphColor>
-                    </v:CommitRefsPresenter>
+                                           VerticalAlignment="Center"
+                                           UseGraphColor="{Binding IsHighlightedInGraph, Mode=OneWay}"/>
 
                     <v:CommitSubjectPresenter Grid.Column="3"
                                               Height="26"
@@ -256,7 +250,7 @@
                      Margin="0,24,0,0"
                      Graph="{Binding Graph}"
                      DotBrush="{DynamicResource Brush.Contents}"
-                     OnlyHighlightCurrentBranch="{Binding $parent[v:Histories].OnlyHighlightCurrentBranch}"
+                     OnlyHighlighted="{Binding GraphHighlighting, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static m:CommitGraphHighlighting.All}}"
                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                      IsHitTestVisible="False"
                      ClipToBounds="True"/>
@@ -286,12 +280,11 @@
                   Focusable="False"
                   IsEnabled="{Binding #ThisControl.IsDetailsPanelExpanded, Mode=OneWay}"/>
 
-    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
-      <ContentControl>
-        <ContentControl.Content>
-          <Binding Path="DetailContext">
-            <Binding.TargetNullValue>
-              <TabControl Padding="0,4">
+    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" >
+      <ContentControl Content="{Binding DetailContext, Mode=OneWay}">
+        <ContentControl.DataTemplates>
+          <DataTemplate DataType="m:Null">
+            <TabControl Padding="0,4">
                 <TabItem>
                   <TabItem.Header>
                     <Border Background="Transparent" PointerPressed="OnTabHeaderPointerPressed">
@@ -326,11 +319,8 @@
                   </TabItem.Header>
                 </TabItem>
               </TabControl>
-            </Binding.TargetNullValue>
-          </Binding>
-        </ContentControl.Content>
-        
-        <ContentControl.DataTemplates>
+          </DataTemplate>
+          
           <DataTemplate DataType="vm:CommitDetail">
             <v:CommitDetail IsDetailsPanelExpanded="{Binding #ThisControl.IsDetailsPanelExpanded, Mode=OneWay}"/>
           </DataTemplate>
