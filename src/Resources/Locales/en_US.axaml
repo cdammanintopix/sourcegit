@@ -733,6 +733,7 @@
   <x:String x:Key="Text.Push.CreateMR" xml:space="preserve">Create MR to default branch</x:String>
   <x:String x:Key="Text.Push.DraftMR" xml:space="preserve">Mark MR as draft</x:String>
   <x:String x:Key="Text.Push.CISkip" xml:space="preserve">Skip CI</x:String>
+  <x:String x:Key="Text.Push.CICancelLast" xml:space="preserve">Cancel last CI pipelines</x:String>
   <x:String x:Key="Text.Push.WithAllTags" xml:space="preserve">Push all tags</x:String>
   <x:String x:Key="Text.PushTag" xml:space="preserve">Push Tag To Remote</x:String>
   <x:String x:Key="Text.PushTag.PushAllRemotes" xml:space="preserve">Push to all remotes</x:String>

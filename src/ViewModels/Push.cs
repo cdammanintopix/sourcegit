@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using SourceGit.Models;
 using SourceGit.Views;
 
 namespace SourceGit.ViewModels
@@ -120,6 +121,12 @@ namespace SourceGit.ViewModels
             set;
         } = true;
 
+        public bool CICancelLast
+        {
+            get;
+            set;
+        } = true;
+
         public bool CISkip
         {
             get => _ciSkip;
@@ -228,6 +235,12 @@ namespace SourceGit.ViewModels
 
         public override async Task<bool> Sure()
         {
+            if (CICancelLast)
+            {
+                ProgressDescription = $"Cancelling last CI pipelines for branch {_selectedRemoteBranch.Name} ...";
+                await CIManager.CancelPipelinesForBranch(CI.GetGitlabRoute(_repo.Remotes), _selectedRemoteBranch.Name);
+            }
+
             using var lockWatcher = _repo.LockWatcher();
 
             var remoteBranchName = _selectedRemoteBranch.Name;

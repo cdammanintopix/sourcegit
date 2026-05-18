@@ -19,7 +19,7 @@
                  Text="{DynamicResource Text.Push.Title}"/>
     </StackPanel>
 
-    <Grid Margin="0,16,0,0" RowDefinitions="32,32,32,Auto,Auto,32,32,32,32,Auto" ColumnDefinitions="130,*">
+    <Grid Margin="0,16,0,0" RowDefinitions="32,32,32,Auto,Auto,32,32,32,32,32,Auto" ColumnDefinitions="130,*">
       <TextBlock Grid.Row="0" Grid.Column="0"
                  HorizontalAlignment="Right" VerticalAlignment="Center"
                  Margin="0,0,8,0"
@@ -118,16 +118,20 @@
       </Grid>
 
       <CheckBox Grid.Row="8" Grid.Column="1"
+                Content="{DynamicResource Text.Push.CICancelLast}"
+                IsChecked="{Binding CICancelLast, Mode=TwoWay}"/>
+
+      <CheckBox Grid.Row="9" Grid.Column="1"
                 Content="{DynamicResource Text.Push.CISkip}"
                 IsChecked="{Binding CISkip, Mode=TwoWay}"
                 ToolTip.Tip="-o ci.skip"/>
 
-      <TextBlock Grid.Row="9" Grid.Column="0"
+      <TextBlock Grid.Row="10" Grid.Column="0"
                  HorizontalAlignment="Right" VerticalAlignment="Center"
                  Margin="0,0,8,0"
                  Text="{DynamicResource Text.CI.Args}"
                  IsVisible="{Binding IsCIArgsVisible}"/>
-      <TextBox Grid.Row="9" Grid.Column="1"
+      <TextBox Grid.Row="10" Grid.Column="1"
                Height="28"
                VerticalAlignment="Center"
                CornerRadius="3"

@@ -200,7 +200,7 @@ namespace SourceGit.Models
                 using var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", GITLAB_TOKEN);
                 client.Timeout = TimeSpan.FromSeconds(2);
-                var rsp = await client.GetAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipelines?ref={HttpUtility.UrlEncode(branch)}&status=created,waiting_for_resource,preparing,pending,running");
+                var rsp = await client.GetAsync($"https://gitlab.intopix.com/api/v4/projects/{HttpUtility.UrlEncode(route)}/pipelines?ref={HttpUtility.UrlEncode(branch)}");
                 if (rsp.IsSuccessStatusCode)
                 {
                     (found, pipelines) = ParsePipelinesJson(await rsp.Content.ReadAsStringAsync());
@@ -214,19 +214,8 @@ namespace SourceGit.Models
             return (failed, found, pipelines);
         }
 
-        public async Task<bool> CancelPipelinesForSha(string route, string sha)
+        public static async Task<bool> CancelPipelines(string route, List<(int, string)> pipelines)
         {
-            string req = CI.GetReq(route, sha);
-            List<(int, string)> pipelines = [];
-            if (_resources.TryGetValue(req, out var value))
-            {
-                pipelines = value.Item2;
-            }
-            else
-            {
-                (_, _, pipelines) = await GetPipelinesForSha(route, sha);
-            }
-
             if (pipelines.Count == 0)
             {
                 return false;
@@ -249,6 +238,24 @@ namespace SourceGit.Models
                 } catch { }
             }
 
+            return updateNeeded;
+        }
+
+        public async Task<bool> CancelPipelinesForSha(string route, string sha)
+        {
+            string req = CI.GetReq(route, sha);
+            List<(int, string)> pipelines = [];
+            if (_resources.TryGetValue(req, out var value))
+            {
+                pipelines = value.Item2;
+            }
+            else
+            {
+                (_, _, pipelines) = await GetPipelinesForSha(route, sha);
+            }
+
+            bool updateNeeded = await CancelPipelines(route, pipelines);
+
             if (updateNeeded)
             {
                 Request(req, true);
@@ -257,7 +264,15 @@ namespace SourceGit.Models
             return true;
         }
 
-        public static async Task<bool> RunPipelineForBranch(string route, string branch, string ciArgs="")
+        public static async Task<bool> CancelPipelinesForBranch(string route, string branch)
+        {
+            (_, _, var pipelines) = await GetPipelinesForBranch(route, branch);
+            await CancelPipelines(route, pipelines);
+
+            return true;
+        }
+
+        public static async Task<bool> RunPipelineForBranch(string route, string branch, string ciArgs = "")
         {
             if (string.IsNullOrEmpty(route) || string.IsNullOrEmpty(branch))
             {
@@ -271,7 +286,8 @@ namespace SourceGit.Models
                 client.Timeout = TimeSpan.FromSeconds(2);
                 var content = new
                 {
-                    inputs = new Dictionary<string, object> {
+                    inputs = new Dictionary<string, object>
+                    {
                         ["ci-args"] = ciArgs
                     }
                 };
