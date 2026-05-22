@@ -654,7 +654,7 @@ namespace SourceGit.Views
             if (sender is Button button && DataContext is ViewModels.WorkingCopy vm && vm.Repository.CurrentBranch != null)
             {
                 string branchPrefix = "[" + vm.Repository.CurrentBranch.Name + "]";
-                if (vm.CommitMessage[..branchPrefix.Length] != branchPrefix)
+                if (vm.CommitMessage.Length < branchPrefix.Length || vm.CommitMessage[..branchPrefix.Length] != branchPrefix)
                 {
                     if (vm.CommitMessage.Length == 0 || vm.CommitMessage[0] != '[')
                     {
