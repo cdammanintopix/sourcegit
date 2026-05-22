@@ -48,18 +48,24 @@ Ubuntu2404_x64_Release_build:
     - export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
     - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64 -p:DisableUpdateDetection=true
     - rm -f build/SourceGit/*.dbg
+    - rm -f build/SourceGit/*.pdb
     - mv build/SourceGit/SourceGit build/SourceGit/sourcegit
     - cd build
-    - install -d resources/deb/opt/sourcegit/
-    - install -d resources/deb/usr/bin/
-    - install -d resources/deb/usr/share/applications/
-    - install -d resources/deb/usr/share/icons/
-    - cp -f SourceGit/* resources/deb/opt/sourcegit/
-    - ln -rsf resources/deb/opt/sourcegit/sourcegit resources/deb/usr/bin/
-    - cp -r resources/_common/applications resources/deb/usr/share/
-    - cp -r resources/_common/icons resources/deb/usr/share/
-    - 'sed -i -e "s/^Version:.*/Version: $(cat ../VERSION)/" -e "s/^Architecture:.*/Architecture: amd64/" resources/deb/DEBIAN/control'
-    - dpkg-deb --root-owner-group --build --nocheck resources/deb "sourcegit_v$(cat ../VERSION)-1_amd64.deb"
+    - mkdir -p resources/deb/opt/sourcegit/
+    - mkdir -p resources/deb/usr/bin
+    - mkdir -p resources/deb/usr/share/applications
+    - mkdir -p resources/deb/usr/share/icons
+    - cp -f SourceGit/* resources/deb/opt/sourcegit
+    - ln -rsf resources/deb/opt/sourcegit/sourcegit resources/deb/usr/bin
+    - cp -r resources/_common/applications resources/deb/usr/share
+    - cp -r resources/_common/icons resources/deb/usr/share
+    - |
+      sed -i -e "s/^Version:.*/Version: $(cat ../VERSION)/"
+      -e "s/^Architecture:.*/Architecture: amd64/"
+      -e "s/^Installed-Size:.*/Installed-Size: $$(du -sk resources/deb | cut -f1)/"
+      -e "s/@ICU_DEPS@, //"
+      resources/deb/DEBIAN/control
+    - dpkg-deb -Zgzip --root-owner-group --build --nocheck resources/deb "sourcegit_v$(cat ../VERSION)-1_amd64.deb"
   artifacts:
     paths:
       - build/*.deb
@@ -81,6 +87,7 @@ Rocky9_x64_Release_build:
     - update-crypto-policies --set DEFAULT:SHA1
     - dotnet publish ./src/SourceGit.csproj -c Release -o build/SourceGit -r linux-x64 -p:DisableUpdateDetection=true
     - rm -f build/SourceGit/*.dbg
+    - rm -f build/SourceGit/*.pdb
     - mv build/SourceGit/SourceGit build/SourceGit/sourcegit
     - cd build
     - rpmbuild -bb --target="x86_64" resources/rpm/SPECS/build.spec --define "_topdir $(pwd)/resources/rpm" --define "_version v$(cat ../VERSION)"
