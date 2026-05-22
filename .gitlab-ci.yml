@@ -59,12 +59,7 @@ Ubuntu2404_x64_Release_build:
     - ln -rsf resources/deb/opt/sourcegit/sourcegit resources/deb/usr/bin
     - cp -r resources/_common/applications resources/deb/usr/share
     - cp -r resources/_common/icons resources/deb/usr/share
-    - |
-      sed -i -e "s/^Version:.*/Version: $(cat ../VERSION)/"
-      -e "s/^Architecture:.*/Architecture: amd64/"
-      -e "s/^Installed-Size:.*/Installed-Size: $(du -sk resources/deb | cut -f1)/"
-      -e "s/@ICU_DEPS@, //"
-      resources/deb/DEBIAN/control
+    - 'sed -i -e "s/^Version:.*/Version: $(cat ../VERSION)/" -e "s/^Architecture:.*/Architecture: amd64/" -e "s/^Installed-Size:.*/Installed-Size: $(du -sk resources/deb | cut -f1)/" -e "s/@ICU_DEPS@, //" resources/deb/DEBIAN/control'
     - dpkg-deb -Zgzip --root-owner-group --build --nocheck resources/deb "sourcegit_v$(cat ../VERSION)-1_amd64.deb"
   artifacts:
     paths:

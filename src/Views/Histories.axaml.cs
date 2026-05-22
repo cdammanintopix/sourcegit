@@ -104,7 +104,7 @@ namespace SourceGit.Views
         {
             SelectionMode = DataGridSelectionMode.Extended;
             CanUserReorderColumns = false;
-            CanUserResizeColumns = true;
+            CanUserResizeColumns = false;
             CanUserSortColumns = false;
             AutoGenerateColumns = false;
             IsReadOnly = true;
@@ -419,6 +419,120 @@ namespace SourceGit.Views
             }
         }
 
+        protected override void OnDataContextChanged(EventArgs e)
+        {
+            base.OnDataContextChanged(e);
+
+            if (DataContext is ViewModels.Histories vm)
+                CommitListContainer.Columns[1].Width = new(vm.AuthorColumnWidth, DataGridLengthUnitType.Pixel);
+        }
+
+        private void OnCommitListHeaderPointerMoved(object sender, PointerEventArgs e)
+        {
+            if (sender is not Border border)
+                return;
+
+            if (DataContext is not ViewModels.Histories { IsAuthorColumnVisible: true } vm)
+                return;
+
+            var pos = e.GetPosition(border);
+            if (_resizingAuthorColumn)
+            {
+                var posX = CommitListContainer.Columns[0].ActualWidth;
+                var maxW = posX + CommitListContainer.Columns[1].ActualWidth - 100;
+                var delta = posX - pos.X;
+                var w = Math.Max(Math.Min(vm.AuthorColumnWidth + delta, maxW), 80);
+                CommitListContainer.Columns[1].Width = new(w, DataGridLengthUnitType.Pixel);
+                vm.AuthorColumnWidth = w;
+            }
+            else
+            {
+                var dis = CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
+                if (dis < 4 && dis > -4)
+                {
+                    if (border.Cursor != _resizingCursor)
+                        border.Cursor = _resizingCursor;
+                }
+                else if (border.Cursor != Cursor.Default)
+                {
+                    border.Cursor = Cursor.Default;
+                }
+            }
+        }
+
+        private void OnCommitListHeaderPointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            if (sender is not Border border)
+                return;
+
+            var pos = e.GetPosition(border);
+            var dis = CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
+            if (dis > 4 || dis < -4)
+                return;
+
+            if (e.GetCurrentPoint(border).Properties.IsLeftButtonPressed)
+            {
+                _resizingAuthorColumn = true;
+                e.Handled = true;
+            }
+        }
+
+        private void OnCommitListHeaderPointerReleased(object sender, PointerReleasedEventArgs e)
+        {
+            _resizingAuthorColumn = false;
+        }
+
+        private void OnCommitListHeaderContextRequested(object sender, ContextRequestedEventArgs e)
+        {
+            if (DataContext is not ViewModels.Histories vm)
+                return;
+
+            if (sender is not Border border)
+                return;
+
+            var columnsHeader = new MenuItem();
+            columnsHeader.Header = new TextBlock() { Text = App.Text("Histories.ShowColumns"), FontWeight = FontWeight.Bold };
+            columnsHeader.IsEnabled = false;
+
+            var authorColumn = new MenuItem();
+            authorColumn.Header = App.Text("Histories.Header.Author");
+            if (vm.IsAuthorColumnVisible)
+                authorColumn.Icon = this.CreateMenuIcon("Icons.Check");
+            authorColumn.Click += (_, ev) =>
+            {
+                vm.IsAuthorColumnVisible = !vm.IsAuthorColumnVisible;
+                ev.Handled = true;
+            };
+
+            var shaColumn = new MenuItem();
+            shaColumn.Header = App.Text("Histories.Header.SHA");
+            if (vm.IsSHAColumnVisible)
+                shaColumn.Icon = this.CreateMenuIcon("Icons.Check");
+            shaColumn.Click += (_, ev) =>
+            {
+                vm.IsSHAColumnVisible = !vm.IsSHAColumnVisible;
+                ev.Handled = true;
+            };
+
+            var timeColumn = new MenuItem();
+            timeColumn.Header = App.Text("Histories.Header.DateTime");
+            if (vm.IsDateTimeColumnVisible)
+                timeColumn.Icon = this.CreateMenuIcon("Icons.Check");
+            timeColumn.Click += (_, ev) =>
+            {
+                vm.IsDateTimeColumnVisible = !vm.IsDateTimeColumnVisible;
+                ev.Handled = true;
+            };
+
+            var menu = new ContextMenu();
+            menu.Items.Add(columnsHeader);
+            menu.Items.Add(authorColumn);
+            menu.Items.Add(shaColumn);
+            menu.Items.Add(timeColumn);
+            menu.Open(border);
+            e.Handled = true;
+        }
+
         private void OnCommitListLayoutUpdated(object _1, EventArgs _2)
         {
             if (!IsLoaded)
@@ -469,82 +583,29 @@ namespace SourceGit.Views
 
         private void OnCommitListContextRequested(object sender, ContextRequestedEventArgs e)
         {
-            if (e.Source is Control { DataContext: Models.Commit })
+            var repoView = this.FindAncestorOfType<Repository>();
+            if (repoView is not { DataContext: ViewModels.Repository repo })
+                return;
+
+            var selected = CommitListContainer.SelectedItems;
+            if (selected is not { Count: > 0 })
+                return;
+
+            var commits = new List<Models.Commit>();
+            for (var i = selected.Count - 1; i >= 0; i--)
             {
-                var repoView = this.FindAncestorOfType<Repository>();
-                if (repoView is not { DataContext: ViewModels.Repository repo })
-                    return;
-
-                var selected = CommitListContainer.SelectedItems;
-                if (selected is not { Count: > 0 })
-                    return;
-
-                var commits = new List<Models.Commit>();
-                for (var i = selected.Count - 1; i >= 0; i--)
-                {
-                    if (selected[i] is Models.Commit c)
-                        commits.Add(c);
-                }
-
-                if (selected.Count > 1)
-                {
-                    var menu = CreateContextMenuForMultipleCommits(repo, commits);
-                    menu.Open(CommitListContainer);
-                }
-                else if (selected.Count == 1)
-                {
-                    var menu = CreateContextMenuForSingleCommit(repo, commits[0]);
-                    menu.Open(CommitListContainer);
-                }
+                if (selected[i] is Models.Commit c)
+                    commits.Add(c);
             }
-            else if (e.Source is Control elem)
+
+            if (selected.Count > 1)
             {
-                var headersPresenter = CommitListContainer.FindDescendantOfType<DataGridColumnHeadersPresenter>();
-                if (!headersPresenter.IsVisualAncestorOf(elem))
-                    return;
-
-                if (DataContext is not ViewModels.Histories vm)
-                    return;
-
-                var columnsHeader = new MenuItem();
-                columnsHeader.Header = new TextBlock() { Text = App.Text("Histories.ShowColumns"), FontWeight = FontWeight.Bold };
-                columnsHeader.IsEnabled = false;
-
-                var authorColumn = new MenuItem();
-                authorColumn.Header = App.Text("Histories.Header.Author");
-                if (vm.IsAuthorColumnVisible)
-                    authorColumn.Icon = this.CreateMenuIcon("Icons.Check");
-                authorColumn.Click += (_, ev) =>
-                {
-                    vm.IsAuthorColumnVisible = !vm.IsAuthorColumnVisible;
-                    ev.Handled = true;
-                };
-
-                var shaColumn = new MenuItem();
-                shaColumn.Header = App.Text("Histories.Header.SHA");
-                if (vm.IsSHAColumnVisible)
-                    shaColumn.Icon = this.CreateMenuIcon("Icons.Check");
-                shaColumn.Click += (_, ev) =>
-                {
-                    vm.IsSHAColumnVisible = !vm.IsSHAColumnVisible;
-                    ev.Handled = true;
-                };
-
-                var timeColumn = new MenuItem();
-                timeColumn.Header = App.Text("Histories.Header.DateTime");
-                if (vm.IsDateTimeColumnVisible)
-                    timeColumn.Icon = this.CreateMenuIcon("Icons.Check");
-                timeColumn.Click += (_, ev) =>
-                {
-                    vm.IsDateTimeColumnVisible = !vm.IsDateTimeColumnVisible;
-                    ev.Handled = true;
-                };
-
-                var menu = new ContextMenu();
-                menu.Items.Add(columnsHeader);
-                menu.Items.Add(authorColumn);
-                menu.Items.Add(shaColumn);
-                menu.Items.Add(timeColumn);
+                var menu = CreateContextMenuForMultipleCommits(repo, commits);
+                menu.Open(CommitListContainer);
+            }
+            else if (selected.Count == 1)
+            {
+                var menu = CreateContextMenuForSingleCommit(repo, commits[0]);
                 menu.Open(CommitListContainer);
             }
 
@@ -1208,6 +1269,24 @@ namespace SourceGit.Views
                 e.Handled = true;
             };
 
+            var copyAuthorTime = new MenuItem();
+            copyAuthorTime.Header = App.Text("CommitCM.CopyAuthorTime");
+            copyAuthorTime.Icon = this.CreateMenuIcon("Icons.DateTime");
+            copyAuthorTime.Click += async (_, e) =>
+            {
+                await this.CopyTextAsync(Models.DateTimeFormat.Format(commit.AuthorTime));
+                e.Handled = true;
+            };
+
+            var copyCommitterTime = new MenuItem();
+            copyCommitterTime.Header = App.Text("CommitCM.CopyCommitterTime");
+            copyCommitterTime.Icon = this.CreateMenuIcon("Icons.DateTime");
+            copyCommitterTime.Click += async (_, e) =>
+            {
+                await this.CopyTextAsync(Models.DateTimeFormat.Format(commit.CommitterTime));
+                e.Handled = true;
+            };
+
             var copy = new MenuItem();
             copy.Header = App.Text("Copy");
             copy.Icon = this.CreateMenuIcon("Icons.Copy");
@@ -1218,6 +1297,8 @@ namespace SourceGit.Views
             copy.Items.Add(copyMessage);
             copy.Items.Add(copyAuthor);
             copy.Items.Add(copyCommitter);
+            copy.Items.Add(copyAuthorTime);
+            copy.Items.Add(copyCommitterTime);
             menu.Items.Add(copy);
 
             return menu;
@@ -1441,6 +1522,9 @@ namespace SourceGit.Views
 
         private void FillRemoteBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current, bool merged)
         {
+            if (branch == null)
+                return;
+
             var name = branch.FriendlyName;
 
             var submenu = new MenuItem();
@@ -1716,5 +1800,7 @@ namespace SourceGit.Views
         private double _lastGraphStartY = 0;
         private double _lastGraphClipWidth = 0;
         private double _lastGraphRowHeight = 0;
+        private bool _resizingAuthorColumn = false;
+        private Cursor _resizingCursor = new Cursor(StandardCursorType.SizeWestEast);
     }
 }

@@ -155,8 +155,10 @@
   <x:String x:Key="Text.CommitCM.CompareWithHead" xml:space="preserve">与当前HEAD比较</x:String>
   <x:String x:Key="Text.CommitCM.CompareWithWorktree" xml:space="preserve">与本地工作树比较</x:String>
   <x:String x:Key="Text.CommitCM.CopyAuthor" xml:space="preserve">作者</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">修改时间</x:String>
   <x:String x:Key="Text.CommitCM.CopyCommitMessage" xml:space="preserve">提交信息</x:String>
   <x:String x:Key="Text.CommitCM.CopyCommitter" xml:space="preserve">提交者</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">提交时间</x:String>
   <x:String x:Key="Text.CommitCM.CopySHA" xml:space="preserve">提交指纹</x:String>
   <x:String x:Key="Text.CommitCM.CopySubject" xml:space="preserve">主题</x:String>
   <x:String x:Key="Text.CommitCM.CustomAction" xml:space="preserve">自定义操作</x:String>
@@ -674,6 +676,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">在提交路线图中显示标签</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">SUBJECT字数检测</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24小时制</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">在提交路线图中使用精简分支名</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">生成GitHub风格的默认头像</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT配置</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">自动换行转换</x:String>
