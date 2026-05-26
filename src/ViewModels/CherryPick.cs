@@ -50,7 +50,7 @@ namespace SourceGit.ViewModels
             IsMergeCommit = false;
             ParentsForMergeCommit = [];
             MainlineForMergeCommit = 0;
-            AppendSourceToMessage = true;
+            AppendSourceToMessage = false;
             AutoCommit = true;
         }
 
@@ -61,7 +61,7 @@ namespace SourceGit.ViewModels
             IsMergeCommit = true;
             ParentsForMergeCommit = parents;
             MainlineForMergeCommit = 0;
-            AppendSourceToMessage = true;
+            AppendSourceToMessage = false;
             AutoCommit = true;
         }
 
