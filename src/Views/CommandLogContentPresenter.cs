@@ -154,6 +154,10 @@ namespace SourceGit.Views
                     ScrollToEnd();
                 }
             }
+            else if (change.Property.Name == nameof(ActualThemeVariant) && change.NewValue != null)
+            {
+                Models.TextMateHelper.SetThemeByApp(_textMate);
+            }
         }
 
         private TextMate.Installation _textMate = null;

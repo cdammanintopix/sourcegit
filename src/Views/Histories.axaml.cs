@@ -849,15 +849,15 @@ namespace SourceGit.Views
                             FillCurrentBranchMenu(menu, repo, current);
                             break;
                         case Models.DecoratorType.LocalBranchHead:
-                            var lb = repo.Branches.Find(x => x.IsLocal && d.Name == x.Name);
-                            FillOtherLocalBranchMenu(menu, repo, lb, current, commit.IsMerged);
+                            var lb = repo.Branches.Find(x => x.IsLocal && d.Name.Equals(x.Name, StringComparison.Ordinal));
+                            FillOtherLocalBranchMenu(menu, repo, lb, current);
                             break;
                         case Models.DecoratorType.RemoteBranchHead:
-                            var rb = repo.Branches.Find(x => !x.IsLocal && d.Name == x.FriendlyName);
-                            FillRemoteBranchMenu(menu, repo, rb, current, commit.IsMerged);
+                            var rb = repo.Branches.Find(x => !x.IsLocal && d.Name.Equals(x.FriendlyName, StringComparison.Ordinal));
+                            FillRemoteBranchMenu(menu, repo, rb, current);
                             break;
                         case Models.DecoratorType.Tag:
-                            var t = repo.Tags.Find(x => x.Name == d.Name);
+                            var t = repo.Tags.Find(x => d.Name.Equals(x.Name, StringComparison.Ordinal));
                             if (t != null)
                                 tags.Add(t);
                             break;
@@ -871,7 +871,7 @@ namespace SourceGit.Views
             if (tags.Count > 0)
             {
                 foreach (var tag in tags)
-                    FillTagMenu(menu, repo, tag, current, commit.IsMerged);
+                    FillTagMenu(menu, repo, tag, current);
                 menu.Items.Add(new MenuItem() { Header = "-" });
             }
 
@@ -903,7 +903,7 @@ namespace SourceGit.Views
             if (!repo.IsBare)
             {
                 var target = commit.GetFriendlyName();
-                if (target.Length > 32)
+                if (target.Length > 40)
                     target = commit.SHA.Substring(0, 10);
 
                 if (!isHead)
@@ -933,20 +933,55 @@ namespace SourceGit.Views
                     };
                     menu.Items.Add(rebase);
 
-                    if (!commit.HasDecorators)
+                    var merge = new MenuItem();
+                    merge.Header = App.Text("BranchCM.Merge", target, current.Name);
+                    merge.Icon = this.CreateMenuIcon("Icons.Merge");
+                    merge.Click += (_, e) =>
                     {
-                        var merge = new MenuItem();
-                        merge.Header = App.Text("CommitCM.Merge", current.Name);
-                        merge.Icon = this.CreateMenuIcon("Icons.Merge");
-                        merge.Click += (_, e) =>
+                        if (repo.CanCreatePopup())
                         {
-                            if (repo.CanCreatePopup())
-                                repo.ShowPopup(new ViewModels.Merge(repo, commit, current.Name));
+                            var found = false;
+                            foreach (var d in commit.Decorators)
+                            {
+                                if (d.Type == Models.DecoratorType.LocalBranchHead)
+                                {
+                                    var b = repo.Branches.Find(x => x.IsLocal && x.Name.Equals(d.Name, StringComparison.Ordinal));
+                                    if (b != null)
+                                    {
+                                        found = true;
+                                        repo.ShowPopup(new ViewModels.Merge(repo, b, current.Name, false));
+                                        break;
+                                    }
+                                }
+                                else if (d.Type == Models.DecoratorType.RemoteBranchHead)
+                                {
+                                    var rb = repo.Branches.Find(x => !x.IsLocal && x.FriendlyName.Equals(d.Name, StringComparison.Ordinal));
+                                    if (rb != null)
+                                    {
+                                        found = true;
+                                        repo.ShowPopup(new ViewModels.Merge(repo, rb, current.Name, false));
+                                        break;
+                                    }
+                                }
+                                else if (d.Type == Models.DecoratorType.Tag)
+                                {
+                                    var t = repo.Tags.Find(x => x.Name.Equals(d.Name, StringComparison.Ordinal));
+                                    if (t != null)
+                                    {
+                                        found = true;
+                                        repo.ShowPopup(new ViewModels.Merge(repo, t, current.Name));
+                                        break;
+                                    }
+                                }
+                            }
 
-                            e.Handled = true;
-                        };
-                        menu.Items.Add(merge);
-                    }
+                            if (!found)
+                                repo.ShowPopup(new ViewModels.Merge(repo, commit, current.Name));
+                        }
+
+                        e.Handled = true;
+                    };
+                    menu.Items.Add(merge);
 
                     var cherryPick = new MenuItem();
                     cherryPick.Header = App.Text("CommitCM.CherryPick");
@@ -1405,7 +1440,7 @@ namespace SourceGit.Views
             menu.Items.Add(submenu);
         }
 
-        private void FillOtherLocalBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current, bool merged)
+        private void FillOtherLocalBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current)
         {
             var submenu = new MenuItem();
             submenu.Icon = this.CreateMenuIcon("Icons.Branch");
@@ -1428,29 +1463,6 @@ namespace SourceGit.Views
                     e.Handled = true;
                 };
                 submenu.Items.Add(checkout);
-
-                var merge = new MenuItem();
-                merge.Header = App.Text("BranchCM.Merge", branch.Name, current.Name);
-                merge.Icon = this.CreateMenuIcon("Icons.Merge");
-                merge.IsEnabled = !merged;
-                merge.Click += (_, e) =>
-                {
-                    if (repo.CanCreatePopup())
-                        repo.ShowPopup(new ViewModels.Merge(repo, branch, current.Name, false));
-                    e.Handled = true;
-                };
-                submenu.Items.Add(merge);
-
-                var rebase = new MenuItem();
-                rebase.Header = App.Text("BranchCM.Rebase", current.Name, branch.Name);
-                rebase.Icon = this.CreateMenuIcon("Icons.Rebase");
-                rebase.Click += (_, e) =>
-                {
-                    if (repo.CanCreatePopup())
-                        repo.ShowPopup(new ViewModels.Rebase(repo, current, branch));
-                    e.Handled = true;
-                };
-                submenu.Items.Add(rebase);
             }
 
             var rename = new MenuItem();
@@ -1520,7 +1532,7 @@ namespace SourceGit.Views
             menu.Items.Add(submenu);
         }
 
-        private void FillRemoteBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current, bool merged)
+        private void FillRemoteBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current)
         {
             if (branch == null)
                 return;
@@ -1546,30 +1558,6 @@ namespace SourceGit.Views
                 e.Handled = true;
             };
             submenu.Items.Add(checkout);
-
-            var merge = new MenuItem();
-            merge.Header = App.Text("BranchCM.Merge", name, current.Name);
-            merge.Icon = this.CreateMenuIcon("Icons.Merge");
-            merge.IsEnabled = !merged;
-            merge.Click += (_, e) =>
-            {
-                if (repo.CanCreatePopup())
-                    repo.ShowPopup(new ViewModels.Merge(repo, branch, current.Name, false));
-                e.Handled = true;
-            };
-
-            submenu.Items.Add(merge);
-
-            var rebase = new MenuItem();
-            rebase.Header = App.Text("BranchCM.Rebase", current.Name, name);
-            rebase.Icon = this.CreateMenuIcon("Icons.Rebase");
-            rebase.Click += (_, e) =>
-            {
-                if (repo.CanCreatePopup())
-                    repo.ShowPopup(new ViewModels.Rebase(repo, current, branch));
-                e.Handled = true;
-            };
-            submenu.Items.Add(rebase);
 
             var delete = new MenuItem();
             delete.Header = App.Text("BranchCM.Delete", name);
@@ -1608,7 +1596,7 @@ namespace SourceGit.Views
             menu.Items.Add(submenu);
         }
 
-        private void FillTagMenu(ContextMenu menu, ViewModels.Repository repo, Models.Tag tag, Models.Branch current, bool merged)
+        private void FillTagMenu(ContextMenu menu, ViewModels.Repository repo, Models.Tag tag, Models.Branch current)
         {
             var submenu = new MenuItem();
             submenu.Header = tag.Name;
@@ -1632,20 +1620,6 @@ namespace SourceGit.Views
                 e.Handled = true;
             };
             submenu.Items.Add(push);
-
-            if (!repo.IsBare && !merged)
-            {
-                var merge = new MenuItem();
-                merge.Header = App.Text("TagCM.Merge", tag.Name, current.Name);
-                merge.Icon = this.CreateMenuIcon("Icons.Merge");
-                merge.Click += (_, e) =>
-                {
-                    if (repo.CanCreatePopup())
-                        repo.ShowPopup(new ViewModels.Merge(repo, tag, current.Name));
-                    e.Handled = true;
-                };
-                submenu.Items.Add(merge);
-            }
 
             var delete = new MenuItem();
             delete.Header = App.Text("TagCM.Delete", tag.Name);
