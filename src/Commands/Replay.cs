@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 
 namespace SourceGit.Commands
 {
-    public class MergeTree : Command
+    public class Replay : Command
     {
-        public MergeTree(string repo, string source, string dest)
+        public Replay(string repo, string onto, string range)
         {
             WorkingDirectory = repo;
-            Args = $"merge-tree --write-tree {source} {dest}";
+            Context = repo;
+            RaiseError = false;
+            Args = $"replay --onto {onto} {range}";
         }
 
         public async Task<int> GetExitCodeAsync()

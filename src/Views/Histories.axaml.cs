@@ -563,16 +563,12 @@ namespace SourceGit.Views
             SetCurrentValue(IsScrollToTopVisibleProperty, startY >= rowHeight);
 
             var clipWidth = dataGrid.Columns[0].ActualWidth - 4;
-            if (Math.Abs(_lastGraphStartY - startY) > 0.01 ||
-                Math.Abs(_lastGraphClipWidth - clipWidth) > 0.01 ||
-                Math.Abs(_lastGraphRowHeight - rowHeight) > 0.01)
-            {
-                _lastGraphStartY = startY;
-                _lastGraphClipWidth = clipWidth;
-                _lastGraphRowHeight = rowHeight;
-
+            var lastLayout = CommitGraph.Layout;
+            if (lastLayout == null ||
+                Math.Abs(lastLayout.StartY - startY) > 0.01 ||
+                Math.Abs(lastLayout.ClipWidth - clipWidth) > 0.01 ||
+                Math.Abs(lastLayout.RowHeight - rowHeight) > 0.01)
                 CommitGraph.Layout = new(startY, clipWidth, rowHeight);
-            }
         }
 
         private void OnScrollToTopPointerPressed(object sender, PointerPressedEventArgs e)
@@ -632,6 +628,12 @@ namespace SourceGit.Views
                 if (e.Source is Control { DataContext: Models.Commit c })
                     await histories.CheckoutBranchByCommitAsync(c);
             }
+        }
+
+        private void OnCommitGraphLoaded(object sender, RoutedEventArgs e)
+        {
+            // Force-update the graph layout to ensure the graph is correctly rendered when it's loaded.
+            OnCommitListLayoutUpdated(sender, e);
         }
 
         private void OnTabHeaderPointerPressed(object sender, PointerPressedEventArgs e)
@@ -1771,10 +1773,8 @@ namespace SourceGit.Views
             e.Handled = true;
         }
 
-        private double _lastGraphStartY = 0;
-        private double _lastGraphClipWidth = 0;
-        private double _lastGraphRowHeight = 0;
         private bool _resizingAuthorColumn = false;
         private Cursor _resizingCursor = new Cursor(StandardCursorType.SizeWestEast);
     }
 }
+
