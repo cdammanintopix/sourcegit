@@ -34,7 +34,7 @@ namespace SourceGit.Models
         {
             get;
             set;
-        } = false;
+        } = true;
 
         public string PreferredOpenAIService
         {
