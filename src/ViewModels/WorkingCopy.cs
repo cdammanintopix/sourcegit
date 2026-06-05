@@ -79,7 +79,13 @@ namespace SourceGit.ViewModels
             get => _repo.UIStates.NoVerifyOnCommit;
             set => _repo.UIStates.NoVerifyOnCommit = value;
         }
-        
+
+        public string CommitAndPush
+        {
+            get => _commitAndPush;
+            set => SetProperty(ref _commitAndPush, value);
+        }
+
         public bool UseAmend
         {
             get => _useAmend;
@@ -99,11 +105,13 @@ namespace SourceGit.ViewModels
                         }
 
                         CommitMessage = new Commands.QueryCommitFullMessage(_repo.FullPath, currentBranch.Head).GetResult();
+                        CommitAndPush = App.Text("WorkingCopy.CommitAndForcePush");
                     }
                     else
                     {
                         CommitMessage = string.Empty;
                         ResetAuthor = false;
+                        CommitAndPush = App.Text("WorkingCopy.CommitAndPush");
                     }
 
                     Staged = GetStagedChanges(_cached);
@@ -806,6 +814,7 @@ namespace SourceGit.ViewModels
         private bool _isStaging = false;
         private bool _isUnstaging = false;
         private bool _isCommitting = false;
+        private string _commitAndPush = App.Text("WorkingCopy.CommitAndPush");
         private bool _useAmend = false;
         private bool _resetAuthor = false;
         private bool _hasRemotes = false;
