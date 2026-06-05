@@ -144,9 +144,10 @@ namespace SourceGit.ViewModels
 
         public string CIArgs { get; set; } = "";
 
-        public Push(Repository repo, Models.Branch localBranch)
+        public Push(Repository repo, Models.Branch localBranch, bool forcePush=false)
         {
             _repo = repo;
+            ForcePush = forcePush;
 
             // Gather all local branches and find current branch.
             LocalBranches = new List<Models.Branch>();

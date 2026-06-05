@@ -79,7 +79,7 @@ namespace SourceGit.ViewModels
             get => _repo.UIStates.NoVerifyOnCommit;
             set => _repo.UIStates.NoVerifyOnCommit = value;
         }
-
+        
         public bool UseAmend
         {
             get => _useAmend;
@@ -641,9 +641,6 @@ namespace SourceGit.ViewModels
 
             if (succ)
             {
-                UseAmend = false;
-                CommitMessage = string.Empty;
-
                 if (autoPush && _repo.Remotes.Count > 0)
                 {
                     Models.Branch pushBranch = null;
@@ -654,8 +651,11 @@ namespace SourceGit.ViewModels
                     }
 
                     if (_repo.CanCreatePopup())
-                        await _repo.ShowAndStartPopupAsync(new Push(_repo, pushBranch));
+                        await _repo.ShowAndStartPopupAsync(new Push(_repo, pushBranch, _useAmend));
                 }
+
+                CommitMessage = string.Empty;
+                UseAmend = false;
             }
 
             _repo.MarkBranchesDirtyManually();

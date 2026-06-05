@@ -438,7 +438,6 @@
           <Button.IsVisible>
             <MultiBinding Converter="{x:Static BoolConverters.And}">
               <Binding Path="HasRemotes"/>
-              <Binding Path="UseAmend" Converter="{x:Static BoolConverters.Not}"/>
               <Binding Path="InProgressContext" Converter="{x:Static ObjectConverters.IsNull}"/>
             </MultiBinding>
           </Button.IsVisible>
