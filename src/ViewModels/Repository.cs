@@ -1895,13 +1895,13 @@ namespace SourceGit.ViewModels
                     await new Commands.Fetch(FullPath, remote).Use(log).RunAsync();
 
                 _lastFetchTime = DateTime.Now;
-                IsAutoFetching = false;
             }
             catch
             {
                 // Ignore all exceptions.
             }
 
+            IsAutoFetching = false;
             log?.Complete();
         }
 
