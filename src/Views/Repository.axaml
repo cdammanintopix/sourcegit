@@ -792,15 +792,29 @@
                    FontWeight="Bold"
                    Margin="8,0"
                    Foreground="{DynamicResource Brush.Conflict.Foreground}"
-                   Text="{DynamicResource Text.Bisect.WaitingForRange}"
-                   IsVisible="{Binding BisectState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:BisectState.WaitingForRange}}"/>
+                   Text="{DynamicResource Text.Bisect.WaitingForFirstBad}"
+                   IsVisible="{Binding BisectState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:BisectState.WaitingForFirstBad}}"/>
 
         <TextBlock Grid.Column="0"
                    FontWeight="Bold"
                    Margin="8,0"
                    Foreground="{DynamicResource Brush.Conflict.Foreground}"
-                   Text="{DynamicResource Text.Bisect.Detecting}"
-                   IsVisible="{Binding BisectState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:BisectState.Detecting}}"/>
+                   Text="{DynamicResource Text.Bisect.WaitingForCheckoutAnother}"
+                   IsVisible="{Binding BisectState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:BisectState.WaitingForCheckoutAnother}}"/>
+
+        <TextBlock Grid.Column="0"
+                   FontWeight="Bold"
+                   Margin="8,0"
+                   Foreground="{DynamicResource Brush.Conflict.Foreground}"
+                   Text="{DynamicResource Text.Bisect.WaitingForFirstGood}"
+                   IsVisible="{Binding BisectState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:BisectState.WaitingForFirstGood}}"/>
+
+        <TextBlock Grid.Column="0"
+                   FontWeight="Bold"
+                   Margin="8,0"
+                   Foreground="{DynamicResource Brush.Conflict.Foreground}"
+                   Text="{DynamicResource Text.Bisect.WaitingForMark}"
+                   IsVisible="{Binding BisectState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:BisectState.WaitingForMark}}"/>
 
         <v:LoadingIcon Grid.Column="1"
                        Width="14" Height="14"
@@ -812,27 +826,41 @@
                 Margin="4,0"
                 FontWeight="Regular"
                 BorderThickness="0"
-                Content="{DynamicResource Text.Bisect.Good}"
-                IsEnabled="{Binding !IsBisectCommandRunning}"
+                Content="{DynamicResource Text.Bisect.Bad}"
                 Padding="8,2"
                 Click="OnBisectCommand"
-                Tag="good"/>
+                Tag="bad">
+          <Button.IsEnabled>
+            <MultiBinding Converter="{x:Static BoolConverters.And}">
+              <Binding Path="IsBisectCommandRunning" Converter="{x:Static BoolConverters.Not}"/>
+              <Binding Path="BisectState" Converter="{x:Static ObjectConverters.NotEqual}" ConverterParameter="{x:Static m:BisectState.WaitingForCheckoutAnother}"/>
+            </MultiBinding>
+          </Button.IsEnabled>
+        </Button>
         <Button Grid.Column="3"
                 Classes="flat"
                 Margin="4,0"
                 FontWeight="Regular"
                 BorderThickness="0"
-                Content="{DynamicResource Text.Bisect.Bad}"
-                IsEnabled="{Binding !IsBisectCommandRunning}"
+                Content="{DynamicResource Text.Bisect.Good}"
                 Padding="8,2"
                 Click="OnBisectCommand"
-                Tag="bad"/>
+                Tag="good">
+          <Button.IsEnabled>
+            <MultiBinding Converter="{x:Static BoolConverters.And}">
+              <Binding Path="IsBisectCommandRunning" Converter="{x:Static BoolConverters.Not}"/>
+              <Binding Path="BisectState" Converter="{x:Static ObjectConverters.NotEqual}" ConverterParameter="{x:Static m:BisectState.WaitingForFirstBad}"/>
+              <Binding Path="BisectState" Converter="{x:Static ObjectConverters.NotEqual}" ConverterParameter="{x:Static m:BisectState.WaitingForCheckoutAnother}"/>
+            </MultiBinding>
+          </Button.IsEnabled>
+        </Button>
         <Button Grid.Column="4"
                 Classes="flat"
                 Margin="4,0"
                 FontWeight="Regular"
                 BorderThickness="0"
                 Content="{DynamicResource Text.Bisect.Skip}"
+                IsVisible="{Binding BisectState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:BisectState.WaitingForMark}}"
                 IsEnabled="{Binding !IsBisectCommandRunning}"
                 Padding="8,2"
                 Click="OnBisectCommand"
@@ -907,7 +935,7 @@
       </Border>
 
       <Grid Grid.Row="3">
-        <Border IsVisible="{Binding IsHistoriesVisible, Mode=OneWay}" PropertyChanged="OnRightPagePropertyChanged">
+        <Border Background="{DynamicResource Brush.HistoryBG}" IsVisible="{Binding IsHistoriesVisible, Mode=OneWay}" PropertyChanged="OnRightPagePropertyChanged">
           <v:Histories DataContext="{Binding Histories, Mode=OneWay}"
                        CurrentBranch="{Binding CurrentBranch, Mode=OneWay}"
                        Bisect="{Binding Bisect, Mode=OneWay}"

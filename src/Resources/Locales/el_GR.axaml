@@ -31,7 +31,6 @@
   <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Απόκρυψη άλλων</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Εμφάνιση όλων</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">Τριμερής συγχώνευση (3-Way)</x:String>
-  <x:String x:Key="Text.Apply.File" xml:space="preserve">Αρχείο patch:</x:String>
   <x:String x:Key="Text.Apply.File.Placeholder" xml:space="preserve">Επιλέξτε αρχείο .patch για εφαρμογή</x:String>
   <x:String x:Key="Text.Apply.IgnoreWS" xml:space="preserve">Αγνόηση αλλαγών κενών χαρακτήρων</x:String>
   <x:String x:Key="Text.Apply.Title" xml:space="preserve">Εφαρμογή Patch</x:String>
@@ -55,10 +54,10 @@
   <x:String x:Key="Text.Bisect">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort">Ματαίωση</x:String>
   <x:String x:Key="Text.Bisect.Bad">Κακό</x:String>
-  <x:String x:Key="Text.Bisect.Detecting">Εκτέλεση bisect. Το τρέχον HEAD είναι καλό ή κακό;</x:String>
   <x:String x:Key="Text.Bisect.Good">Καλό</x:String>
   <x:String x:Key="Text.Bisect.Skip">Παράλειψη</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange">Εκτέλεση bisect. Σημειώστε το τρέχον commit ως καλό ή κακό και κάντε checkout σε άλλο.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood">Εκτέλεση bisect. Σημειώστε το τρέχον commit ως καλό ή κακό και κάντε checkout σε άλλο.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark">Εκτέλεση bisect. Το τρέχον HEAD είναι καλό ή κακό;</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Blame</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Blame στην προηγούμενη αναθεώρηση</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace">Αγνόηση αλλαγών κενών χαρακτήρων</x:String>
@@ -494,7 +493,6 @@
   <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">ΣΥΓΓΡΑΦΕΑΣ</x:String>
   <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">ΩΡΑ ΣΥΓΓΡΑΦΕΑ</x:String>
   <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">ΩΡΑ COMMIT</x:String>
-  <x:String x:Key="Text.Histories.Header.DateTime" xml:space="preserve">ΗΜΕΡΟΜΗΝΙΑ &amp; ΩΡΑ</x:String>
   <x:String x:Key="Text.Histories.Header.GraphAndSubject" xml:space="preserve">ΓΡΑΦΗΜΑ &amp; ΘΕΜΑ</x:String>
   <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">ΕΠΙΣΗΜΑΝΣΕΙΣ ΣΤΟ ΓΡΑΦΗΜΑ</x:String>
@@ -671,7 +669,6 @@
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">Ενεργοποίηση συμπαγών φακέλων στο δέντρο αλλαγών</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Γλώσσα</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Commits ιστορικού</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">Εμφάνιση ώρας συγγραφέα αντί για ώρα commit στο γράφημα</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">Εμφάνιση της σελίδας `ΤΟΠΙΚΕΣ ΑΛΛΑΓΕΣ` από προεπιλογή</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">Εμφάνιση της καρτέλας `ΑΛΛΑΓΕΣ` στις λεπτομέρειες commit από προεπιλογή</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Εμφάνιση απογόνων στις λεπτομέρειες commit</x:String>
