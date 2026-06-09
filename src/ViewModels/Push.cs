@@ -265,7 +265,7 @@ namespace SourceGit.ViewModels
             if (succ)
             {
                 string remoteMessage = string.Join("\n    ", log.Content.Split('\n')
-                    .Where(line => line.StartsWith("remote: "))
+                    .Where(line => line.StartsWith("remote: ") && !line.StartsWith("remote: Resolving deltas:"))
                     .Select(line => line.Substring(8).Trim())
                     .Where(line => !string.IsNullOrEmpty(line)));
                 if (!string.IsNullOrEmpty(remoteMessage))
