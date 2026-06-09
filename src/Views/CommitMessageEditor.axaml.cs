@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.Json;
 
 using Avalonia.Interactivity;
+using SourceGit.Models;
 
 namespace SourceGit.Views
 {
@@ -46,7 +47,7 @@ namespace SourceGit.Views
             Editor.CommitMessage = File.ReadAllText(file).ReplaceLineEndings("\n").Trim();
         }
 
-        public void AsBuiltin(string conventionalTypesOverride, string msg, Action<string> onSave)
+        public void AsBuiltin(string conventionalTypesOverride, string msg, Action<string> onSave, Branch currentBranch)
         {
             ConventionalTypesOverride = conventionalTypesOverride;
 
@@ -54,6 +55,7 @@ namespace SourceGit.Views
             _shouldExitApp = false;
 
             Editor.CommitMessage = msg;
+            Editor.CurrentBranch = currentBranch;
         }
 
         protected override void OnClosed(EventArgs e)

@@ -188,7 +188,7 @@ namespace SourceGit.Views
 
                 item.FullMessage = msg;
                 item.IsMessageUserEdited = true;
-            });
+            }, vm.Current);
             dialog.ShowDialog(this);
         }
 

@@ -16,6 +16,7 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Rendering;
 using AvaloniaEdit.Utils;
+using SourceGit.Models;
 
 namespace SourceGit.Views
 {
@@ -426,6 +427,15 @@ namespace SourceGit.Views
             set => SetValue(CommitMessageProperty, value);
         }
 
+        public static readonly StyledProperty<Branch> CurrentBranchProperty =
+            AvaloniaProperty.Register<CommitMessageToolBox, Branch>(nameof(CurrentBranch));
+
+        public Branch CurrentBranch
+        {
+            get => GetValue(CurrentBranchProperty);
+            set => SetValue(CurrentBranchProperty, value);
+        }
+
         public CommitMessageToolBox()
         {
             InitializeComponent();
@@ -652,17 +662,17 @@ namespace SourceGit.Views
 
         private async void OnPrependBranchName(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && DataContext is ViewModels.WorkingCopy vm && vm.Repository.CurrentBranch != null)
+            if (sender is Button button && CurrentBranch != null)
             {
-                string branchPrefix = "[" + vm.Repository.CurrentBranch.Name + "]";
-                if (vm.CommitMessage.Length < branchPrefix.Length || vm.CommitMessage[..branchPrefix.Length] != branchPrefix)
+                string branchPrefix = "[" + CurrentBranch.Name + "]";
+                if (Editor.CommitMessage.Length < branchPrefix.Length || Editor.CommitMessage[..branchPrefix.Length] != branchPrefix)
                 {
-                    if (vm.CommitMessage.Length == 0 || vm.CommitMessage[0] != '[')
+                    if (Editor.CommitMessage.Length == 0 || Editor.CommitMessage[0] != '[')
                     {
                         branchPrefix += " ";
                     }
                     var caretOffset = Editor.CaretOffset + branchPrefix.Length;
-                    vm.CommitMessage = branchPrefix + vm.CommitMessage;
+                    Editor.CommitMessage = branchPrefix + Editor.CommitMessage;
                     Editor.CaretOffset = caretOffset;
                 }
                 Editor.TextArea.Focus();
