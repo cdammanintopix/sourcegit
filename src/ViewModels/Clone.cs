@@ -78,7 +78,7 @@ namespace SourceGit.ViewModels
         {
             get;
             set;
-        } = true;
+        } = false;
 
         public Clone(string pageId)
         {
