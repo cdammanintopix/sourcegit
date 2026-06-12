@@ -25,6 +25,12 @@ namespace SourceGit.ViewModels
             private set => SetProperty(ref _isTextDiff, value);
         }
 
+        public bool IsIgnoreWhitespaceVisible
+        {
+            get => _isIgnoreWhitespaceVisible;
+            private set => SetProperty(ref _isIgnoreWhitespaceVisible, value);
+        }
+
         public object Content
         {
             get => _content;
@@ -45,6 +51,7 @@ namespace SourceGit.ViewModels
             if (previous != null)
             {
                 _isTextDiff = previous._isTextDiff;
+                _isIgnoreWhitespaceVisible = previous._isIgnoreWhitespaceVisible;
                 _content = previous._content;
                 _fileModeChange = previous._fileModeChange;
                 _unifiedLines = previous._unifiedLines;
@@ -78,12 +85,12 @@ namespace SourceGit.ViewModels
 
         public void CheckSettings()
         {
+            var pref = Preferences.Instance;
+
             if (Content is TextDiffContext ctx)
             {
-                var pref = Preferences.Instance;
-
-                if ((pref.UseFullTextDiff && _info.UnifiedLines != _entireFileLine) ||
-                    (!pref.UseFullTextDiff && _info.UnifiedLines == _entireFileLine) ||
+                if ((pref.UseFullTextDiff && _info.UnifiedLines != _entireFileLines) ||
+                    (!pref.UseFullTextDiff && _info.UnifiedLines == _entireFileLines) ||
                     (pref.IgnoreWhitespaceChangesInDiff != _info.IgnoreWhitespace))
                 {
                     LoadContent();
@@ -92,6 +99,11 @@ namespace SourceGit.ViewModels
 
                 if (ctx.IsSideBySide() != pref.UseSideBySideDiff)
                     Content = ctx.SwitchMode();
+            }
+            else if (Content is Models.NoOrEOLChange)
+            {
+                if (pref.IgnoreWhitespaceChangesInDiff != _info.IgnoreWhitespace)
+                    LoadContent();
             }
         }
 
@@ -107,7 +119,7 @@ namespace SourceGit.ViewModels
             Task.Run(async () =>
             {
                 var pref = Preferences.Instance;
-                var numLines = pref.UseFullTextDiff ? _entireFileLine : _unifiedLines;
+                var numLines = pref.UseFullTextDiff ? _entireFileLines : _unifiedLines;
                 var ignoreWhitespace = pref.IgnoreWhitespaceChangesInDiff;
                 var ignoreCRAtEOL = pref.IgnoreCRAtEOLInDiff;
 
@@ -220,6 +232,10 @@ namespace SourceGit.ViewModels
                     else
                         rs = latest.LFSDiff;
                 }
+                else if (IsEmptyFileHash(latest.OldHash) || IsEmptyFileHash(latest.NewHash))
+                {
+                    rs = new Models.EmptyFile();
+                }
                 else
                 {
                     rs = new Models.NoOrEOLChange();
@@ -232,6 +248,7 @@ namespace SourceGit.ViewModels
                     if (rs is Models.TextDiff cur)
                     {
                         IsTextDiff = true;
+                        IsIgnoreWhitespaceVisible = true;
 
                         if (Preferences.Instance.UseSideBySideDiff)
                             Content = new TwoSideTextDiff(_option, cur, _content as TextDiffContext);
@@ -241,6 +258,7 @@ namespace SourceGit.ViewModels
                     else
                     {
                         IsTextDiff = false;
+                        IsIgnoreWhitespaceVisible = (rs is Models.NoOrEOLChange);
                         Content = rs;
                     }
                 });
@@ -272,6 +290,20 @@ namespace SourceGit.ViewModels
             };
         }
 
+        private bool IsEmptyFileHash(string hash)
+        {
+            if (string.IsNullOrEmpty(hash))
+                return false;
+
+            if (hash.Length == 40)
+                return hash.Equals(Models.EmptyFile.SHA1, StringComparison.Ordinal);
+
+            if (hash.Length == 64)
+                return hash.Equals(Models.EmptyFile.SHA256, StringComparison.Ordinal);
+
+            return false;
+        }
+
         private class Info
         {
             public string Argument { get; }
@@ -299,12 +331,13 @@ namespace SourceGit.ViewModels
             }
         }
 
-        private readonly int _entireFileLine = 999999999;
+        private readonly int _entireFileLines = 999999999;
         private readonly string _repo;
         private readonly Models.DiffOption _option = null;
         private string _fileModeChange = string.Empty;
         private int _unifiedLines = 4;
         private bool _isTextDiff = false;
+        private bool _isIgnoreWhitespaceVisible = true;
         private object _content = null;
         private Info _info = null;
     }

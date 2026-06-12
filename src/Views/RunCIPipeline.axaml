@@ -42,7 +42,7 @@
                Height="28"
                VerticalAlignment="Center"
                CornerRadius="3"
-               Watermark="{DynamicResource Text.CI.ArgsWatermark}"
+               PlaceholderText="{DynamicResource Text.CI.ArgsPlaceholderText}"
                Text="{Binding CIArgs}"/>
     </Grid>
   </StackPanel>
