@@ -253,8 +253,12 @@ namespace SourceGit.Views
             e.Handled = true;
 
             var deltaX = e.KeyModifiers == KeyModifiers.Shift ? e.Delta.Y : e.Delta.X;
-            var deltaOffset = Bounds.Width * deltaX * 0.5;
-            var desired = Math.Max(0, Math.Min(_offsetX + deltaOffset, _maxOffsetX));
+            if (deltaX == 0)
+                return;
+
+            deltaX = Math.Min(32, Math.Max(-32, _maxOffsetX * deltaX));
+
+            var desired = Math.Max(0, Math.Min(_offsetX + deltaX, _maxOffsetX));
             if (Math.Abs(desired - _offsetX) < 0.1)
                 return;
 

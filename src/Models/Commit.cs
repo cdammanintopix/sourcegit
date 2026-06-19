@@ -8,7 +8,6 @@ namespace SourceGit.Models
     {
         BySHA = 0,
         ByAuthor,
-        ByCommitter,
         ByMessage,
         ByPath,
         ByContent,

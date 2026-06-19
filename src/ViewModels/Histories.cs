@@ -297,7 +297,7 @@ namespace SourceGit.ViewModels
         public void CheckoutCommitDetached(Models.Commit c)
         {
             if (!c.IsCurrentHead && _repo.CanCreatePopup())
-                _repo.ShowPopup(new CheckoutCommit(_repo, c));
+                _repo.ShowPopup(new CheckoutDetached(_repo, c));
         }
 
         public async Task<bool> CheckoutBranchByDecoratorAsync(Models.Decorator decorator)
@@ -388,7 +388,7 @@ namespace SourceGit.ViewModels
                 if (firstRemoteBranch != null)
                     _repo.ShowPopup(new CreateBranch(_repo, firstRemoteBranch));
                 else if (!_repo.IsBare)
-                    _repo.ShowPopup(new CheckoutCommit(_repo, commit));
+                    _repo.ShowPopup(new CheckoutDetached(_repo, commit));
             }
         }
 

@@ -65,9 +65,6 @@
   <x:String x:Key="Text.ChangeDisplayMode.List" xml:space="preserve">பாதை பட்டியலாகக் காட்டு</x:String>
   <x:String x:Key="Text.ChangeDisplayMode.Tree" xml:space="preserve">கோப்பு முறைமை மரமாகக் காட்டு</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">கிளை சரிபார்</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">உறுதிமொழி சரிபார்</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">உறுதிமொழி:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">முன்னறிவிப்பு: ஒரு உறுதிமொழி சரிபார்பதன் மூலம், உங்கள் தலை பிரிக்கப்படும்</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">உள்ளக மாற்றங்கள்:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">கிளை:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">கனி பறி</x:String>
@@ -534,7 +531,6 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">தொலையைச் சேர்</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">உறுதிமொழி தேடு</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">ஆசிரியர்</x:String>
-  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">உறுதிமொழியாளர்</x:String>
   <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">செய்தி</x:String>
   <x:String x:Key="Text.Repository.Search.BySHA" xml:space="preserve">பாகொவ</x:String>
   <x:String x:Key="Text.Repository.Search.InCurrentBranch" xml:space="preserve">தற்போதைய கிளை</x:String>

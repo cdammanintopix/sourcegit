@@ -234,6 +234,7 @@ namespace SourceGit.Views
             if (selected.Count == 1)
             {
                 var tag = selected[0];
+                var menu = new ContextMenu();
 
                 var createBranch = new MenuItem();
                 createBranch.Icon = this.CreateMenuIcon("Icons.Branch.Add");
@@ -244,6 +245,22 @@ namespace SourceGit.Views
                         repo.ShowPopup(new ViewModels.CreateBranch(repo, tag));
                     ev.Handled = true;
                 };
+                menu.Items.Add(createBranch);
+
+                if (repo.CurrentBranch != null && !tag.SHA.Equals(repo.CurrentBranch.Head, StringComparison.Ordinal))
+                {
+                    var checkoutCommit = new MenuItem();
+                    checkoutCommit.Header = App.Text("TagCM.Checkout");
+                    checkoutCommit.Icon = this.CreateMenuIcon("Icons.Detached");
+                    checkoutCommit.Click += (_, e) =>
+                    {
+                        if (repo.CanCreatePopup())
+                            repo.ShowPopup(new ViewModels.CheckoutDetached(repo, tag));
+
+                        e.Handled = true;
+                    };
+                    menu.Items.Add(checkoutCommit);
+                }
 
                 var pushTag = new MenuItem();
                 pushTag.Header = App.Text("TagCM.Push", tag.Name);
@@ -255,6 +272,22 @@ namespace SourceGit.Views
                         repo.ShowPopup(new ViewModels.PushTag(repo, tag));
                     ev.Handled = true;
                 };
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(pushTag);
+
+                if (repo.CurrentBranch is { IsDetachedHead: false } current)
+                {
+                    var mergeTag = new MenuItem();
+                    mergeTag.Header = App.Text("TagCM.Merge", tag.Name, current.Name);
+                    mergeTag.Icon = this.CreateMenuIcon("Icons.Merge");
+                    mergeTag.Click += (_, ev) =>
+                    {
+                        if (repo.CanCreatePopup())
+                            repo.ShowPopup(new ViewModels.Merge(repo, tag, current.Name));
+                        ev.Handled = true;
+                    };
+                    menu.Items.Add(mergeTag);
+                }
 
                 var deleteTag = new MenuItem();
                 deleteTag.Header = App.Text("TagCM.Delete", tag.Name);
@@ -265,6 +298,8 @@ namespace SourceGit.Views
                         repo.ShowPopup(new ViewModels.DeleteTag(repo, tag));
                     ev.Handled = true;
                 };
+                menu.Items.Add(deleteTag);
+                menu.Items.Add(new MenuItem() { Header = "-" });
 
                 var compareWithHead = new MenuItem();
                 compareWithHead.Header = App.Text("TagCM.CompareWithHead");
@@ -281,6 +316,9 @@ namespace SourceGit.Views
                 {
                     new ViewModels.CompareCommandPalette(repo, tag).Open();
                 };
+                menu.Items.Add(compareWithHead);
+                menu.Items.Add(compareWith);
+                menu.Items.Add(new MenuItem() { Header = "-" });
 
                 var archive = new MenuItem();
                 archive.Icon = this.CreateMenuIcon("Icons.Archive");
@@ -291,16 +329,6 @@ namespace SourceGit.Views
                         repo.ShowPopup(new ViewModels.Archive(repo, tag));
                     ev.Handled = true;
                 };
-
-                var menu = new ContextMenu();
-                menu.Items.Add(createBranch);
-                menu.Items.Add(new MenuItem() { Header = "-" });
-                menu.Items.Add(pushTag);
-                menu.Items.Add(deleteTag);
-                menu.Items.Add(new MenuItem() { Header = "-" });
-                menu.Items.Add(compareWithHead);
-                menu.Items.Add(compareWith);
-                menu.Items.Add(new MenuItem() { Header = "-" });
                 menu.Items.Add(archive);
                 menu.Items.Add(new MenuItem() { Header = "-" });
 

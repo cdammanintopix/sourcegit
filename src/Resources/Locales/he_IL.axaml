@@ -4,7 +4,6 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">אודות</x:String>
-  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">Source Revision:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">אודות SourceGit</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">תאריך שחרור: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">הערות שחרור</x:String>
@@ -112,9 +111,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Submodule:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Checkout של Branch</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Checkout של Commit</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Commit:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">אזהרה: ביצוע checkout ל־commit יגרום ל־HEAD להפוך ל־detached</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">שינויים מקומיים:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Branch:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">ה־HEAD הנוכחי מכיל commits שאינם מקושרים לאף branch או tag! האם להמשיך?</x:String>
@@ -795,7 +791,6 @@
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">פתור</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">חיפוש Commit</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Author</x:String>
-  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Committer</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">תוכן</x:String>
   <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">הודעה</x:String>
   <x:String x:Key="Text.Repository.Search.ByPath" xml:space="preserve">נתיב</x:String>

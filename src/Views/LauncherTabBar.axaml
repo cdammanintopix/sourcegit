@@ -64,12 +64,11 @@
                 </ToolTip.Tip>
 
                 <Grid ColumnDefinitions="Auto,*,Auto">
-                  <Path Grid.Column="0"
-                        Width="12" Height="12" Margin="12,0"
-                        Fill="{Binding Node.Bookmark, Converter={x:Static c:IntConverters.ToBookmarkBrush}}"
-                        Data="{StaticResource Icons.Bookmark}"
-                        IsVisible="{Binding Node.IsRepository}"
-                        IsHitTestVisible="False"/>
+                  <v:Bookmark Grid.Column="0"
+                              Width="12" Height="12"
+                              Margin="12,0"
+                              Value="{Binding Node.Bookmark, Mode=OneWay}"
+                              IsVisible="{Binding Node.IsRepository}"/>
                   <Path Grid.Column="0"
                         Width="12" Height="12" Margin="12,0"
                         Fill="{DynamicResource Brush.FG1}"

@@ -107,9 +107,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">サブモジュール:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">ブランチをチェックアウト</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">コミットをチェックアウト</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">コミット:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">警告: コミットをチェックアウトすると、HEAD が切断されます</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">ローカルの変更:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">ブランチ:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">現在の HEAD には、どのブランチやタグにも繋がっていないコミットが含まれています！それでも続行しますか？</x:String>
@@ -742,7 +739,6 @@
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">解決</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">コミットを検索</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">著者</x:String>
-  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">コミッター</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">ファイルの内容</x:String>
   <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">メッセージ</x:String>
   <x:String x:Key="Text.Repository.Search.ByPath" xml:space="preserve">パス</x:String>

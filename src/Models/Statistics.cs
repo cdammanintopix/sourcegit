@@ -37,6 +37,8 @@ namespace SourceGit.Models
                 MaxValue = 8;
             else if (maxValue < 16)
                 MaxValue = 16;
+            else if (maxValue < 24)
+                MaxValue = 24;
             else
                 MaxValue = (int)(Math.Floor(maxValue / 6.0) * 8.0);
 

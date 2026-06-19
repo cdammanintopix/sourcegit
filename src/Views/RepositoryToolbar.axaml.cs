@@ -234,7 +234,6 @@ namespace SourceGit.Views
                 {
                     var startFeature = new MenuItem();
                     startFeature.Header = App.Text("GitFlow.StartFeature");
-                    startFeature.Icon = this.CreateMenuIcon("Icons.GitFlow.Feature");
                     startFeature.Click += (_, e) =>
                     {
                         if (repo.CanCreatePopup())
@@ -244,7 +243,6 @@ namespace SourceGit.Views
 
                     var startRelease = new MenuItem();
                     startRelease.Header = App.Text("GitFlow.StartRelease");
-                    startRelease.Icon = this.CreateMenuIcon("Icons.GitFlow.Release");
                     startRelease.Click += (_, e) =>
                     {
                         if (repo.CanCreatePopup())
@@ -254,7 +252,6 @@ namespace SourceGit.Views
 
                     var startHotfix = new MenuItem();
                     startHotfix.Header = App.Text("GitFlow.StartHotfix");
-                    startHotfix.Icon = this.CreateMenuIcon("Icons.GitFlow.Hotfix");
                     startHotfix.Click += (_, e) =>
                     {
                         if (repo.CanCreatePopup())
@@ -265,6 +262,22 @@ namespace SourceGit.Views
                     menu.Items.Add(startFeature);
                     menu.Items.Add(startRelease);
                     menu.Items.Add(startHotfix);
+
+                    var type = repo.CurrentBranch != null ? repo.GetGitFlowType(repo.CurrentBranch) : Models.GitFlowBranchType.None;
+                    if (type != Models.GitFlowBranchType.None)
+                    {
+                        var finish = new MenuItem();
+                        finish.Header = App.Text("GitFlow.Finish", repo.CurrentBranch.Name);
+                        finish.Icon = this.CreateMenuIcon("Icons.GitFlow.Finish");
+                        finish.Click += (_, e) =>
+                        {
+                            if (repo.CanCreatePopup())
+                                repo.ShowPopup(new ViewModels.GitFlowFinish(repo, repo.CurrentBranch, type));
+                            e.Handled = true;
+                        };
+                        menu.Items.Add(new MenuItem() { Header = "-" });
+                        menu.Items.Add(finish);
+                    }
                 }
                 else
                 {

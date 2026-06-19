@@ -4,7 +4,6 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">Σχετικά</x:String>
-  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">Αναθεώρηση πηγαίου κώδικα:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Σχετικά με το SourceGit</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Ημερομηνία έκδοσης: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Σημειώσεις έκδοσης</x:String>
@@ -112,9 +111,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Υπομονάδα:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Checkout κλάδου</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Checkout commit</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Commit:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Προειδοποίηση: Με το checkout σε commit, το HEAD θα αποσυνδεθεί (detached)</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Τοπικές αλλαγές:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Κλάδος:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Το τρέχον HEAD περιέχει commit που δεν συνδέονται με κανέναν κλάδο/ετικέτα! Θέλετε να συνεχίσετε;</x:String>
@@ -806,7 +802,6 @@
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">ΕΠΙΛΥΣΗ</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">Αναζήτηση commit</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Συγγραφέας</x:String>
-  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Committer</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Περιεχόμενο</x:String>
   <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">Μήνυμα</x:String>
   <x:String x:Key="Text.Repository.Search.ByPath" xml:space="preserve">Διαδρομή</x:String>

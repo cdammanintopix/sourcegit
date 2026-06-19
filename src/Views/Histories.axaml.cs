@@ -1030,7 +1030,7 @@ namespace SourceGit.Views
                     checkoutCommit.Click += (_, e) =>
                     {
                         if (repo.CanCreatePopup())
-                            repo.ShowPopup(new ViewModels.CheckoutCommit(repo, commit));
+                            repo.ShowPopup(new ViewModels.CheckoutDetached(repo, commit));
                         e.Handled = true;
                     };
                     menu.Items.Add(checkoutCommit);
@@ -1432,7 +1432,7 @@ namespace SourceGit.Views
                 {
                     var finish = new MenuItem();
                     finish.Header = App.Text("BranchCM.Finish", current.Name);
-                    finish.Icon = this.CreateMenuIcon("Icons.GitFlow");
+                    finish.Icon = this.CreateMenuIcon("Icons.GitFlow.Finish");
                     finish.Click += (_, e) =>
                     {
                         if (repo.CanCreatePopup())
@@ -1536,7 +1536,7 @@ namespace SourceGit.Views
                 {
                     var finish = new MenuItem();
                     finish.Header = App.Text("BranchCM.Finish", branch.Name);
-                    finish.Icon = this.CreateMenuIcon("Icons.GitFlow");
+                    finish.Icon = this.CreateMenuIcon("Icons.GitFlow.Finish");
                     finish.Click += (_, e) =>
                     {
                         if (repo.CanCreatePopup())

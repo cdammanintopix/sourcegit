@@ -917,7 +917,7 @@ namespace SourceGit.Views
                 {
                     var finish = new MenuItem();
                     finish.Header = App.Text("BranchCM.Finish", branch.Name);
-                    finish.Icon = this.CreateMenuIcon("Icons.GitFlow");
+                    finish.Icon = this.CreateMenuIcon("Icons.GitFlow.Finish");
                     finish.Click += (_, e) =>
                     {
                         if (repo.CanCreatePopup())

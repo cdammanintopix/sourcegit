@@ -537,8 +537,8 @@ namespace SourceGit.ViewModels
         public bool IsGitFlowEnabled()
         {
             return GitFlow is { IsValid: true } &&
-                _branches.Find(x => x.IsLocal && x.Name.Equals(GitFlow.Master, StringComparison.Ordinal)) != null &&
-                _branches.Find(x => x.IsLocal && x.Name.Equals(GitFlow.Develop, StringComparison.Ordinal)) != null;
+                _branches.Find(x => x.IsLocal && x.Name.Equals(GitFlow.ProductionBranch, StringComparison.Ordinal)) != null &&
+                _branches.Find(x => x.IsLocal && x.Name.Equals(GitFlow.DevelopmentBranch, StringComparison.Ordinal)) != null;
         }
 
         public Models.GitFlowBranchType GetGitFlowType(Models.Branch b)
@@ -656,17 +656,7 @@ namespace SourceGit.ViewModels
 
                 var config = await new Commands.Config(FullPath).ReadAllAsync().ConfigureAwait(false);
                 _hasAllowedSignersFile = config.TryGetValue("gpg.ssh.allowedsignersfile", out var allowedSignersFile) && !string.IsNullOrEmpty(allowedSignersFile);
-
-                if (config.TryGetValue("gitflow.branch.master", out var masterName))
-                    GitFlow.Master = masterName;
-                if (config.TryGetValue("gitflow.branch.develop", out var developName))
-                    GitFlow.Develop = developName;
-                if (config.TryGetValue("gitflow.prefix.feature", out var featurePrefix))
-                    GitFlow.FeaturePrefix = featurePrefix;
-                if (config.TryGetValue("gitflow.prefix.release", out var releasePrefix))
-                    GitFlow.ReleasePrefix = releasePrefix;
-                if (config.TryGetValue("gitflow.prefix.hotfix", out var hotfixPrefix))
-                    GitFlow.HotfixPrefix = hotfixPrefix;
+                GitFlow.Parse(config);
             });
         }
 

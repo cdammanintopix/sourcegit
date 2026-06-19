@@ -60,6 +60,9 @@ namespace SourceGit.Models
 
             Task.Run(async () =>
             {
+                using var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(2);
+
                 while (true)
                 {
                     string email = null;
@@ -96,10 +99,10 @@ namespace SourceGit.Models
                         {
                             Dns.GetHostEntry("gitlab.intopix.com"); // This raise an early exception if not connected to the VPN
 
-                            using var client = new HttpClient();
-                            client.DefaultRequestHeaders.Add("PRIVATE-TOKEN", CIManager.GITLAB_TOKEN);
-                            client.Timeout = TimeSpan.FromSeconds(2);
-                            var rsp = await client.GetAsync($"https://gitlab.intopix.com/api/v4/users?search={matchIntopixUser.Groups[0].Value}");
+                            using var ipxClient = new HttpClient();
+                            ipxClient.DefaultRequestHeaders.Add("PRIVATE-TOKEN", CIManager.GITLAB_TOKEN);
+                            ipxClient.Timeout = TimeSpan.FromSeconds(2);
+                            var rsp = await ipxClient.GetAsync($"https://gitlab.intopix.com/api/v4/users?search={matchIntopixUser.Groups[0].Value}");
                             if (rsp.IsSuccessStatusCode)
                             {
                                 var matchAvatar = REG_AVATAR().Match(rsp.Content.ReadAsStringAsync().Result);
@@ -118,8 +121,6 @@ namespace SourceGit.Models
                     Bitmap img = null;
                     try
                     {
-                        using var client = new HttpClient();
-                        client.Timeout = TimeSpan.FromSeconds(2);
                         var rsp = await client.GetAsync(url);
                         if (rsp.IsSuccessStatusCode)
                         {
@@ -254,10 +255,7 @@ namespace SourceGit.Models
         {
             var lowered = email.ToLower(CultureInfo.CurrentCulture).Trim();
             var hash = MD5.HashData(Encoding.Default.GetBytes(lowered));
-            var builder = new StringBuilder(hash.Length * 2);
-            foreach (var c in hash)
-                builder.Append(c.ToString("x2"));
-            return builder.ToString();
+            return Convert.ToHexStringLower(hash);
         }
 
         private void NotifyResourceChanged(string email, Bitmap image)

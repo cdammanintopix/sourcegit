@@ -76,6 +76,15 @@ namespace SourceGit.ViewModels
         {
             if (!string.IsNullOrEmpty(repo) && Directory.Exists(repo))
             {
+                var isBare = new Commands.IsBareRepository(repo).GetResult();
+                if (isBare)
+                {
+                    var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(repo, null, false);
+                    Welcome.Instance.Refresh();
+                    OpenRepositoryInTab(node, null);
+                    return true;
+                }
+
                 var test = new Commands.QueryRepositoryRootPath(repo).GetResult();
                 if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
                 {
