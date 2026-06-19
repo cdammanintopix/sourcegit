@@ -168,6 +168,25 @@ namespace SourceGit.Views
 
     public partial class InteractiveRebase : ChromelessWindow
     {
+        public static readonly StyledProperty<bool> AutoStartProperty =
+            AvaloniaProperty.Register<InteractiveRebase, bool>(nameof(AutoStart), false);
+
+        public bool AutoStart
+        {
+            get => GetValue(AutoStartProperty);
+            set => SetValue(AutoStartProperty, value);
+        }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == AutoStartProperty && AutoStart == true)
+            {
+                OnStartJobs(null, null);
+            }
+        }
+
         public InteractiveRebase()
         {
             CloseOnESC = true;

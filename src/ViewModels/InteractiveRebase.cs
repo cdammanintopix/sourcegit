@@ -164,6 +164,12 @@ namespace SourceGit.ViewModels
             private set => SetProperty(ref _detail, value);
         }
 
+        public bool AutoStart
+        {
+            get => _autoStart;
+            private set => SetProperty(ref _autoStart, value);
+        }
+
         public InteractiveRebase(Repository repo, Models.Commit on, InteractiveRebasePrefill prefill = null)
         {
             _repo = repo;
@@ -277,6 +283,7 @@ namespace SourceGit.ViewModels
                     UpdateItems();
                     PreSelected = selected;
                     IsLoading = false;
+                    AutoStart = prefill != null;
                 });
             });
         }
@@ -533,6 +540,7 @@ namespace SourceGit.ViewModels
 
         private Repository _repo = null;
         private bool _isLoading = false;
+        private bool _autoStart = false;
         private InteractiveRebaseItem _preSelected = null;
         private object _detail = null;
         private CommitDetail _commitDetail = null;
