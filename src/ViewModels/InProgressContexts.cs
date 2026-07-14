@@ -60,7 +60,8 @@ namespace SourceGit.ViewModels
             {
                 WorkingDirectory = repo.FullPath,
                 Context = repo.FullPath,
-                Args = "cherry-pick --continue",
+                Editor = Commands.Command.EditorType.None,
+                Args = "-c core.commentChar=± cherry-pick --continue",
             };
 
             _skipCmd = new Commands.Command
@@ -115,7 +116,7 @@ namespace SourceGit.ViewModels
                 WorkingDirectory = repo.FullPath,
                 Context = repo.FullPath,
                 Editor = Commands.Command.EditorType.RebaseEditor,
-                Args = "rebase --continue",
+                Args = "-c core.commentChar=± rebase --continue",
             };
 
             _skipCmd = new Commands.Command
@@ -185,7 +186,8 @@ namespace SourceGit.ViewModels
             {
                 WorkingDirectory = repo.FullPath,
                 Context = repo.FullPath,
-                Args = "revert --continue",
+                Editor = Commands.Command.EditorType.None,
+                Args = "-c core.commentChar=± revert --continue",
             };
 
             _skipCmd = new Commands.Command
@@ -232,7 +234,8 @@ namespace SourceGit.ViewModels
             {
                 WorkingDirectory = repo.FullPath,
                 Context = repo.FullPath,
-                Args = "merge --continue",
+                Editor = Commands.Command.EditorType.None,
+                Args = "-c core.commentChar=± merge --continue",
             };
 
             _abortCmd = new Commands.Command

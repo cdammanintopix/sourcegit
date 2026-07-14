@@ -10,7 +10,7 @@ namespace SourceGit.Commands
             Context = repo;
 
             var builder = new StringBuilder(512);
-            builder.Append("rebase ");
+            builder.Append("-c core.commentChar=± rebase ");
             if (autoStash)
                 builder.Append("--autostash ");
             if (noVerify)

@@ -338,7 +338,6 @@
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Διαγραφή κλάδου</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Κλάδος:</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">Πρόκειται να διαγράψετε έναν απομακρυσμένο κλάδο!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">Διαγραφή και του απομακρυσμένου κλάδου ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Διαγραφή πολλαπλών κλάδων</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Προσπαθείτε να διαγράψετε πολλούς κλάδους ταυτόχρονα. Βεβαιωθείτε ότι ελέγξατε ξανά πριν προχωρήσετε!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Διαγραφή πολλαπλών ετικετών</x:String>
@@ -358,7 +357,6 @@
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">Ετικέτα:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">Διαγραφή από τα απομακρυσμένα αποθετήρια</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">ΔΥΑΔΙΚΟ DIFF</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">Άλλαξε η λειτουργία αρχείου (file mode)</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">Πρώτη διαφορά</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">Αγνόηση αλλαγών κενών χαρακτήρων</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">ΑΝΑΜΕΙΞΗ</x:String>

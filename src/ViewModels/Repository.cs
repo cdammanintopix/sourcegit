@@ -769,7 +769,7 @@ namespace SourceGit.ViewModels
             _watcher?.MarkBranchUpdated();
             _watcher?.MarkWorkingCopyUpdated();
 
-            _branches.RemoveAll(b => b.IsLocal && b.FriendlyName.Equals(created.FriendlyName, StringComparison.Ordinal));
+            _branches.RemoveAll(b => b.IsLocal && b.Name.Equals(created.Name, StringComparison.Ordinal));
             _branches.Add(created);
 
             if (checkout)
@@ -797,15 +797,21 @@ namespace SourceGit.ViewModels
                 CurrentBranch = created;
             }
 
-            List<Models.Branch> locals = [];
+            var locals = new List<Models.Branch>();
+            var count = 0;
             foreach (var b in _branches)
             {
                 if (b.IsLocal)
+                {
                     locals.Add(b);
+                    if (!b.IsDetachedHead)
+                        count++;
+                }
             }
 
             var builder = BuildBranchTree(locals, [], false);
             LocalBranchTrees = builder.Locals;
+            LocalBranchesCount = count;
 
             RefreshCommits();
             RefreshWorkingCopyChanges();
@@ -855,8 +861,28 @@ namespace SourceGit.ViewModels
             var newFullName = $"refs/heads/{newName}";
             _uiStates.RenameBranchFilter(b.FullName, newFullName);
 
-            b.Name = newName;
-            b.FullName = newFullName;
+            var renamed = new Models.Branch
+            {
+                Name = newName,
+                FullName = newFullName,
+                CommitterDate = b.CommitterDate,
+                Head = b.Head,
+                IsLocal = b.IsLocal,
+                IsCurrent = b.IsCurrent,
+                IsDetachedHead = b.IsDetachedHead,
+                Upstream = b.Upstream,
+                Ahead = b.Ahead,
+                Behind = b.Behind,
+                Remote = b.Remote,
+                IsUpstreamGone = b.IsUpstreamGone,
+                WorktreePath = b.WorktreePath,
+            };
+
+            _branches.Remove(b);
+            _branches.Add(renamed);
+
+            if (b.IsCurrent)
+                CurrentBranch = renamed;
 
             List<Models.Branch> locals = [];
             foreach (var branch in _branches)

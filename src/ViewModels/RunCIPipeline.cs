@@ -63,7 +63,7 @@ namespace SourceGit.ViewModels
                 {
                     succ = await new Commands.Branch(_repo.FullPath, branchName)
                         .Use(log)
-                        .DeleteLocalAsync();
+                        .DeleteLocalAsync(true);
                 }
             }
 

@@ -9,6 +9,8 @@ using System.Text.Json;
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform;
+using Avalonia.Threading;
 
 namespace SourceGit.Native
 {
@@ -34,8 +36,10 @@ namespace SourceGit.Native
 
         public void SetupWindow(Window window)
         {
-            window.WindowDecorations = WindowDecorations.BorderOnly;
+            window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
             window.ExtendClientAreaToDecorationsHint = true;
+            window.BorderThickness = new Thickness(1);
+            window.Padding = new Thickness(0);
         }
 
         public string GetDataDir()
@@ -133,7 +137,8 @@ namespace SourceGit.Native
 
         public void OpenBrowser(string url)
         {
-            var info = new ProcessStartInfo("cmd", $"""/c start "" {url.Quoted()}""");
+            var info = new ProcessStartInfo(url);
+            info.UseShellExecute = true;
             info.CreateNoWindow = true;
             Process.Start(info);
         }
@@ -336,7 +341,7 @@ namespace SourceGit.Native
                     {
                         var exec = instance.ProductPath;
                         var icon = instance.IsPrerelease ? "vs-preview" : "vs";
-                        finder.TryAdd(instance.DisplayName, icon, () => exec, GenerateVSProjectLaunchOptions);
+                        finder.TryAdd(instance.DisplayName, icon, () => exec, GenerateVSProjectLaunchOptions, false);
                     }
                 }
             }
@@ -364,5 +369,48 @@ namespace SourceGit.Native
             return string.Empty;
         }
         #endregion
+    }
+
+    [SupportedOSPlatform("windows")]
+    public static class Win64Utilities
+    {
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct MARGINS
+        {
+            public int cxLeftWidth;
+            public int cxRightWidth;
+            public int cyTopHeight;
+            public int cyBottomHeight;
+        }
+
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS margins);
+
+        public static void FixWindowFrame(Window w)
+        {
+            if (w.WindowState == WindowState.Maximized)
+            {
+                w.BorderThickness = new Thickness(0);
+                w.Padding = new Thickness(8, 6, 8, 8);
+            }
+            else
+            {
+                w.BorderThickness = new Thickness(1);
+                w.Padding = new Thickness(0);
+            }
+
+            if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000))
+                return;
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                var platformHandle = w.TryGetPlatformHandle();
+                if (platformHandle == null)
+                    return;
+
+                var margins = new MARGINS { cxLeftWidth = 1, cxRightWidth = 1, cyTopHeight = 1, cyBottomHeight = 1 };
+                DwmExtendFrameIntoClientArea(platformHandle.Handle, ref margins);
+            }, DispatcherPriority.Render);
+        }
     }
 }

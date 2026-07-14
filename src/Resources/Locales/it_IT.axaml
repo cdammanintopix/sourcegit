@@ -311,7 +311,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Elimina Branch</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Branch:</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">Stai per eliminare un branch remoto!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">Elimina anche il branch remoto ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Elimina Branch Multipli</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Stai per eliminare più branch contemporaneamente. Controlla attentamente prima di procedere!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Elimina Tag Multipli</x:String>
@@ -331,7 +330,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">Tag:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">Elimina dai repository remoti</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">DIFF BINARIO</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">Modalità File Modificata</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">Prima differenza</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">Ignora Modifiche agli Spazi</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">FUSIONE</x:String>

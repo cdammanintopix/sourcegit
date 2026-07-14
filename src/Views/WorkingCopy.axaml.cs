@@ -516,6 +516,20 @@ namespace SourceGit.Views
                                 };
                                 addToIgnore.Items.Add(byExtensionInSameFolder);
                             }
+
+                            if (!isRooted)
+                            {
+                                var untrackedInSameFolder = new MenuItem();
+                                untrackedInSameFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.UntrackedInSameFolder");
+                                untrackedInSameFolder.Click += (_, e) =>
+                                {
+                                    var dir = Path.GetDirectoryName(change.Path)!.Replace('\\', '/').TrimEnd('/');
+                                    if (repo.CanCreatePopup())
+                                        repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{dir}/"));
+                                    e.Handled = true;
+                                };
+                                addToIgnore.Items.Add(untrackedInSameFolder);
+                            }
                         }
 
                         menu.Items.Add(addToIgnore);

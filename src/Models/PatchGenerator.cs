@@ -266,9 +266,9 @@ namespace SourceGit.Models
             var writer = new StreamWriter(saveTo) { NewLine = "\n" };
             writer.WriteLine($"diff --git \"a/{_targetFile}\" \"b/{_targetFile}\"");
 
-            if (string.IsNullOrEmpty(_diff.OldMode))
+            if (_diff.OldMode == 0)
             {
-                if (string.IsNullOrEmpty(_diff.NewMode) || revert)
+                if (_diff.NewMode == 0 || revert)
                 {
                     writer.WriteLine($"index {_diff.OldHash}..{_diff.NewHash}");
                     writer.WriteLine($"--- a/{_targetFile}");
@@ -279,7 +279,7 @@ namespace SourceGit.Models
                     writer.WriteLine($"--- /dev/null");
                 }
             }
-            else if (string.IsNullOrEmpty(_diff.NewMode))
+            else if (_diff.NewMode == 0)
             {
                 writer.WriteLine($"index {_diff.OldHash}..{_diff.NewHash} {_diff.OldMode}");
                 writer.WriteLine($"--- a/{_targetFile}");

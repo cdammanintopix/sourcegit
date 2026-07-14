@@ -6,6 +6,7 @@ using System.Runtime.Versioning;
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform;
 
 namespace SourceGit.Native
 {
@@ -19,15 +20,17 @@ namespace SourceGit.Native
 
         public void SetupWindow(Window window)
         {
+            window.BorderThickness = new Thickness(0);
+
             if (OS.UseSystemWindowFrame)
             {
+                window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.Default;
                 window.ExtendClientAreaToDecorationsHint = false;
-                window.WindowDecorations = WindowDecorations.Full;
             }
             else
             {
+                window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
                 window.ExtendClientAreaToDecorationsHint = true;
-                window.WindowDecorations = WindowDecorations.None;
                 window.Classes.Add("custom_window_frame");
             }
         }

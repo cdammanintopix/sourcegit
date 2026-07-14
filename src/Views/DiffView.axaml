@@ -18,16 +18,13 @@
           <Path Grid.Column="0" Width="12" Height="12" Data="{StaticResource Icons.File}" Margin="8,0,0,0"/>
 
           <!-- File Mode Change -->
-          <Border Grid.Column="1"
-                  Margin="4,0,0,0"
-                  Height="18"
-                  CornerRadius="4"
-                  VerticalAlignment="Center"
-                  Background="{DynamicResource Brush.Badge}"
-                  IsVisible="{Binding FileModeChange, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                  ToolTip.Tip="{DynamicResource Text.Diff.FileModeChanged}">
-            <TextBlock FontSize="10" HorizontalAlignment="Center" Margin="4,0" Text="{Binding FileModeChange}" Foreground="{DynamicResource Brush.BadgeFG}"/>
-          </Border>
+          <v:FileModeChange Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource Brush.BadgeFG}"
+                            Background="{DynamicResource Brush.Badge}"
+                            FontSize="10"
+                            OldMode="{Binding OldMode, Mode=OneWay}"
+                            NewMode="{Binding NewMode, Mode=OneWay}"/>
           
           <!-- Line Changes Summary -->
           <ContentControl Grid.Column="2" Margin="4,0,0,0" Content="{Binding Content, Mode=OneWay}" IsVisible="{Binding IsTextDiff}">
@@ -391,7 +388,9 @@
           <!-- New Empty File -->
           <DataTemplate DataType="m:EmptyFile">
             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-              <Path Width="64" Height="64" Data="{StaticResource Icons.Empty}" Fill="{DynamicResource Brush.FG2}"/>
+              <Path Width="64" Height="64"
+                    Data="{StaticResource Icons.File.Empty}"
+                    Fill="{DynamicResource Brush.FG2}"/>
               <TextBlock Margin="0,16,0,0"
                          Text="{DynamicResource Text.Diff.EmptyFile}"
                          FontSize="18" FontWeight="Bold"

@@ -35,8 +35,15 @@
           <DataTemplate DataType="m:Commit">
             <Grid ColumnDefinitions="Auto,Auto,*">
               <Path Grid.Column="0" Width="14" Height="14" Data="{StaticResource Icons.Commit}" />
-              <TextBlock Grid.Column="1" Foreground="DarkOrange" VerticalAlignment="Center" Margin="8,0" Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}" />
-              <TextBlock Grid.Column="2" Text="{Binding Subject, Mode=OneWay}" TextTrimming="CharacterEllipsis"/>
+              <TextBlock Grid.Column="1"
+                         FontFamily="{DynamicResource Fonts.Monospace}"
+                         Foreground="DarkOrange"
+                         VerticalAlignment="Center"
+                         Margin="8,0"
+                         Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}" />
+              <TextBlock Grid.Column="2"
+                         Text="{Binding Subject, Mode=OneWay}"
+                         TextTrimming="CharacterEllipsis"/>
             </Grid>
           </DataTemplate>
 

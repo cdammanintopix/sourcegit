@@ -194,7 +194,6 @@
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">கிளையை நீக்கு</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">கிளை:</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">நீங்கள் ஒரு தொலை கிளையை நீக்கப் போகிறீர்கள்!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">தொலை ${0}$ கிளையையும் நீக்கு</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">பல கிளைகளை நீக்கு</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">நீங்கள் ஒரே நேரத்தில் பல கிளைகளை நீக்க முயற்சிக்கிறீர்கள் நடவடிக்கை எடுப்பதற்கு முன் மீண்டும் சரிபார்!</x:String>
   <x:String x:Key="Text.DeleteRemote" xml:space="preserve">தொலையை நீக்கு</x:String>
@@ -211,7 +210,6 @@
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">குறிசொல்:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">தொலை களஞ்சியங்களிலிருந்து நீக்கு</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">இருமம்  வேறுபாடு</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">கோப்பு முறை மாற்றப்பட்டது</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">முதல் வேறுபாடு</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">வெள்ளைவெளி மாற்றத்தை புறக்கணி</x:String>
   <x:String x:Key="Text.Diff.Last" xml:space="preserve">கடைசி வேறுபாடு</x:String>

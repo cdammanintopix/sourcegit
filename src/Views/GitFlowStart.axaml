@@ -49,7 +49,7 @@
                                 Height="26"
                                 VerticalAlignment="Center"
                                 CornerRadius="3"
-                                PlaceholderText="{DynamicResource Text.GitFlow.StartPlaceholder}"
+                                Watermark="{DynamicResource Text.GitFlow.StartPlaceholder}"
                                 Text="{Binding Name, Mode=TwoWay}"
                                 ClipToBounds="True">
         <v:BranchOrTagNameTextBox.InnerLeftContent>

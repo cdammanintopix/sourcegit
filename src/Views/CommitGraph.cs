@@ -6,13 +6,28 @@ namespace SourceGit.Views
 {
     public class CommitGraph : Control
     {
-        public static readonly StyledProperty<Models.CommitGraph> GraphProperty =
-            AvaloniaProperty.Register<CommitGraph, Models.CommitGraph>(nameof(Graph));
+        public static readonly DirectProperty<CommitGraph, Models.CommitGraph> GraphProperty =
+            AvaloniaProperty.RegisterDirect<CommitGraph, Models.CommitGraph>(
+                nameof(Graph),
+                static o => o.Graph,
+                static (o, v) => o.Graph = v);
 
         public Models.CommitGraph Graph
         {
-            get => GetValue(GraphProperty);
-            set => SetValue(GraphProperty, value);
+            get => _graph;
+            set => SetAndRaise(GraphProperty, ref _graph, value);
+        }
+
+        public static readonly DirectProperty<CommitGraph, Models.CommitGraphLayout> LayoutProperty =
+            AvaloniaProperty.RegisterDirect<CommitGraph, Models.CommitGraphLayout>(
+                nameof(Layout),
+                static o => o.Layout,
+                static (o, v) => o.Layout = v);
+
+        public Models.CommitGraphLayout Layout
+        {
+            get => _layout;
+            set => SetAndRaise(LayoutProperty, ref _layout, value);
         }
 
         public static readonly StyledProperty<IBrush> DotBrushProperty =
@@ -24,42 +39,35 @@ namespace SourceGit.Views
             set => SetValue(DotBrushProperty, value);
         }
 
-        public static readonly StyledProperty<Models.CommitGraphLayout> LayoutProperty =
-            AvaloniaProperty.Register<CommitGraph, Models.CommitGraphLayout>(nameof(Layout));
-
-        public Models.CommitGraphLayout Layout
-        {
-            get => GetValue(LayoutProperty);
-            set => SetValue(LayoutProperty, value);
-        }
-
-        static CommitGraph()
-        {
-            AffectsRender<CommitGraph>(
-                GraphProperty,
-                DotBrushProperty,
-                LayoutProperty);
-        }
-
         public override void Render(DrawingContext context)
         {
             base.Render(context);
 
-            if (Graph is not { } graph || Layout is not { } layout)
+            if (_graph == null || _layout == null)
                 return;
 
-            var startY = layout.StartY;
-            var clipWidth = layout.ClipWidth;
+            var startY = _layout.StartY;
+            var clipWidth = _layout.ClipWidth;
             var clipHeight = Bounds.Height;
-            var rowHeight = layout.RowHeight;
+            var rowHeight = _layout.RowHeight;
             var endY = startY + clipHeight + 28;
 
             using (context.PushClip(new Rect(0, 0, clipWidth, clipHeight)))
             using (context.PushTransform(Matrix.CreateTranslation(0, -startY)))
             {
-                DrawCurves(context, graph, startY, endY, rowHeight);
-                DrawAnchors(context, graph, startY, endY, rowHeight);
+                DrawCurves(context, _graph, startY, endY, rowHeight);
+                DrawAnchors(context, _graph, startY, endY, rowHeight);
             }
+        }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == GraphProperty ||
+                change.Property == LayoutProperty ||
+                change.Property == DotBrushProperty)
+                InvalidateVisual();
         }
 
         private void DrawCurves(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
@@ -190,5 +198,8 @@ namespace SourceGit.Views
                 }
             }
         }
+
+        private Models.CommitGraph _graph = null;
+        private Models.CommitGraphLayout _layout = null;
     }
 }

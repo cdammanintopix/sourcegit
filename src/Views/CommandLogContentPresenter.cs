@@ -61,22 +61,16 @@ namespace SourceGit.Views
             private readonly List<string> _errors = ["! [rejected]", "! [remote rejected]"];
         }
 
-        public static readonly StyledProperty<ViewModels.CommandLog> LogProperty =
-            AvaloniaProperty.Register<CommandLogContentPresenter, ViewModels.CommandLog>(nameof(Log));
+        public static readonly DirectProperty<CommandLogContentPresenter, object> LogProperty =
+            AvaloniaProperty.RegisterDirect<CommandLogContentPresenter, object>(
+                nameof(Log),
+                static o => o.Log,
+                static (o, v) => o.Log = v);
 
-        public ViewModels.CommandLog Log
+        public object Log
         {
-            get => GetValue(LogProperty);
-            set => SetValue(LogProperty, value);
-        }
-
-        public static readonly StyledProperty<string> PureTextProperty =
-            AvaloniaProperty.Register<CommandLogContentPresenter, string>(nameof(PureText));
-
-        public string PureText
-        {
-            get => GetValue(PureTextProperty);
-            set => SetValue(PureTextProperty, value);
+            get => _log;
+            set => SetAndRaise(LogProperty, ref _log, value);
         }
 
         protected override Type StyleKeyOverride => typeof(TextEditor);
@@ -140,19 +134,15 @@ namespace SourceGit.Views
                     Text = newLog.Content;
                     newLog.Subscribe(this);
                 }
+                else if (change.NewValue is string text)
+                {
+                    Text = text;
+                }
                 else
                 {
                     Text = string.Empty;
                 }
                 ScrollToEnd();
-            }
-            else if (change.Property == PureTextProperty)
-            {
-                if (!string.IsNullOrEmpty(PureText))
-                {
-                    Text = PureText;
-                    ScrollToEnd();
-                }
             }
             else if (change.Property.Name == nameof(ActualThemeVariant) && change.NewValue != null)
             {
@@ -160,6 +150,7 @@ namespace SourceGit.Views
             }
         }
 
+        private object _log = null;
         private TextMate.Installation _textMate = null;
     }
 }

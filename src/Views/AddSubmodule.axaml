@@ -27,7 +27,7 @@
                Height="26"
                VerticalAlignment="Center"
                CornerRadius="3"
-               PlaceholderText="{DynamicResource Text.RepositoryURL}"
+               Watermark="{DynamicResource Text.RepositoryURL}"
                Text="{Binding Url, Mode=TwoWay}">
         <TextBox.InnerLeftContent>
           <Path Width="12" Height="12"
@@ -49,7 +49,7 @@
                Height="26"
                VerticalAlignment="Center"
                CornerRadius="3"
-               PlaceholderText="{DynamicResource Text.Submodule.RelativePath.Placeholder}"
+               Watermark="{DynamicResource Text.Submodule.RelativePath.Placeholder}"
                Text="{Binding RelativePath, Mode=TwoWay}">
         <TextBox.InnerLeftContent>
           <Path Width="12" Height="12"

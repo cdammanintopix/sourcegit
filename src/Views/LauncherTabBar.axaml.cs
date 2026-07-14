@@ -12,13 +12,16 @@ namespace SourceGit.Views
 {
     public class LauncherTabSizeBox : Border
     {
-        public static readonly StyledProperty<bool> UseFixedWidthProperty =
-            AvaloniaProperty.Register<LauncherTabSizeBox, bool>(nameof(UseFixedWidth), true);
+        public static readonly DirectProperty<LauncherTabSizeBox, bool> UseFixedWidthProperty =
+            AvaloniaProperty.RegisterDirect<LauncherTabSizeBox, bool>(
+                nameof(UseFixedWidth),
+                static o => o.UseFixedWidth,
+                static (o, v) => o.UseFixedWidth = v);
 
         public bool UseFixedWidth
         {
-            get => GetValue(UseFixedWidthProperty);
-            set => SetValue(UseFixedWidthProperty, value);
+            get => _useFixedWidth;
+            set => SetAndRaise(UseFixedWidthProperty, ref _useFixedWidth, value);
         }
 
         public LauncherTabSizeBox()
@@ -34,23 +37,27 @@ namespace SourceGit.Views
 
             if (change.Property == UseFixedWidthProperty)
             {
-                if (UseFixedWidth)
+                if (_useFixedWidth)
                     Width = 200;
                 else
                     Width = double.NaN;
             }
         }
+
+        private bool _useFixedWidth = true;
     }
 
     public partial class LauncherTabBar : UserControl
     {
-        public static readonly StyledProperty<bool> IsScrollerVisibleProperty =
-            AvaloniaProperty.Register<LauncherTabBar, bool>(nameof(IsScrollerVisible));
+        public static readonly DirectProperty<LauncherTabBar, bool> IsScrollButtonVisibleProperty =
+            AvaloniaProperty.RegisterDirect<LauncherTabBar, bool>(
+                nameof(IsScrollButtonVisible),
+                static o => o.IsScrollButtonVisible);
 
-        public bool IsScrollerVisible
+        public bool IsScrollButtonVisible
         {
-            get => GetValue(IsScrollerVisibleProperty);
-            set => SetValue(IsScrollerVisibleProperty, value);
+            get => _isScrollButtonVisible;
+            set => SetAndRaise(IsScrollButtonVisibleProperty, ref _isScrollButtonVisible, value);
         }
 
         public LauncherTabBar()
@@ -74,7 +81,7 @@ namespace SourceGit.Views
             var separatorPen = new Pen(new SolidColorBrush(ActualThemeVariant == ThemeVariant.Dark ? Colors.White : Colors.Black, 0.2));
             var separatorY = (height - 18) * 0.5 + 1;
 
-            if (!IsScrollerVisible && selectedIdx > 0)
+            if (!_isScrollButtonVisible && selectedIdx > 0)
             {
                 var container = LauncherTabsList.ContainerFromIndex(0);
                 if (container != null)
@@ -97,7 +104,7 @@ namespace SourceGit.Views
                 if (containerEndX < startX || containerEndX > endX)
                     continue;
 
-                if (IsScrollerVisible && i == count - 1)
+                if (_isScrollButtonVisible && i == count - 1)
                     break;
 
                 var separatorX = containerEndX - startX + LauncherTabsScroller.Bounds.X - 0.5;
@@ -164,31 +171,39 @@ namespace SourceGit.Views
 
         private void ScrollTabs(object _, PointerWheelEventArgs e)
         {
-            if (!e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+            if (Math.Abs(e.Delta.X) < Math.Abs(e.Delta.Y))
             {
-                if (e.Delta.Y < 0)
-                    LauncherTabsScroller.LineRight();
-                else if (e.Delta.Y > 0)
-                    LauncherTabsScroller.LineLeft();
+                var x = LauncherTabsScroller.Offset.X;
+                var extent = LauncherTabsScroller.Extent.Width;
+                var viewport = LauncherTabsScroller.Viewport.Width;
+                var delta = e.Delta.Y;
+
+                if (extent > viewport)
+                {
+                    x += -delta * 64; // Use the same logic with vertical scrolling in `ScrollContentPresenter`
+                    x = Math.Min(Math.Max(x, 0), extent - viewport);
+                }
+
+                LauncherTabsScroller.Offset = new Vector(x, 0);
                 e.Handled = true;
             }
         }
 
         private void ScrollTabsLeft(object _, RoutedEventArgs e)
         {
-            LauncherTabsScroller.LineLeft();
+            LauncherTabsScroller.Offset -= _scrollStep;
             e.Handled = true;
         }
 
         private void ScrollTabsRight(object _, RoutedEventArgs e)
         {
-            LauncherTabsScroller.LineRight();
+            LauncherTabsScroller.Offset += _scrollStep;
             e.Handled = true;
         }
 
         private void OnTabsLayoutUpdated(object _1, EventArgs _2)
         {
-            SetCurrentValue(IsScrollerVisibleProperty, LauncherTabsScroller.Extent.Width > LauncherTabsScroller.Viewport.Width);
+            IsScrollButtonVisible = LauncherTabsScroller.Extent.Width > LauncherTabsScroller.Viewport.Width;
             InvalidateVisual();
         }
 
@@ -308,10 +323,10 @@ namespace SourceGit.Views
                     var edit = new MenuItem();
                     edit.Header = App.Text("PageTabBar.Tab.Edit");
                     edit.Icon = this.CreateMenuIcon("Icons.Edit");
-                    edit.Click += (_, e) =>
+                    edit.Click += (_, ev) =>
                     {
                         page.Node.Edit();
-                        e.Handled = true;
+                        ev.Handled = true;
                     };
                     menu.Items.Add(edit);
 
@@ -392,6 +407,8 @@ namespace SourceGit.Views
             e.Handled = true;
         }
 
+        private bool _isScrollButtonVisible = false;
+        private readonly Vector _scrollStep = new(64, 0);
         private PointerPressedEventArgs _pressedTabEvent = null;
         private bool _startDragTab = false;
         private readonly DataFormat<string> _dndMainTabFormat = DataFormat.CreateStringApplicationFormat("sourcegit-dnd-main-tab");

@@ -7,13 +7,16 @@ namespace SourceGit.Views
 {
     public class Bookmark : Control
     {
-        public static readonly StyledProperty<int> ValueProperty =
-            AvaloniaProperty.Register<Bookmark, int>(nameof(Value), 0);
+        public static readonly DirectProperty<Bookmark, int> ValueProperty =
+            AvaloniaProperty.RegisterDirect<Bookmark, int>(
+                nameof(Value),
+                static o => o.Value,
+                static (o, v) => o.Value = v);
 
         public int Value
         {
-            get => GetValue(ValueProperty);
-            set => SetValue(ValueProperty, value);
+            get => _value;
+            set => SetAndRaise(ValueProperty, ref _value, value);
         }
 
         public Bookmark()
@@ -26,7 +29,7 @@ namespace SourceGit.Views
             if (_icon == null)
                 LoadIcon();
 
-            var brush = Models.Bookmarks.Brushes[Value] ?? (this.FindResource("Brush.FG1") as IBrush);
+            var brush = Models.Bookmarks.Get(_value) ?? (this.FindResource("Brush.FG1") as IBrush);
             var startX = (Bounds.Width - 12.0) * 0.5;
             var startY = (Bounds.Height - 12.0) * 0.5;
             using (context.PushTransform(Matrix.CreateTranslation(startX, startY)))
@@ -37,8 +40,9 @@ namespace SourceGit.Views
         {
             base.OnPropertyChanged(change);
 
-            if (change.Property.Name.Equals(nameof(ActualThemeVariant), StringComparison.Ordinal) ||
-                change.Property == ValueProperty)
+            if (change.Property == ValueProperty)
+                InvalidateVisual();
+            else if (change.Property.Name == nameof(ActualThemeVariant) && change.NewValue != null)
                 InvalidateVisual();
         }
 
@@ -56,6 +60,7 @@ namespace SourceGit.Views
                 _icon.Transform = new MatrixTransform(_icon.Transform.Value * transform);
         }
 
+        private int _value = 0;
         private Geometry _icon = null;
     }
 }

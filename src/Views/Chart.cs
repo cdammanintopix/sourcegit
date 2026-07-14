@@ -13,13 +13,16 @@ namespace SourceGit.Views
 
     public class Chart : Control
     {
-        public static readonly StyledProperty<Models.StatisticsSamples> SamplesProperty =
-            AvaloniaProperty.Register<Chart, Models.StatisticsSamples>(nameof(Samples));
+        public static readonly DirectProperty<Chart, Models.StatisticsSamples> SamplesProperty =
+            AvaloniaProperty.RegisterDirect<Chart, Models.StatisticsSamples>(
+                nameof(Samples),
+                static o => o.Samples,
+                static (o, v) => o.Samples = v);
 
         public Models.StatisticsSamples Samples
         {
-            get => GetValue(SamplesProperty);
-            set => SetValue(SamplesProperty, value);
+            get => _samples;
+            set => SetAndRaise(SamplesProperty, ref _samples, value);
         }
 
         public static readonly StyledProperty<FontFamily> LabelFontFamilyProperty =
@@ -50,7 +53,7 @@ namespace SourceGit.Views
         {
             base.Render(context);
 
-            var samples = Samples;
+            var samples = _samples;
             if (samples == null || samples.Count == 0)
                 return;
 
@@ -270,6 +273,7 @@ namespace SourceGit.Views
 
         private record HitBox(Rect Rect, ChartToolTip ToolTip);
 
+        private Models.StatisticsSamples _samples = null;
         private double _offsetX = 0;
         private double _maxOffsetX = 0;
         private bool _isDraging = false;

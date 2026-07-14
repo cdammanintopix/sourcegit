@@ -9,7 +9,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SourceGit.Views.Welcome"
              x:DataType="vm:Welcome">
-  <Grid RowDefinitions="*,36">
+  <Grid RowDefinitions="*,Auto" Margin="8">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*"/>
       <ColumnDefinition Width="2*" MinWidth="600"/>
@@ -17,7 +17,7 @@
     </Grid.ColumnDefinitions>
 
     <!-- Managed Repositories -->
-    <Grid Grid.Row="0" Grid.Column="1" Margin="8" RowDefinitions="Auto,*">
+    <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto,*">
       <!-- Search Box -->
       <TextBox Grid.Row="0"
                x:Name="SearchBox"
@@ -27,7 +27,7 @@
                BorderBrush="{DynamicResource Brush.Border0}"
                BorderThickness="1"
                Background="{DynamicResource Brush.Contents}"
-               PlaceholderText="{DynamicResource Text.Welcome.Search}"
+               Watermark="{DynamicResource Text.Welcome.Search}"
                VerticalContentAlignment="Center"
                Text="{Binding SearchFilter, Mode=TwoWay}">
         <TextBox.Styles>
@@ -212,12 +212,14 @@
     </Grid>
 
     <!-- Tips -->
-    <TextBlock Grid.Row="1" Grid.Column="1"
-               Classes="italic"
-               Margin="0,0,8,0"
-               HorizontalAlignment="Center" VerticalAlignment="Center"
-               FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
-               Text="{DynamicResource Text.Welcome.DragDropTip}"
-               Foreground="{DynamicResource Brush.FG2}"/>
+    <Border Grid.Row="1" Grid.Column="1"
+            Margin="0,8,0,0"
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            IsVisible="{OnPlatform True, Linux=False}">
+      <TextBlock Classes="italic"
+                 FontSize="12"
+                 Text="{DynamicResource Text.Welcome.DragDropTip}"
+                 Opacity=".5"/>
+    </Border>    
   </Grid>
 </UserControl>

@@ -36,8 +36,17 @@
           <DataTemplate DataType="m:Commit">
             <Grid ColumnDefinitions="Auto,Auto,*">
               <Path Grid.Column="0" Width="14" Height="14" Data="{StaticResource Icons.Commit}"/>
-              <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}" Foreground="DarkOrange" Margin="8,0,0,0"/>
-              <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Subject}" Margin="4,0,0,0" TextTrimming="CharacterEllipsis"/>
+              <TextBlock Grid.Column="1"
+                         VerticalAlignment="Center"
+                         FontFamily="{DynamicResource Fonts.Monospace}"
+                         Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
+                         Foreground="DarkOrange"
+                         Margin="8,0,0,0"/>
+              <TextBlock Grid.Column="2"
+                         VerticalAlignment="Center"
+                         Text="{Binding Subject}"
+                         Margin="4,0,0,0"
+                         TextTrimming="CharacterEllipsis"/>
             </Grid>
           </DataTemplate>
 
@@ -58,7 +67,7 @@
                x:Name="TxtSaveFile"
                Height="28"
                CornerRadius="3"
-               PlaceholderText="{DynamicResource Text.Archive.File.Placeholder}"
+               Watermark="{DynamicResource Text.Archive.File.Placeholder}"
                Text="{Binding SaveFile, Mode=TwoWay}">
         <TextBox.InnerRightContent>
           <Button Classes="icon_button" Width="30" Height="30" Click="SelectOutputFile">

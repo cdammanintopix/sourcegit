@@ -6,7 +6,7 @@ This document shows the translation status of each locale file in the repository
 
 ### ![en_US](https://img.shields.io/badge/en__US-%E2%88%9A-brightgreen)
 
-### ![de__DE](https://img.shields.io/badge/de__DE-91.07%25-yellow)
+### ![de__DE](https://img.shields.io/badge/de__DE-89.98%25-yellow)
 
 <details>
 <summary>Missing keys in de_DE.axaml</summary>
@@ -47,9 +47,20 @@ This document shows the translation status of each locale file in the repository
 - Text.ConfigureCustomActionControls.UseFriendlyName
 - Text.ConfirmEmptyCommit.StageSelectedThenCommit
 - Text.CopyAsPatch
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
 - Text.Diff.EmptyFile
 - Text.Diff.Submodule.UncommittedChanges
 - Text.Discard.IncludeModified
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
 - Text.GitFlow.Finish
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.StartAt
@@ -98,13 +109,14 @@ This document shows the translation status of each locale file in the repository
 - Text.TagCM.Checkout
 - Text.TagCM.Merge
 - Text.UpdateSubmodules.Recursive
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 - Text.Worktree.Branch
 - Text.Worktree.Head
 - Text.Worktree.Path
 
 </details>
 
-### ![el__GR](https://img.shields.io/badge/el__GR-98.21%25-yellow)
+### ![el__GR](https://img.shields.io/badge/el__GR-97.05%25-yellow)
 
 <details>
 <summary>Missing keys in el_GR.axaml</summary>
@@ -119,7 +131,18 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutDetached.Warning
 - Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules
 - Text.CopyAsPatch
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
 - Text.Diff.EmptyFile
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
 - Text.GitFlow.Finish
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.StartAt
@@ -127,36 +150,31 @@ This document shows the translation status of each locale file in the repository
 - Text.TagCM.Checkout
 - Text.TagCM.Merge
 - Text.UpdateSubmodules.Recursive
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 
 </details>
 
-### ![es__ES](https://img.shields.io/badge/es__ES-98.21%25-yellow)
+### ![es__ES](https://img.shields.io/badge/es__ES-98.82%25-yellow)
 
 <details>
 <summary>Missing keys in es_ES.axaml</summary>
 
-- Text.Apply.Source
-- Text.Apply.Source.File
-- Text.Apply.Source.Clipboard
-- Text.Bisect.WaitingForCheckoutAnother
-- Text.Bisect.WaitingForFirstBad
-- Text.CheckoutDetached
-- Text.CheckoutDetached.Target
-- Text.CheckoutDetached.Warning
-- Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules
-- Text.CopyAsPatch
-- Text.Diff.EmptyFile
-- Text.GitFlow.Finish
-- Text.GitFlow.FinishWithRebase
-- Text.GitFlow.StartAt
-- Text.GitFlow.StartName
-- Text.TagCM.Checkout
-- Text.TagCM.Merge
-- Text.UpdateSubmodules.Recursive
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 
 </details>
 
-### ![fr__FR](https://img.shields.io/badge/fr__FR-97.12%25-yellow)
+### ![fr__FR](https://img.shields.io/badge/fr__FR-95.97%25-yellow)
 
 <details>
 <summary>Missing keys in fr_FR.axaml</summary>
@@ -173,7 +191,18 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitCM.CopyCommitterTime
 - Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules
 - Text.CopyAsPatch
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
 - Text.Diff.EmptyFile
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
 - Text.GitFlow.Finish
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.StartAt
@@ -190,10 +219,11 @@ This document shows the translation status of each locale file in the repository
 - Text.TagCM.Checkout
 - Text.TagCM.Merge
 - Text.UpdateSubmodules.Recursive
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 
 </details>
 
-### ![he__IL](https://img.shields.io/badge/he__IL-97.12%25-yellow)
+### ![he__IL](https://img.shields.io/badge/he__IL-95.97%25-yellow)
 
 <details>
 <summary>Missing keys in he_IL.axaml</summary>
@@ -210,7 +240,18 @@ This document shows the translation status of each locale file in the repository
 - Text.CommitCM.CopyCommitterTime
 - Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules
 - Text.CopyAsPatch
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
 - Text.Diff.EmptyFile
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
 - Text.GitFlow.Finish
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.StartAt
@@ -227,10 +268,11 @@ This document shows the translation status of each locale file in the repository
 - Text.TagCM.Checkout
 - Text.TagCM.Merge
 - Text.UpdateSubmodules.Recursive
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 
 </details>
 
-### ![id__ID](https://img.shields.io/badge/id__ID-83.93%25-yellow)
+### ![id__ID](https://img.shields.io/badge/id__ID-82.91%25-yellow)
 
 <details>
 <summary>Missing keys in id_ID.axaml</summary>
@@ -291,12 +333,23 @@ This document shows the translation status of each locale file in the repository
 - Text.ConfirmEmptyCommit.StageSelectedThenCommit
 - Text.CopyAsPatch
 - Text.DealWithLocalChanges.DoNothing
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
 - Text.Diff.EmptyFile
 - Text.Diff.Submodule.UncommittedChanges
 - Text.Discard.IncludeModified
 - Text.EditBranchDescription
 - Text.EditBranchDescription.Target
 - Text.FileCM.CustomAction
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
 - Text.GitFlow.Finish
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.StartAt
@@ -391,6 +444,7 @@ This document shows the translation status of each locale file in the repository
 - Text.TagCM.CompareWithHead
 - Text.TagCM.Merge
 - Text.UpdateSubmodules.Recursive
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 - Text.WorkingCopy.Conflicts.Merge
 - Text.WorkingCopy.Conflicts.MergeExternal
 - Text.Worktree.Branch
@@ -400,7 +454,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![it__IT](https://img.shields.io/badge/it__IT-90.58%25-yellow)
+### ![it__IT](https://img.shields.io/badge/it__IT-89.49%25-yellow)
 
 <details>
 <summary>Missing keys in it_IT.axaml</summary>
@@ -442,9 +496,20 @@ This document shows the translation status of each locale file in the repository
 - Text.ConfigureCustomActionControls.UseFriendlyName
 - Text.ConfirmEmptyCommit.StageSelectedThenCommit
 - Text.CopyAsPatch
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
 - Text.Diff.EmptyFile
 - Text.Diff.Submodule.UncommittedChanges
 - Text.Discard.IncludeModified
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
 - Text.GitFlow.Finish
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.StartAt
@@ -497,108 +562,16 @@ This document shows the translation status of each locale file in the repository
 - Text.TagCM.Checkout
 - Text.TagCM.Merge
 - Text.UpdateSubmodules.Recursive
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 - Text.Worktree.Branch
 - Text.Worktree.Head
 - Text.Worktree.Path
 
 </details>
 
-### ![ja__JP](https://img.shields.io/badge/ja__JP-91.37%25-yellow)
+### ![ja__JP](https://img.shields.io/badge/ja__JP-%E2%88%9A-brightgreen)
 
-<details>
-<summary>Missing keys in ja_JP.axaml</summary>
-
-- Text.AIAssistant.Use
-- Text.App.HideOthers
-- Text.Apply.3Way
-- Text.Apply.Source
-- Text.Apply.Source.File
-- Text.Apply.Source.Clipboard
-- Text.Bisect.WaitingForCheckoutAnother
-- Text.Bisect.WaitingForFirstBad
-- Text.BranchCM.CompareWithSpecial
-- Text.CheckoutBranchFromStash
-- Text.CheckoutBranchFromStash.Branch
-- Text.CheckoutBranchFromStash.Stash
-- Text.CheckoutDetached
-- Text.CheckoutDetached.Target
-- Text.CheckoutDetached.Warning
-- Text.Clone.Bookmark
-- Text.Clone.Group
-- Text.CommandPalette.Branches
-- Text.CommandPalette.BranchesAndTags
-- Text.CommandPalette.RepositoryActions
-- Text.CommandPalette.RevisionFiles
-- Text.CommitCM.CopyAuthorTime
-- Text.CommitCM.CopyCommitterTime
-- Text.CommitDetail.CollapseToBottom
-- Text.Compare.Changes
-- Text.Compare.Commits
-- Text.Compare.Commits.LeftOnly
-- Text.Compare.Commits.RightOnly
-- Text.Compare.Commits.Tips
-- Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules
-- Text.ConfigureCustomActionControls.StringFormatter
-- Text.ConfigureCustomActionControls.StringFormatter.Tip
-- Text.ConfigureCustomActionControls.UseFriendlyName
-- Text.ConfirmEmptyCommit.StageSelectedThenCommit
-- Text.CopyAsPatch
-- Text.DealWithLocalChanges.DoNothing
-- Text.Diff.EmptyFile
-- Text.Diff.Submodule.UncommittedChanges
-- Text.Discard.IncludeModified
-- Text.GitFlow.Finish
-- Text.GitFlow.FinishWithRebase
-- Text.GitFlow.StartAt
-- Text.GitFlow.StartName
-- Text.Histories.HighlightsInGraph
-- Text.Histories.HighlightsInGraph.All
-- Text.Histories.HighlightsInGraph.CurrentBranchOnly
-- Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits
-- Text.Histories.HighlightsInGraph.SelectedCommitsOnly
-- Text.HistoriesDetailsStandalone
-- Text.HistoriesDetailsStandalone.CommitDetail
-- Text.HistoriesDetailsStandalone.RevisionCompare
-- Text.Hotkeys.Global.OpenLocalRepository
-- Text.Hotkeys.Repo.CreateBranch
-- Text.Hotkeys.Repo.ToggleHistoriesDetailPanel
-- Text.Init.CommandTip
-- Text.Init.ErrorMessageTip
-- Text.InteractiveRebase.NoVerify
-- Text.Merge.Test
-- Text.Merge.Test.NoConflicts
-- Text.Merge.Test.UnknownError
-- Text.Merge.Test.WillCauseConflicts
-- Text.OpenLocalRepository
-- Text.OpenLocalRepository.Bookmark
-- Text.OpenLocalRepository.Group
-- Text.OpenLocalRepository.Path
-- Text.Preferences.AI.AdditionalPrompt
-- Text.Preferences.AI.Model
-- Text.Preferences.AI.Model.AutoFetchAvailableModels
-- Text.Preferences.General.ShowRelativeTimeInGraph
-- Text.Preferences.General.Use24Hours
-- Text.Preferences.General.UseCompactBranchNames
-- Text.Preferences.Git.UseStashAndReapplyByDefault
-- Text.Rebase.NoVerify
-- Text.Rebase.Test
-- Text.Rebase.Test.OK
-- Text.Rebase.Test.UnknownError
-- Text.Rebase.Test.WillCauseConflicts
-- Text.RemoteCM.EnableAutoFetch
-- Text.StashCM.Branch
-- Text.SubmoduleRevisionCompare
-- Text.SubmoduleRevisionCompare.OpenDetails
-- Text.TagCM.Checkout
-- Text.TagCM.Merge
-- Text.UpdateSubmodules.Recursive
-- Text.Worktree.Branch
-- Text.Worktree.Head
-- Text.Worktree.Path
-
-</details>
-
-### ![ko__KR](https://img.shields.io/badge/ko__KR-98.61%25-yellow)
+### ![ko__KR](https://img.shields.io/badge/ko__KR-97.45%25-yellow)
 
 <details>
 <summary>Missing keys in ko_KR.axaml</summary>
@@ -609,7 +582,18 @@ This document shows the translation status of each locale file in the repository
 - Text.CheckoutDetached.Target
 - Text.CheckoutDetached.Warning
 - Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
 - Text.Diff.EmptyFile
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
 - Text.GitFlow.Finish
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.StartAt
@@ -617,10 +601,11 @@ This document shows the translation status of each locale file in the repository
 - Text.TagCM.Checkout
 - Text.TagCM.Merge
 - Text.UpdateSubmodules.Recursive
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 
 </details>
 
-### ![pt__BR](https://img.shields.io/badge/pt__BR-63.79%25-red)
+### ![pt__BR](https://img.shields.io/badge/pt__BR-62.97%25-red)
 
 <details>
 <summary>Missing keys in pt_BR.axaml</summary>
@@ -742,6 +727,8 @@ This document shows the translation status of each locale file in the repository
 - Text.DeinitSubmodule
 - Text.DeinitSubmodule.Force
 - Text.DeinitSubmodule.Path
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
 - Text.DeleteMultiTags
 - Text.DeleteMultiTags.DeleteFromRemotes
 - Text.DeleteMultiTags.Tip
@@ -772,6 +759,15 @@ This document shows the translation status of each locale file in the repository
 - Text.Fetch.Force
 - Text.FileCM.CustomAction
 - Text.FileCM.ResolveUsing
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
 - Text.GitFlow.Finish
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.FinishWithSquash
@@ -972,6 +968,7 @@ This document shows the translation status of each locale file in the repository
 - Text.ViewLogs.CopyLog
 - Text.ViewLogs.Delete
 - Text.WorkingCopy.AddToGitIgnore.InFolder
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 - Text.WorkingCopy.ClearCommitHistories
 - Text.WorkingCopy.ClearCommitHistories.Confirm
 - Text.WorkingCopy.CommitToEdit
@@ -993,29 +990,27 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ru__RU](https://img.shields.io/badge/ru__RU-98.61%25-yellow)
+### ![ru__RU](https://img.shields.io/badge/ru__RU-98.82%25-yellow)
 
 <details>
 <summary>Missing keys in ru_RU.axaml</summary>
 
-- Text.Bisect.WaitingForCheckoutAnother
-- Text.Bisect.WaitingForFirstBad
-- Text.CheckoutDetached
-- Text.CheckoutDetached.Target
-- Text.CheckoutDetached.Warning
-- Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules
-- Text.Diff.EmptyFile
-- Text.GitFlow.Finish
-- Text.GitFlow.FinishWithRebase
-- Text.GitFlow.StartAt
-- Text.GitFlow.StartName
-- Text.TagCM.Checkout
-- Text.TagCM.Merge
-- Text.UpdateSubmodules.Recursive
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 
 </details>
 
-### ![ta__IN](https://img.shields.io/badge/ta__IN-65.67%25-red)
+### ![ta__IN](https://img.shields.io/badge/ta__IN-64.83%25-red)
 
 <details>
 <summary>Missing keys in ta_IN.axaml</summary>
@@ -1158,6 +1153,8 @@ This document shows the translation status of each locale file in the repository
 - Text.DeinitSubmodule
 - Text.DeinitSubmodule.Force
 - Text.DeinitSubmodule.Path
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
 - Text.DeleteMultiTags
 - Text.DeleteMultiTags.DeleteFromRemotes
 - Text.DeleteMultiTags.Tip
@@ -1181,6 +1178,15 @@ This document shows the translation status of each locale file in the repository
 - Text.ExecuteCustomAction.Target
 - Text.ExecuteCustomAction.Repository
 - Text.FileCM.CustomAction
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
 - Text.GitFlow.Finish
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.FinishWithSquash
@@ -1351,6 +1357,7 @@ This document shows the translation status of each locale file in the repository
 - Text.ViewLogs.CopyLog
 - Text.ViewLogs.Delete
 - Text.WorkingCopy.AddToGitIgnore.InFolder
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 - Text.WorkingCopy.ClearCommitHistories
 - Text.WorkingCopy.ClearCommitHistories.Confirm
 - Text.WorkingCopy.ConfirmCommitWithDetachedHead
@@ -1369,7 +1376,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![uk__UA](https://img.shields.io/badge/uk__UA-66.47%25-red)
+### ![uk__UA](https://img.shields.io/badge/uk__UA-65.62%25-red)
 
 <details>
 <summary>Missing keys in uk_UA.axaml</summary>
@@ -1508,6 +1515,8 @@ This document shows the translation status of each locale file in the repository
 - Text.DeinitSubmodule
 - Text.DeinitSubmodule.Force
 - Text.DeinitSubmodule.Path
+- Text.DeleteBranch.AskForRemote
+- Text.DeleteBranch.Force
 - Text.DeleteMultiTags
 - Text.DeleteMultiTags.DeleteFromRemotes
 - Text.DeleteMultiTags.Tip
@@ -1531,6 +1540,15 @@ This document shows the translation status of each locale file in the repository
 - Text.ExecuteCustomAction.Target
 - Text.ExecuteCustomAction.Repository
 - Text.FileCM.CustomAction
+- Text.FileModeChange
+- Text.FileModeChange.Deleted
+- Text.FileModeChange.Directory
+- Text.FileModeChange.Executable
+- Text.FileModeChange.New
+- Text.FileModeChange.Normal
+- Text.FileModeChange.Submodule
+- Text.FileModeChange.Symlink
+- Text.FileModeChange.Unknown
 - Text.GitFlow.Finish
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.FinishWithSquash
@@ -1700,6 +1718,7 @@ This document shows the translation status of each locale file in the repository
 - Text.ViewLogs.CopyLog
 - Text.ViewLogs.Delete
 - Text.WorkingCopy.AddToGitIgnore.InFolder
+- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
 - Text.WorkingCopy.ClearCommitHistories
 - Text.WorkingCopy.ClearCommitHistories.Confirm
 - Text.WorkingCopy.ConfirmCommitWithDetachedHead
@@ -1715,6 +1734,20 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![zh__CN](https://img.shields.io/badge/zh__CN-%E2%88%9A-brightgreen)
+### ![zh__CN](https://img.shields.io/badge/zh__CN-99.90%25-yellow)
 
-### ![zh__TW](https://img.shields.io/badge/zh__TW-%E2%88%9A-brightgreen)
+<details>
+<summary>Missing keys in zh_CN.axaml</summary>
+
+- Text.DeleteBranch.AskForRemote
+
+</details>
+
+### ![zh__TW](https://img.shields.io/badge/zh__TW-99.90%25-yellow)
+
+<details>
+<summary>Missing keys in zh_TW.axaml</summary>
+
+- Text.DeleteBranch.AskForRemote
+
+</details>

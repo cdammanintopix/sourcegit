@@ -285,7 +285,6 @@
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Hapus Branch</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Branch:</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">Anda akan menghapus remote branch!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">Juga hapus remote branch ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Hapus Beberapa Branch</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Anda akan menghapus beberapa branch sekaligus. Pastikan untuk memeriksa ulang sebelum bertindak!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Hapus Beberapa Tag</x:String>
@@ -305,7 +304,6 @@
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">Tag:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">Hapus dari repositori remote</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">DIFF BINARY</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">Mode Berkas Berubah</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">Perbedaan Pertama</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">Abaikan Perubahan Whitespace</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">BLEND</x:String>

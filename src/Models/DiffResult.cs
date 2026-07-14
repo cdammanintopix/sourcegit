@@ -33,10 +33,10 @@ namespace SourceGit.Models
         public string NewLine => NewLineNumber == 0 ? string.Empty : NewLineNumber.ToString();
 
         public TextDiffLine() { }
-        public TextDiffLine(TextDiffLineType type, string line, byte[] rawContent, int oldLine, int newLine)
+        public TextDiffLine(TextDiffLineType type, string content, byte[] rawContent, int oldLine, int newLine)
         {
             Type = type;
-            Content = line;
+            Content = content;
             RawContent = rawContent;
             OldLineNumber = oldLine;
             NewLineNumber = newLine;
@@ -49,8 +49,8 @@ namespace SourceGit.Models
         public int MaxLineNumber = 0;
         public int AddedLines { get; set; } = 0;
         public int DeletedLines { get; set; } = 0;
-        public string OldMode { get; set; } = string.Empty;
-        public string NewMode { get; set; } = string.Empty;
+        public int OldMode { get; set; } = 0;
+        public int NewMode { get; set; } = 0;
         public string OldHash { get; set; } = string.Empty;
         public string NewHash { get; set; } = string.Empty;
     }
@@ -104,23 +104,9 @@ namespace SourceGit.Models
         public bool IsLFS { get; set; } = false;
         public string OldHash { get; set; } = string.Empty;
         public string NewHash { get; set; } = string.Empty;
-        public string OldMode { get; set; } = string.Empty;
-        public string NewMode { get; set; } = string.Empty;
+        public int OldMode { get; set; } = 0;
+        public int NewMode { get; set; } = 0;
         public TextDiff TextDiff { get; set; } = null;
         public LFSDiff LFSDiff { get; set; } = null;
-
-        public string FileModeChange
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(OldMode) && string.IsNullOrEmpty(NewMode))
-                    return string.Empty;
-
-                var oldDisplay = string.IsNullOrEmpty(OldMode) ? "0" : OldMode;
-                var newDisplay = string.IsNullOrEmpty(NewMode) ? "0" : NewMode;
-
-                return $"{oldDisplay} → {newDisplay}";
-            }
-        }
     }
 }

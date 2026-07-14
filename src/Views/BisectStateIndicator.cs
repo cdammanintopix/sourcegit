@@ -26,19 +26,16 @@ namespace SourceGit.Views
             set => SetValue(ForegroundProperty, value);
         }
 
-        public static readonly StyledProperty<Models.Bisect> BisectProperty =
-            AvaloniaProperty.Register<BisectStateIndicator, Models.Bisect>(nameof(Bisect));
+        public static readonly DirectProperty<BisectStateIndicator, Models.Bisect> BisectProperty =
+            AvaloniaProperty.RegisterDirect<BisectStateIndicator, Models.Bisect>(
+                nameof(Bisect),
+                static o => o.Bisect,
+                static (o, v) => o.Bisect = v);
 
         public Models.Bisect Bisect
         {
-            get => GetValue(BisectProperty);
-            set => SetValue(BisectProperty, value);
-        }
-
-        static BisectStateIndicator()
-        {
-            AffectsMeasure<BisectStateIndicator>(BisectProperty);
-            AffectsRender<BisectStateIndicator>(BackgroundProperty, ForegroundProperty);
+            get => _bisect;
+            set => SetAndRaise(BisectProperty, ref _bisect, value);
         }
 
         public override void Render(DrawingContext context)
@@ -54,9 +51,17 @@ namespace SourceGit.Views
                 case Models.BisectCommitFlag.Skipped:
                     RenderImpl(context, Brushes.Gray, "Icons.Skip");
                     break;
-                default:
-                    break;
             }
+        }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == BisectProperty)
+                InvalidateMeasure();
+            else if (change.Property == BackgroundProperty || change.Property == ForegroundProperty)
+                InvalidateVisual();
         }
 
         protected override void OnDataContextChanged(EventArgs e)
@@ -126,6 +131,7 @@ namespace SourceGit.Views
                 context.DrawGeometry(Foreground, null, icon);
         }
 
+        private Models.Bisect _bisect = null;
         private Models.BisectCommitFlag _flag = Models.BisectCommitFlag.None;
     }
 }

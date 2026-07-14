@@ -33,6 +33,7 @@
                                        UseGraphColor="False"/>
                 <TextBlock Margin="4,0,0,0"
                            Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
+                           FontFamily="{DynamicResource Fonts.Monospace}"
                            Foreground="DarkOrange"
                            TextDecorations="Underline"
                            Cursor="Hand"

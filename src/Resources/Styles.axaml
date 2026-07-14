@@ -4,7 +4,6 @@
         xmlns:v="using:SourceGit.Views"
         xmlns:c="using:SourceGit.Converters"
         xmlns:ae="using:AvaloniaEdit"
-        xmlns:aec="using:AvaloniaEdit.CodeCompletion"
         xmlns:aee="using:AvaloniaEdit.Editing"
         xmlns:aes="using:AvaloniaEdit.Search">
   <Design.PreviewWith>
@@ -19,31 +18,36 @@
     </Style.Resources>
     
     <Setter Property="Background" Value="{DynamicResource Brush.Window}"/>
-    <Setter Property="WindowDecorations" Value="Full"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource Brush.WindowBorder}"/>
+    <Setter Property="SystemDecorations" Value="Full"/>
     <Setter Property="Padding" Value="0"/>
 
     <Setter Property="Template">
       <ControlTemplate>
-        <Panel>
-          <Border Name="PART_TransparencyFallback" IsHitTestVisible="False" />
-          <Border Background="{TemplateBinding Background}" IsHitTestVisible="False" />
-          <Panel Background="Transparent" Margin="{TemplateBinding WindowDecorationMargin}" />
-          <VisualLayerManager Name="PART_VisualLayerManager">
-            <LayoutTransformControl>
-              <LayoutTransformControl.LayoutTransform>
-                <ScaleTransform ScaleX="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
-                                ScaleY="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"/>
-              </LayoutTransformControl.LayoutTransform>
+        <Border BorderThickness="{TemplateBinding BorderThickness}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                Background="{TemplateBinding Background}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                ClipToBounds="True">
+          <Border Margin="{TemplateBinding Padding}">
+            <VisualLayerManager>
+              <LayoutTransformControl>
+                <LayoutTransformControl.LayoutTransform>
+                  <ScaleTransform ScaleX="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
+                                  ScaleY="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"/>
+                </LayoutTransformControl.LayoutTransform>
 
-              <ContentPresenter Name="PART_ContentPresenter"
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                Content="{TemplateBinding Content}"
-                                Margin="{TemplateBinding Padding}"
-                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-            </LayoutTransformControl>
-          </VisualLayerManager>
-        </Panel>
+                <Border>
+                  <ContentPresenter Name="PART_ContentPresenter"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Content="{TemplateBinding Content}"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                </Border>
+              </LayoutTransformControl>
+            </VisualLayerManager>
+          </Border>
+        </Border>
       </ControlTemplate>        
     </Setter>
   </Style>
@@ -51,7 +55,7 @@
   <Style Selector="Window.custom_window_frame">
     <Setter Property="Background" Value="Transparent"/>
     <Setter Property="BorderThickness" Value="0"/>
-    <Setter Property="WindowDecorations" Value="None"/>
+    <Setter Property="SystemDecorations" Value="None"/>
     <Setter Property="Padding" Value="12"/>
     <Setter Property="CornerRadius" Value="8"/>
 
@@ -123,11 +127,12 @@
                   Tag="{x:Static WindowEdge.SouthEast}"/>
 
           <Grid Margin="{TemplateBinding Padding}" Effect="drop-shadow(0 0 12 #60000000)">
-            <Border Background="{DynamicResource Brush.Window}"
+            <Border x:Name="PART_ContentRoot"
+                    Background="{DynamicResource Brush.Window}"
                     BorderBrush="{DynamicResource Brush.WindowBorder}"
                     BorderThickness="1"
                     CornerRadius="{TemplateBinding CornerRadius}">
-              <VisualLayerManager Name="PART_VisualLayerManager">
+              <VisualLayerManager>
                 <LayoutTransformControl>
                   <LayoutTransformControl.LayoutTransform>
                     <ScaleTransform ScaleX="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
@@ -186,15 +191,16 @@
     <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
     <Setter Property="Background" Value="{DynamicResource Brush.Popup}"/>
     <Setter Property="MaxWidth" Value="800"/>
+    <Setter Property="HorizontalOffset" Value="-8"/>
     <Setter Property="VerticalOffset" Value="-8"/>
     <Setter Property="TextBlock.TextDecorations" Value=""/>
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid Margin="8" Effect="drop-shadow(0 0 8 #30000000)">
+        <Grid Margin="8" Effect="drop-shadow(0 0 8 #60000000)">
           <Border Padding="8,6"
                   CornerRadius="4"
                   Background="{DynamicResource Brush.Popup}"
-                  BorderBrush="{DynamicResource Brush.Border2}"
+                  BorderBrush="{DynamicResource Brush.PopupBorder}"
                   BorderThickness="1"
                   MaxWidth="{TemplateBinding MaxWidth}"
                   MinHeight="{TemplateBinding MinHeight}"
@@ -218,11 +224,12 @@
 
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid Margin="4" Effect="drop-shadow(0 0 4 #A0000000)">
+        <Grid Margin="4" Effect="drop-shadow(0 0 4 #80000000)">
           <Border Name="LayoutRoot"
                   Padding="12"
                   Background="{DynamicResource Brush.Popup}"
-                  BorderThickness="0"
+                  BorderThickness="1"
+                  BorderBrush="{DynamicResource Brush.PopupBorder}"
                   CornerRadius="{TemplateBinding CornerRadius}">
             <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                           VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
@@ -524,6 +531,7 @@
     <Setter Property="Foreground" Value="{DynamicResource Brush.Link}"/>
   </Style>
   <Style Selector="Run.commit_link">
+    <Setter Property="FontFamily" Value="{DynamicResource Fonts.Monospace}"/>
     <Setter Property="Foreground" Value="DarkOrange"/>
     <Setter Property="TextDecorations" Value="Underline"/>
   </Style>
@@ -702,25 +710,6 @@
     <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
   </Style>
 
-  <Style Selector="ListBox.launcher_page_tabbar">
-    <Setter Property="Background" Value="Transparent"/>
-  </Style>
-  <Style Selector="ListBox.launcher_page_tabbar ListBoxItem">
-    <Setter Property="Padding" Value="0"/>
-  </Style>
-  <Style Selector="ListBox.launcher_page_tabbar ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="Transparent"/>
-    <Setter Property="Opacity" Value=".5"/>
-  </Style>
-  <Style Selector="ListBox.launcher_page_tabbar ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="Transparent"/>
-    <Setter Property="Opacity" Value=".85"/>
-  </Style>
-  <Style Selector="ListBox.launcher_page_tabbar ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="Transparent"/>
-    <Setter Property="Opacity" Value="1"/>
-  </Style>
-
   <Style Selector="ListBox.repo_left_content_list">
     <Setter Property="Background" Value="Transparent"/>
     <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
@@ -774,12 +763,13 @@
 
   <Style Selector="ContextMenu">
     <Setter Property="MaxWidth" Value="1024"/>
-    <Setter Property="HorizontalOffset" Value="-4"/>
-    <Setter Property="VerticalOffset" Value="-4"/>
+    <Setter Property="HorizontalOffset" Value="-6"/>
+    <Setter Property="VerticalOffset" Value="-6"/>
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid Margin="4" Effect="drop-shadow(0 0 4 #A0000000)">
-          <Border BorderThickness="0"
+        <Grid Margin="6" Effect="drop-shadow(0 0 6 #80000000)">
+          <Border BorderThickness="1"
+                  BorderBrush="{DynamicResource Brush.PopupBorder}"
                   Background="{DynamicResource Brush.Popup}"
                   CornerRadius="{TemplateBinding CornerRadius}"
                   Padding="8,4"
@@ -802,11 +792,11 @@
   <Style Selector="MenuFlyoutPresenter">
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid Margin="4" Effect="drop-shadow(0 0 4 #A0000000)">
+        <Grid Margin="4" Effect="drop-shadow(0 0 4 #80000000)">
           <Border Name="LayoutRoot"
                   Background="{DynamicResource Brush.Popup}"
-                  BorderBrush="{TemplateBinding BorderBrush}"
-                  BorderThickness="0"
+                  BorderBrush="{DynamicResource Brush.PopupBorder}"
+                  BorderThickness="1"
                   Padding="4,2"
                   CornerRadius="{TemplateBinding CornerRadius}">
             <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
@@ -915,8 +905,12 @@
                  HorizontalOffset="-4"
                  VerticalOffset="-4"
                  IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
-            <Grid Margin="4" Effect="drop-shadow(0 0 4 #A0000000)">
-              <Border BorderThickness="0" Padding="8,4" MaxHeight="400" Background="{DynamicResource Brush.Popup}" CornerRadius="{DynamicResource OverlayCornerRadius}">
+            <Grid Margin="6" Effect="drop-shadow(0 0 6 #80000000)">
+              <Border Padding="8,4"
+                      MaxHeight="400"
+                      BorderThickness="1" BorderBrush="{DynamicResource Brush.PopupBorder}"
+                      Background="{DynamicResource Brush.Popup}"
+                      CornerRadius="{DynamicResource OverlayCornerRadius}">
                 <ScrollViewer>
                   <ItemsPresenter Name="PART_ItemsPresenter"
                                   Margin="{DynamicResource MenuFlyoutScrollerMargin}"
@@ -1419,7 +1413,7 @@
                 Padding="10">
           <Grid RowDefinitions="Auto,Auto">
             <StackPanel Grid.Row="0" Orientation="Horizontal">
-              <TextBox PlaceholderText="{x:Static ae:SR.SearchLabel}"
+              <TextBox Watermark="{x:Static ae:SR.SearchLabel}"
                        Name="PART_searchTextBox"
                        Width="265" Height="28"
                        Margin="0,0,0,0"
@@ -1475,20 +1469,6 @@
         </Border>
       </ControlTemplate>
     </Setter>
-  </Style>
-
-  <Style Selector="aec|CompletionListBox">
-    <Setter Property="Background" Value="{DynamicResource Brush.Popup}"/>
-    <Setter Property="BorderThickness" Value="1"/>
-    <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
-    <Setter Property="Padding" Value="8,4"/>
-    <Setter Property="CornerRadius" Value="4"/>
-  </Style>
-
-  <Style Selector="aec|CompletionListBox ListBoxItem">
-    <Setter Property="Height" Value="24"/>
-    <Setter Property="Margin" Value="0,2"/>
-    <Setter Property="CornerRadius" Value="4"/>
   </Style>
 </Styles>
 

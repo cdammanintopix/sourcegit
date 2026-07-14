@@ -667,6 +667,7 @@ namespace SourceGit.ViewModels
             }
 
             _repo.MarkBranchesDirtyManually();
+            _repo.RefreshSubmodules(); // Committing will not change submodule's HEAD (stage already changes it), So we need refresh submodules here manually.
             IsCommitting = false;
         }
 

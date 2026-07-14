@@ -56,7 +56,9 @@
               </Border>
               <TextBlock Grid.Column="3"
                          Text="{Binding BaseHead.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
-                         Foreground="DarkOrange" Margin="8,0,0,0"
+                         FontFamily="{DynamicResource Fonts.Monospace}"
+                         Foreground="DarkOrange"
+                         Margin="8,0,0,0"
                          TextDecorations="Underline"
                          Cursor="Hand"
                          PointerPressed="OnPressedSHA"/>
@@ -96,7 +98,14 @@
                   <TextBlock Text="{Binding ToName}" Margin="4,0" Foreground="#FFF2F2F2"/>
                 </StackPanel>
               </Border>
-              <TextBlock Grid.Column="3" Text="{Binding ToHead.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}" Foreground="DarkOrange" Margin="8,0,0,0" TextDecorations="Underline" Cursor="Hand" PointerPressed="OnPressedSHA"/>
+              <TextBlock Grid.Column="3"
+                         Text="{Binding ToHead.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
+                         FontFamily="{DynamicResource Fonts.Monospace}"
+                         Foreground="DarkOrange"
+                         Margin="8,0,0,0"
+                         TextDecorations="Underline"
+                         Cursor="Hand"
+                         PointerPressed="OnPressedSHA"/>
               <v:DateTimePresenter Grid.Column="4"
                                    Margin="8,0,0,0"
                                    Timestamp="{Binding ToHead.CommitterTime}"
@@ -145,7 +154,7 @@
                      BorderThickness="1" BorderBrush="{DynamicResource Brush.Border2}"
                      Background="Transparent"
                      CornerRadius="4"
-                     PlaceholderText="{DynamicResource Text.CommitDetail.Changes.Search}"
+                     Watermark="{DynamicResource Text.CommitDetail.Changes.Search}"
                      Text="{Binding SearchFilter, Mode=TwoWay}">
               <TextBox.InnerLeftContent>
                 <Path Width="14" Height="14" Margin="4,0,0,0" Fill="{DynamicResource Brush.FG2}" Data="{StaticResource Icons.Search}"/>

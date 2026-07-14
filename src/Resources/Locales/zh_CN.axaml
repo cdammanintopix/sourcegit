@@ -347,8 +347,8 @@
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">子模块 ：</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">删除分支确认</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">分支名 ：</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">强制删除，即使包含未合并的提交</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">您正在删除远程上的分支，请务必小心！！！</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">同时删除远程分支 ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">删除多个分支</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">您正在尝试一次性删除多个分支，请务必仔细检查后再执行操作！</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">删除多个标签</x:String>
@@ -369,7 +369,6 @@
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">同时删除远程仓库中的此标签</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">二进制文件</x:String>
   <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">空文件</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">文件权限已变化</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">首个差异</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">忽略空白符号变化</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">混合对比</x:String>
@@ -442,6 +441,15 @@
   <x:String x:Key="Text.FileHistory" xml:space="preserve">文件历史</x:String>
   <x:String x:Key="Text.FileHistory.FileChange" xml:space="preserve">文件变更</x:String>
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">文件内容</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">文件类型变更：</x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">删除：</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">目录</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">可执行文件</x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">新增文件类型：</x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">普通文件</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">子模块</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">符号链接</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">未知</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">GIT工作流</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">开发分支 ：</x:String>
   <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">特性分支 ：</x:String>
@@ -982,6 +990,7 @@
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">忽略同目录下所有 *{0} 文件</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">忽略该目录下的新文件</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">忽略本文件</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">忽略同目录下所有新文件</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">修补</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">现在您已可将其加入暂存区中</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">清空历史提交信息</x:String>

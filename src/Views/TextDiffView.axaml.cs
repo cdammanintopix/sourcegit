@@ -362,22 +362,52 @@ namespace SourceGit.Views
             }
         }
 
-        public static readonly StyledProperty<string> FileNameProperty =
-            AvaloniaProperty.Register<ThemedTextDiffPresenter, string>(nameof(FileName), string.Empty);
+        public static readonly DirectProperty<ThemedTextDiffPresenter, string> FileNameProperty =
+            AvaloniaProperty.RegisterDirect<ThemedTextDiffPresenter, string>(
+                nameof(FileName),
+                static o => o.FileName,
+                static (o, v) => o.FileName = v);
 
         public string FileName
         {
-            get => GetValue(FileNameProperty);
-            set => SetValue(FileNameProperty, value);
+            get => _fileName;
+            set => SetAndRaise(FileNameProperty, ref _fileName, value);
         }
 
-        public static readonly StyledProperty<bool> IsOldProperty =
-            AvaloniaProperty.Register<ThemedTextDiffPresenter, bool>(nameof(IsOld));
+        public static readonly DirectProperty<ThemedTextDiffPresenter, bool> IsOldProperty =
+            AvaloniaProperty.RegisterDirect<ThemedTextDiffPresenter, bool>(
+                nameof(IsOld),
+                static o => o.IsOld,
+                static (o, v) => o.IsOld = v);
 
         public bool IsOld
         {
-            get => GetValue(IsOldProperty);
-            set => SetValue(IsOldProperty, value);
+            get => _isOld;
+            set => SetAndRaise(IsOldProperty, ref _isOld, value);
+        }
+
+        public static readonly DirectProperty<ThemedTextDiffPresenter, ViewModels.TextDiffSelectedChunk> SelectedChunkProperty =
+            AvaloniaProperty.RegisterDirect<ThemedTextDiffPresenter, ViewModels.TextDiffSelectedChunk>(
+                nameof(SelectedChunk),
+                static o => o.SelectedChunk,
+                static (o, v) => o.SelectedChunk = v);
+
+        public ViewModels.TextDiffSelectedChunk SelectedChunk
+        {
+            get => _selectedChunk;
+            set => SetAndRaise(SelectedChunkProperty, ref _selectedChunk, value);
+        }
+
+        public static readonly DirectProperty<ThemedTextDiffPresenter, ViewModels.BlockNavigation> BlockNavigationProperty =
+            AvaloniaProperty.RegisterDirect<ThemedTextDiffPresenter, ViewModels.BlockNavigation>(
+                nameof(BlockNavigation),
+                static o => o.BlockNavigation,
+                static (o, v) => o.BlockNavigation = v);
+
+        public ViewModels.BlockNavigation BlockNavigation
+        {
+            get => _blockNavigation;
+            set => SetAndRaise(BlockNavigationProperty, ref _blockNavigation, value);
         }
 
         public static readonly StyledProperty<IBrush> LineBrushProperty =
@@ -477,24 +507,6 @@ namespace SourceGit.Views
         {
             get => GetValue(TabWidthProperty);
             set => SetValue(TabWidthProperty, value);
-        }
-
-        public static readonly StyledProperty<ViewModels.TextDiffSelectedChunk> SelectedChunkProperty =
-            AvaloniaProperty.Register<ThemedTextDiffPresenter, ViewModels.TextDiffSelectedChunk>(nameof(SelectedChunk));
-
-        public ViewModels.TextDiffSelectedChunk SelectedChunk
-        {
-            get => GetValue(SelectedChunkProperty);
-            set => SetValue(SelectedChunkProperty, value);
-        }
-
-        public static readonly StyledProperty<ViewModels.BlockNavigation> BlockNavigationProperty =
-            AvaloniaProperty.Register<ThemedTextDiffPresenter, ViewModels.BlockNavigation>(nameof(BlockNavigation));
-
-        public ViewModels.BlockNavigation BlockNavigation
-        {
-            get => GetValue(BlockNavigationProperty);
-            set => SetValue(BlockNavigationProperty, value);
         }
 
         protected override Type StyleKeyOverride => typeof(TextEditor);
@@ -794,7 +806,7 @@ namespace SourceGit.Views
         protected void TrySetChunk(ViewModels.TextDiffSelectedChunk chunk)
         {
             if (ViewModels.TextDiffSelectedChunk.IsChanged(SelectedChunk, chunk))
-                SetCurrentValue(SelectedChunkProperty, chunk);
+                SelectedChunk = chunk;
         }
 
         private List<Models.TextDiffLine> GetLines()
@@ -976,6 +988,10 @@ namespace SourceGit.Views
             await this.CopyTextAsync(patchText);
         }
 
+        private string _fileName = string.Empty;
+        private bool _isOld = false;
+        private ViewModels.TextDiffSelectedChunk _selectedChunk = null;
+        private ViewModels.BlockNavigation _blockNavigation = null;
         private bool _execSizeChanged;
         private TextMate.Installation _textMate;
         private TextLocation _lastSelectStart = TextLocation.Empty;
@@ -1001,7 +1017,7 @@ namespace SourceGit.Views
             _scrollViewer = this.FindDescendantOfType<ScrollViewer>();
             if (_scrollViewer != null)
             {
-                _scrollViewer.Bind(ScrollViewer.OffsetProperty, CompiledBinding.Create<ViewModels.TextDiffContext, Vector>(vm => vm.ScrollOffset, mode: BindingMode.TwoWay));
+                _scrollViewer.Bind(ScrollViewer.OffsetProperty, new Binding("ScrollOffset", BindingMode.TwoWay));
                 _scrollViewer.ScrollChanged += OnTextViewScrollChanged;
             }
         }
@@ -1188,7 +1204,7 @@ namespace SourceGit.Views
             if (_scrollViewer != null)
             {
                 _scrollViewer.ScrollChanged += OnTextViewScrollChanged;
-                _scrollViewer.Bind(ScrollViewer.OffsetProperty, CompiledBinding.Create<ViewModels.TextDiffContext, Vector>(vm => vm.ScrollOffset));
+                _scrollViewer.Bind(ScrollViewer.OffsetProperty, new Binding("ScrollOffset", BindingMode.OneWay));
             }
         }
 
@@ -1387,15 +1403,6 @@ namespace SourceGit.Views
             set => SetValue(DeletedLineBrushProperty, value);
         }
 
-        public static readonly StyledProperty<ViewModels.TextLineRange> DisplayRangeProperty =
-            AvaloniaProperty.Register<TextDiffViewMinimap, ViewModels.TextLineRange>(nameof(DisplayRange));
-
-        public ViewModels.TextLineRange DisplayRange
-        {
-            get => GetValue(DisplayRangeProperty);
-            set => SetValue(DisplayRangeProperty, value);
-        }
-
         public static readonly StyledProperty<Color> DisplayRangeColorProperty =
             AvaloniaProperty.Register<TextDiffViewMinimap, Color>(nameof(DisplayRangeColor), Colors.RoyalBlue);
 
@@ -1405,13 +1412,16 @@ namespace SourceGit.Views
             set => SetValue(DisplayRangeColorProperty, value);
         }
 
-        static TextDiffViewMinimap()
+        public static readonly DirectProperty<TextDiffViewMinimap, ViewModels.TextLineRange> DisplayRangeProperty =
+            AvaloniaProperty.RegisterDirect<TextDiffViewMinimap, ViewModels.TextLineRange>(
+                nameof(DisplayRange),
+                static o => o.DisplayRange,
+                static (o, v) => o.DisplayRange = v);
+
+        public ViewModels.TextLineRange DisplayRange
         {
-            AffectsRender<TextDiffViewMinimap>(
-                AddedLineBrushProperty,
-                DeletedLineBrushProperty,
-                DisplayRangeProperty,
-                DisplayRangeColorProperty);
+            get => _displayRange;
+            set => SetAndRaise(DisplayRangeProperty, ref _displayRange, value);
         }
 
         public override void Render(DrawingContext context)
@@ -1447,6 +1457,17 @@ namespace SourceGit.Views
             context.DrawRectangle(brush, null, rect);
             context.DrawLine(pen, rect.TopLeft, rect.TopRight);
             context.DrawLine(pen, rect.BottomLeft, rect.BottomRight);
+        }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == AddedLineBrushProperty ||
+                change.Property == DeletedLineBrushProperty ||
+                change.Property == DisplayRangeColorProperty ||
+                change.Property == DisplayRangeProperty)
+                InvalidateVisual();
         }
 
         protected override void OnDataContextChanged(EventArgs e)
@@ -1523,17 +1544,22 @@ namespace SourceGit.Views
                 context.DrawRectangle(brush, null, new Rect(x, y, width, h));
             }
         }
+
+        private ViewModels.TextLineRange _displayRange = null;
     }
 
     public partial class TextDiffView : UserControl
     {
-        public static readonly StyledProperty<ViewModels.TextDiffSelectedChunk> SelectedChunkProperty =
-            AvaloniaProperty.Register<TextDiffView, ViewModels.TextDiffSelectedChunk>(nameof(SelectedChunk));
+        public static readonly DirectProperty<TextDiffView, ViewModels.TextDiffSelectedChunk> SelectedChunkProperty =
+            AvaloniaProperty.RegisterDirect<TextDiffView, ViewModels.TextDiffSelectedChunk>(
+                nameof(SelectedChunk),
+                static o => o.SelectedChunk,
+                static (o, v) => o.SelectedChunk = v);
 
         public ViewModels.TextDiffSelectedChunk SelectedChunk
         {
-            get => GetValue(SelectedChunkProperty);
-            set => SetValue(SelectedChunkProperty, value);
+            get => _selectedChunk;
+            set => SetAndRaise(SelectedChunkProperty, ref _selectedChunk, value);
         }
 
         public TextDiffView()
@@ -1659,5 +1685,7 @@ namespace SourceGit.Views
             repo.MarkWorkingCopyDirtyManually();
             File.Delete(tmpFile);
         }
+
+        private ViewModels.TextDiffSelectedChunk _selectedChunk = null;
     }
 }

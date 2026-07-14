@@ -124,7 +124,7 @@
                Height="28"
                VerticalAlignment="Center"
                CornerRadius="3"
-               PlaceholderText="{DynamicResource Text.CI.ArgsPlaceholderText}"
+               Watermark="{DynamicResource Text.CI.ArgsPlaceholderText}"
                Text="{Binding CIArgs}"
                IsVisible="{Binding IsCIArgsVisible}"/>
     </Grid>

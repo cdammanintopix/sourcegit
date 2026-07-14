@@ -14,13 +14,16 @@ namespace SourceGit.Views
 {
     public partial class CommitDetail : UserControl
     {
-        public static readonly StyledProperty<bool> IsDetailsPanelExpandedProperty =
-            AvaloniaProperty.Register<CommitDetail, bool>(nameof(IsDetailsPanelExpanded));
+        public static readonly DirectProperty<CommitDetail, bool> IsDetailsPanelExpandedProperty =
+            AvaloniaProperty.RegisterDirect<CommitDetail, bool>(
+                nameof(IsDetailsPanelExpanded),
+                static o => o.IsDetailsPanelExpanded,
+                static (o, v) => o.IsDetailsPanelExpanded = v);
 
         public bool IsDetailsPanelExpanded
         {
-            get => GetValue(IsDetailsPanelExpandedProperty);
-            set => SetValue(IsDetailsPanelExpandedProperty, value);
+            get => _isDetailsPanelExpanded;
+            set => SetAndRaise(IsDetailsPanelExpandedProperty, ref _isDetailsPanelExpanded, value);
         }
 
         public CommitDetail()
@@ -545,5 +548,7 @@ namespace SourceGit.Views
                 CreateChangeContextMenu(change)?.Open(grid);
             e.Handled = true;
         }
+
+        private bool _isDetailsPanelExpanded = true;
     }
 }

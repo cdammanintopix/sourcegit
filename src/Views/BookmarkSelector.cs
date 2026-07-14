@@ -10,18 +10,21 @@ namespace SourceGit.Views
 {
     public class BookmarkSelector : Control
     {
-        public static readonly StyledProperty<int> BookmarkProperty =
-            AvaloniaProperty.Register<BookmarkSelector, int>(nameof(Bookmark), 0);
+        public static readonly DirectProperty<BookmarkSelector, int> BookmarkProperty =
+            AvaloniaProperty.RegisterDirect<BookmarkSelector, int>(
+                nameof(Bookmark),
+                static o => o.Bookmark,
+                static (o, v) => o.Bookmark = v);
 
         public int Bookmark
         {
-            get => GetValue(BookmarkProperty);
-            set => SetValue(BookmarkProperty, value);
+            get => _bookmark;
+            set => SetAndRaise(BookmarkProperty, ref _bookmark, value);
         }
 
         public BookmarkSelector()
         {
-            var geo = App.Current.FindResource("Icons.Bookmark") as StreamGeometry;
+            var geo = Application.Current!.FindResource("Icons.Bookmark") as StreamGeometry;
             _icon = geo!.Clone();
             var iconBounds = _icon.Bounds;
             var translation = Matrix.CreateTranslation(-(Vector)iconBounds.Position);
@@ -47,13 +50,12 @@ namespace SourceGit.Views
             context.FillRectangle(Brushes.Transparent, new Rect(0, 0, Bounds.Width, Bounds.Height));
 
             var defaultBrush = this.FindResource("Brush.FG1") as IBrush;
-            var selectedBorder = new Pen(new SolidColorBrush((Color)this.FindResource("SystemAccentColor")), 1);
-            var active = Bookmark;
+            var selectedBorder = new Pen(new SolidColorBrush((Color)this.FindResource("SystemAccentColor")!));
 
             for (var i = 0; i < _hitBoxes.Count; i++)
             {
                 var hitBox = _hitBoxes[i];
-                if (i == active)
+                if (i == _bookmark)
                     context.DrawRectangle(selectedBorder, hitBox, 3);
 
                 var bursh = Models.Bookmarks.Get(i) ?? defaultBrush;
@@ -66,7 +68,9 @@ namespace SourceGit.Views
         {
             base.OnPropertyChanged(change);
 
-            if (change.Property == BookmarkProperty || change.Property.Name.Equals(nameof(ActualThemeVariant), StringComparison.Ordinal))
+            if (change.Property == BookmarkProperty)
+                InvalidateVisual();
+            else if (change.Property.Name == nameof(ActualThemeVariant) && change.NewValue != null)
                 InvalidateVisual();
         }
 
@@ -81,7 +85,7 @@ namespace SourceGit.Views
                 {
                     if (_hitBoxes[i].Contains(pos))
                     {
-                        SetCurrentValue(BookmarkProperty, i);
+                        Bookmark = i;
                         break;
                     }
                 }
@@ -95,6 +99,7 @@ namespace SourceGit.Views
             return new Size(8 * 14 + 7 * 12 + 4, 24);
         }
 
+        private int _bookmark = 0;
         private Geometry _icon = null;
         private List<Rect> _hitBoxes = [];
     }

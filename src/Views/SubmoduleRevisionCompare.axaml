@@ -50,7 +50,9 @@
               <TextBlock Grid.Column="1" Text="{Binding Base.Author.Name}" Margin="8,0,0,0"/>
               <TextBlock Grid.Column="2"
                          Text="{Binding Base.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
-                         Foreground="DarkOrange" Margin="8,0,0,0"
+                         FontFamily="{DynamicResource Fonts.Monospace}"
+                         Foreground="DarkOrange"
+                         Margin="8,0,0,0"
                          TextDecorations="Underline"
                          Cursor="Hand"/>
               <v:DateTimePresenter Grid.Column="3"
@@ -79,6 +81,7 @@
               <TextBlock Grid.Column="1" Text="{Binding To.Author.Name}" Margin="8,0,0,0"/>
               <TextBlock Grid.Column="2"
                          Text="{Binding To.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
+                         FontFamily="{DynamicResource Fonts.Monospace}"
                          Foreground="DarkOrange"
                          Margin="8,0,0,0"
                          TextDecorations="Underline"
@@ -113,7 +116,7 @@
                      BorderThickness="1" BorderBrush="{DynamicResource Brush.Border2}"
                      Background="Transparent"
                      CornerRadius="4"
-                     PlaceholderText="{DynamicResource Text.CommitDetail.Changes.Search}"
+                     Watermark="{DynamicResource Text.CommitDetail.Changes.Search}"
                      Text="{Binding SearchFilter, Mode=TwoWay}">
               <TextBox.InnerLeftContent>
                 <Path Width="14" Height="14" Margin="4,0,0,0" Fill="{DynamicResource Brush.FG2}" Data="{StaticResource Icons.Search}"/>

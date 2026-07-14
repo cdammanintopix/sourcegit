@@ -45,8 +45,17 @@
           <DataTemplate DataType="m:Commit">
             <Grid ColumnDefinitions="Auto,Auto,*">
               <Path Grid.Column="0" Width="14" Height="14" Data="{StaticResource Icons.Commit}"/>
-              <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}" Foreground="DarkOrange" Margin="8,0,0,0"/>
-              <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Subject}" Margin="4,0,0,0" TextTrimming="CharacterEllipsis"/>
+              <TextBlock Grid.Column="1"
+                         VerticalAlignment="Center"
+                         Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
+                         FontFamily="{DynamicResource Fonts.Monospace}"
+                         Foreground="DarkOrange"
+                         Margin="8,0,0,0"/>
+              <TextBlock Grid.Column="2"
+                         VerticalAlignment="Center"
+                         Text="{Binding Subject}"
+                         Margin="4,0,0,0"
+                         TextTrimming="CharacterEllipsis"/>
             </Grid>
           </DataTemplate>
 
@@ -86,7 +95,7 @@
                      Height="28"
                      VerticalAlignment="Center"
                      CornerRadius="3"
-                     PlaceholderText="{Binding Placeholder, Mode=OneWay}"
+                     Watermark="{Binding Placeholder, Mode=OneWay}"
                      Text="{Binding Text, Mode=TwoWay}"/>
           </Grid>
         </DataTemplate>
@@ -109,7 +118,7 @@
             <TextBox Grid.Column="1"
                      Height="28"
                      CornerRadius="3"
-                     PlaceholderText="{Binding Placeholder, Mode=OneWay}"
+                     Watermark="{Binding Placeholder, Mode=OneWay}"
                      Text="{Binding Path, Mode=TwoWay}">
               <TextBox.InnerRightContent>
                 <Button Classes="icon_button" Width="30" Height="30" Click="SelectPath">

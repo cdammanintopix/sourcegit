@@ -93,7 +93,7 @@
   <x:String x:Key="Text.BranchCM.SwitchToWorktree" xml:space="preserve">切換到 ${0}$ (工作區)</x:String>
   <x:String x:Key="Text.BranchCM.Tracking" xml:space="preserve">切換上游分支...</x:String>
   <x:String x:Key="Text.BranchTree.Ahead" xml:space="preserve">領先 {0} 次提交</x:String>
-  <x:String x:Key="Text.BranchTree.AheadBehind" xml:space="preserve">領先 {0} 次提交，落後 {0} 次提交</x:String>
+  <x:String x:Key="Text.BranchTree.AheadBehind" xml:space="preserve">領先 {0} 次提交，落後 {1} 次提交</x:String>
   <x:String x:Key="Text.BranchTree.Behind" xml:space="preserve">落後 {0} 次提交</x:String>
   <x:String x:Key="Text.BranchTree.InvalidUpstream" xml:space="preserve">無效</x:String>
   <x:String x:Key="Text.BranchTree.Remote" xml:space="preserve">遠端</x:String>
@@ -347,8 +347,8 @@
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">子模組:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">刪除分支確認</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">分支名稱:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">強制刪除，即使包含未合併的提交</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">您正在刪除遠端上的分支，請務必小心!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">同時刪除遠端分支 ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">刪除多個分支</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">您正在嘗試一次性刪除多個分支，請務必仔細檢查後再刪除!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">刪除多個標籤</x:String>
@@ -369,7 +369,6 @@
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">同時刪除遠端存放庫中的此標籤</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">二進位檔案</x:String>
   <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">空檔案</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">檔案權限已變更</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">第一個差異</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">忽略空白符號變化</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">混合對比</x:String>
@@ -442,6 +441,15 @@
   <x:String x:Key="Text.FileHistory" xml:space="preserve">檔案歷史</x:String>
   <x:String x:Key="Text.FileHistory.FileChange" xml:space="preserve">檔案變更</x:String>
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">檔案內容</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">檔案類型變更：</x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">刪除檔案類型：</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">目錄</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">可執行檔案</x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">新增檔案類型：</x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">普通檔案</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">子模組</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">符號連結</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">未知</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git 工作流</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">開發分支:</x:String>
   <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">功能分支:</x:String>
@@ -982,6 +990,7 @@
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">忽略同路徑下所有 *{0} 檔案</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">忽略本路徑下的新增檔案</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">忽略本檔案</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">忽略同路徑下所有新增檔案</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">修補</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">現在您已可將其加入暫存區中</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">清除提交訊息歷史</x:String>

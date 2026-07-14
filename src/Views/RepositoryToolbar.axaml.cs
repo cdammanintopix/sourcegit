@@ -26,6 +26,7 @@ namespace SourceGit.Views
 
                 RenderOptions.SetBitmapInterpolationMode(menu, BitmapInterpolationMode.HighQuality);
                 RenderOptions.SetEdgeMode(menu, EdgeMode.Antialias);
+                RenderOptions.SetTextRenderingMode(menu, TextRenderingMode.SubpixelAntialias);
 
                 var explore = new MenuItem();
                 explore.Header = App.Text("Repository.Explore");
@@ -62,7 +63,23 @@ namespace SourceGit.Views
                         item.Icon = new Image { Width = 16, Height = 16, Source = dupTool.IconImage };
 
                         var options = dupTool.MakeLaunchOptions(fullpath);
-                        if (options is { Count: > 0 })
+                        var count = (dupTool.SupportOpenFolder ? 1 : 0) + (options?.Count ?? 0);
+                        if (count == 0)
+                            continue;
+
+                        if (count == 1)
+                        {
+                            var args = fullpath.Quoted();
+                            if (options is { Count: 1 })
+                                args = options[0].Args;
+
+                            item.Click += (_, e) =>
+                            {
+                                dupTool.Launch(args);
+                                e.Handled = true;
+                            };
+                        }
+                        else
                         {
                             foreach (var opt in options)
                             {
@@ -77,23 +94,18 @@ namespace SourceGit.Views
                                 item.Items.Add(subItem);
                             }
 
-                            var openAsFolder = new MenuItem();
-                            openAsFolder.Header = App.Text("Repository.OpenAsFolder");
-                            openAsFolder.Click += (_, e) =>
+                            if (dupTool.SupportOpenFolder)
                             {
-                                dupTool.Launch(fullpath.Quoted());
-                                e.Handled = true;
-                            };
-                            item.Items.Add(new MenuItem() { Header = "-" });
-                            item.Items.Add(openAsFolder);
-                        }
-                        else
-                        {
-                            item.Click += (_, e) =>
-                            {
-                                dupTool.Launch(fullpath.Quoted());
-                                e.Handled = true;
-                            };
+                                var open = new MenuItem();
+                                open.Header = App.Text("Repository.OpenAsFolder");
+                                open.Click += (_, e) =>
+                                {
+                                    dupTool.Launch(fullpath.Quoted());
+                                    e.Handled = true;
+                                };
+                                item.Items.Add(new MenuItem() { Header = "-" });
+                                item.Items.Add(open);
+                            }
                         }
 
                         menu.Items.Add(item);

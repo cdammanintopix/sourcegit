@@ -13,10 +13,14 @@ namespace SourceGit.Models
         {
             var parts = data.Split('±', 2);
             if (parts.Length < 2)
-                parts = [string.Empty, data];
-
-            Name = parts[0];
-            Email = parts[1].TrimStart('<').TrimEnd('>');
+            {
+                Email = data;
+            }
+            else
+            {
+                Name = parts[0];
+                Email = parts[1];
+            }
         }
 
         public static User FindOrAdd(string data)

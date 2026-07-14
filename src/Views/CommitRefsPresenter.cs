@@ -148,18 +148,6 @@ namespace SourceGit.Views
             set => SetValue(ShowTagsProperty, value);
         }
 
-        static CommitRefsPresenter()
-        {
-            AffectsMeasure<CommitRefsPresenter>(
-                FontFamilyProperty,
-                FontSizeProperty,
-                ForegroundProperty,
-                UseGraphColorProperty,
-                UseCompactBranchNamesProperty,
-                BackgroundProperty,
-                ShowTagsProperty);
-        }
-
         public Models.Decorator DecoratorAt(Point point)
         {
             var x = 0.0;
@@ -242,6 +230,20 @@ namespace SourceGit.Views
 
                 x += item.Width + 4;
             }
+        }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == FontFamilyProperty ||
+                change.Property == FontSizeProperty ||
+                change.Property == ForegroundProperty ||
+                change.Property == UseGraphColorProperty ||
+                change.Property == UseCompactBranchNamesProperty ||
+                change.Property == BackgroundProperty ||
+                change.Property == ShowTagsProperty)
+                InvalidateMeasure();
         }
 
         protected override void OnDataContextChanged(EventArgs e)
