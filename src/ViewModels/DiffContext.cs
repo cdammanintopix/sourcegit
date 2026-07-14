@@ -118,8 +118,12 @@ namespace SourceGit.ViewModels
         {
             if (_option.Path.EndsWith('/'))
             {
-                Content = null;
+                OldMode = 0;
+                NewMode = 160000;
                 IsTextDiff = false;
+                IsIgnoreWhitespaceVisible = false;
+                Content = null;
+                _info = null;
                 return;
             }
 
@@ -141,103 +145,29 @@ namespace SourceGit.ViewModels
                 _info = info;
 
                 object rs = null;
-                if (latest.TextDiff != null)
+                if (latest.TextDiff is { } textDiff)
                 {
-                    var count = latest.TextDiff.Lines.Count;
-                    var isSubmodule = false;
-                    if (count <= 3)
-                    {
-                        var submoduleDiff = new Models.SubmoduleDiff();
-                        var submoduleRoot = $"{_repo}/{_option.Path}".Replace('\\', '/').TrimEnd('/');
-                        isSubmodule = true;
-                        for (int i = 1; i < count; i++)
-                        {
-                            var line = latest.TextDiff.Lines[i];
-                            if (!line.Content.StartsWith("Subproject commit ", StringComparison.Ordinal))
-                            {
-                                isSubmodule = false;
-                                break;
-                            }
-
-                            var sha = line.Content.Substring(18);
-                            if (line.Type == Models.TextDiffLineType.Added)
-                                submoduleDiff.New = await QuerySubmoduleRevisionAsync(submoduleRoot, sha).ConfigureAwait(false);
-                            else if (line.Type == Models.TextDiffLineType.Deleted)
-                                submoduleDiff.Old = await QuerySubmoduleRevisionAsync(submoduleRoot, sha).ConfigureAwait(false);
-                        }
-
-                        if (isSubmodule)
-                        {
-                            submoduleDiff.FullPath = submoduleRoot;
-                            rs = submoduleDiff;
-                        }
-                    }
-
-                    if (!isSubmodule)
-                        rs = latest.TextDiff;
+                    rs = textDiff;
+                }
+                else if (latest.LFSDiff is { } lfs)
+                {
+                    var imgDecoder = ImageSource.GetDecoder(_option.Path);
+                    if (imgDecoder != Models.ImageDecoder.None)
+                        rs = new LFSImageDiff(_repo, lfs, imgDecoder);
+                    else
+                        rs = lfs;
                 }
                 else if (latest.IsBinary)
                 {
-                    var oldPath = string.IsNullOrEmpty(_option.OrgPath) ? _option.Path : _option.OrgPath;
                     var imgDecoder = ImageSource.GetDecoder(_option.Path);
-
                     if (imgDecoder != Models.ImageDecoder.None)
-                    {
-                        var imgDiff = new Models.ImageDiff();
-
-                        if (_option.Revisions.Count == 2)
-                        {
-                            var oldImage = await ImageSource.FromRevisionAsync(_repo, _option.Revisions[0], oldPath, imgDecoder).ConfigureAwait(false);
-                            var newImage = await ImageSource.FromRevisionAsync(_repo, _option.Revisions[1], _option.Path, imgDecoder).ConfigureAwait(false);
-                            imgDiff.Old = oldImage.Bitmap;
-                            imgDiff.OldFileSize = oldImage.Size;
-                            imgDiff.New = newImage.Bitmap;
-                            imgDiff.NewFileSize = newImage.Size;
-                        }
-                        else
-                        {
-                            if (!oldPath.Equals("/dev/null", StringComparison.Ordinal))
-                            {
-                                var oldImage = await ImageSource.FromRevisionAsync(_repo, "HEAD", oldPath, imgDecoder).ConfigureAwait(false);
-                                imgDiff.Old = oldImage.Bitmap;
-                                imgDiff.OldFileSize = oldImage.Size;
-                            }
-
-                            var fullPath = Path.Combine(_repo, _option.Path);
-                            if (File.Exists(fullPath))
-                            {
-                                var newImage = await ImageSource.FromFileAsync(fullPath, imgDecoder).ConfigureAwait(false);
-                                imgDiff.New = newImage.Bitmap;
-                                imgDiff.NewFileSize = newImage.Size;
-                            }
-                        }
-
-                        rs = imgDiff;
-                    }
+                        rs = await CreateImageDiffAsync(imgDecoder).ConfigureAwait(false);
                     else
-                    {
-                        var binaryDiff = new Models.BinaryDiff();
-                        if (_option.Revisions.Count == 2)
-                        {
-                            binaryDiff.OldSize = await new Commands.QueryFileSize(_repo, oldPath, _option.Revisions[0]).GetResultAsync().ConfigureAwait(false);
-                            binaryDiff.NewSize = await new Commands.QueryFileSize(_repo, _option.Path, _option.Revisions[1]).GetResultAsync().ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            var fullPath = Path.Combine(_repo, _option.Path);
-                            binaryDiff.OldSize = await new Commands.QueryFileSize(_repo, oldPath, "HEAD").GetResultAsync().ConfigureAwait(false);
-                            binaryDiff.NewSize = File.Exists(fullPath) ? new FileInfo(fullPath).Length : 0;
-                        }
-                        rs = binaryDiff;
-                    }
+                        rs = await CreateBinaryDiffAsync().ConfigureAwait(false);
                 }
-                else if (latest.IsLFS)
+                else if (latest.IsSubmoduleChange)
                 {
-                    var imgDecoder = ImageSource.GetDecoder(_option.Path);
-                    if (imgDecoder != Models.ImageDecoder.None)
-                        rs = new LFSImageDiff(_repo, latest.LFSDiff, imgDecoder);
-                    else
-                        rs = latest.LFSDiff;
+                    rs = await CreateSubmoduleDiffAsync(latest.OldHash, latest.NewHash).ConfigureAwait(false);
                 }
                 else if (IsEmptyFileHash(latest.OldHash) || IsEmptyFileHash(latest.NewHash))
                 {
@@ -273,29 +203,107 @@ namespace SourceGit.ViewModels
             });
         }
 
-        private async Task<Models.RevisionSubmodule> QuerySubmoduleRevisionAsync(string repo, string sha)
+        private async Task<Models.ImageDiff> CreateImageDiffAsync(Models.ImageDecoder imgDecoder)
         {
-            if (!File.Exists(Path.Combine(repo, ".git")))
-                return new Models.RevisionSubmodule() { Commit = new Models.Commit() { SHA = sha } };
+            var oldPath = string.IsNullOrEmpty(_option.OrgPath) ? _option.Path : _option.OrgPath;
+            var imgDiff = new Models.ImageDiff();
+            var fullPath = Path.Combine(_repo, _option.Path);
 
-            var uncommittedChangesCount = 0;
-            if (sha.EndsWith("-dirty", StringComparison.Ordinal))
+            if (_option.Revisions.Count == 2)
             {
-                sha = sha.Substring(0, sha.Length - 6);
-                uncommittedChangesCount = await new Commands.CountLocalChanges(repo, true).GetResultAsync().ConfigureAwait(false);
+                if (_option.Revisions[0].Equals("-R", StringComparison.Ordinal))
+                {
+                    var oldImage = await ImageSource.FromFileAsync(fullPath, imgDecoder).ConfigureAwait(false);
+                    imgDiff.Old = oldImage.Bitmap;
+                    imgDiff.OldFileSize = oldImage.Size;
+                }
+                else
+                {
+                    var oldImage = await ImageSource.FromRevisionAsync(_repo, _option.Revisions[0], oldPath, imgDecoder).ConfigureAwait(false);
+                    imgDiff.Old = oldImage.Bitmap;
+                    imgDiff.OldFileSize = oldImage.Size;
+                }
+
+                var newImage = await ImageSource.FromRevisionAsync(_repo, _option.Revisions[1], _option.Path, imgDecoder).ConfigureAwait(false);
+                imgDiff.New = newImage.Bitmap;
+                imgDiff.NewFileSize = newImage.Size;
+            }
+            else
+            {
+                if (!oldPath.Equals("/dev/null", StringComparison.Ordinal))
+                {
+                    var oldImage = await ImageSource.FromRevisionAsync(_repo, "HEAD", oldPath, imgDecoder).ConfigureAwait(false);
+                    imgDiff.Old = oldImage.Bitmap;
+                    imgDiff.OldFileSize = oldImage.Size;
+                }
+
+                var newImage = await ImageSource.FromFileAsync(fullPath, imgDecoder).ConfigureAwait(false);
+                imgDiff.New = newImage.Bitmap;
+                imgDiff.NewFileSize = newImage.Size;
             }
 
-            var commit = await new Commands.QuerySingleCommit(repo, sha).GetResultAsync().ConfigureAwait(false);
-            if (commit == null)
-                return new Models.RevisionSubmodule() { Commit = new Models.Commit() { SHA = sha } };
+            return imgDiff;
+        }
 
-            var body = await new Commands.QueryCommitFullMessage(repo, sha).GetResultAsync().ConfigureAwait(false);
-            return new Models.RevisionSubmodule()
+        private async Task<Models.BinaryDiff> CreateBinaryDiffAsync()
+        {
+            var oldPath = string.IsNullOrEmpty(_option.OrgPath) ? _option.Path : _option.OrgPath;
+            var binaryDiff = new Models.BinaryDiff();
+            var fullPath = Path.Combine(_repo, _option.Path);
+
+            if (_option.Revisions.Count == 2)
             {
-                Commit = commit,
-                FullMessage = new Models.CommitFullMessage { Message = body },
-                UncommittedChanges = uncommittedChangesCount
-            };
+                if (_option.Revisions[0].Equals("-R", StringComparison.Ordinal))
+                {
+                    binaryDiff.OldSize = File.Exists(fullPath) ? new FileInfo(fullPath).Length : 0;
+                    binaryDiff.NewSize = await new Commands.QueryFileSize(_repo, _option.Path, _option.Revisions[1]).GetResultAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    binaryDiff.OldSize = await new Commands.QueryFileSize(_repo, oldPath, _option.Revisions[0]).GetResultAsync().ConfigureAwait(false);
+                    if (string.IsNullOrEmpty(_option.Revisions[1]))
+                        binaryDiff.NewSize = File.Exists(fullPath) ? new FileInfo(fullPath).Length : 0;
+                    else
+                        binaryDiff.NewSize = await new Commands.QueryFileSize(_repo, _option.Path, _option.Revisions[1]).GetResultAsync().ConfigureAwait(false);
+                }
+            }
+            else
+            {
+                binaryDiff.OldSize = await new Commands.QueryFileSize(_repo, oldPath, "HEAD").GetResultAsync().ConfigureAwait(false);
+                binaryDiff.NewSize = File.Exists(fullPath) ? new FileInfo(fullPath).Length : 0;
+            }
+
+            return binaryDiff;
+        }
+
+        private async Task<Models.SubmoduleDiff> CreateSubmoduleDiffAsync(string oldRevision, string newRevision)
+        {
+            var submoduleDiff = new Models.SubmoduleDiff();
+            var submoduleRoot = $"{_repo}/{_option.Path}".Replace('\\', '/').TrimEnd('/');
+            submoduleDiff.FullPath = submoduleRoot;
+
+            if (IsValidSubmoduleHash(oldRevision))
+                submoduleDiff.Old = await new Commands.QuerySubmoduleRevision(submoduleRoot, oldRevision)
+                    .GetResultAsync()
+                    .ConfigureAwait(false);
+
+            if (IsValidSubmoduleHash(newRevision))
+                submoduleDiff.New = await new Commands.QuerySubmoduleRevision(submoduleRoot, newRevision)
+                    .GetResultAsync()
+                    .ConfigureAwait(false);
+
+            return submoduleDiff;
+        }
+
+        private bool IsValidSubmoduleHash(string hash)
+        {
+            for (int i = 0; i < hash.Length; i++)
+            {
+                if (hash[i] != '0')
+                    return true;
+            }
+
+            return false;
         }
 
         private bool IsEmptyFileHash(string hash)

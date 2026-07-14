@@ -101,7 +101,7 @@ namespace SourceGit.Models
     public class DiffResult
     {
         public bool IsBinary { get; set; } = false;
-        public bool IsLFS { get; set; } = false;
+        public bool IsSubmoduleChange { get; set; } = false;
         public string OldHash { get; set; } = string.Empty;
         public string NewHash { get; set; } = string.Empty;
         public int OldMode { get; set; } = 0;

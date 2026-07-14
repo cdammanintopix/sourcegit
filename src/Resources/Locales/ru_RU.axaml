@@ -214,8 +214,8 @@
   <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Подсказка: Если другая сторона является ГОЛОВОЙ (используя контекстное меню), вы можете использовать частично выбранные ревизии (cherry-pick).</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Настройка репозитория</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">ШАБЛОН РЕВИЗИИ</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: 
-  
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры:
+
   ${branch_name} Имя текущей локальной ветки
   ${files_num} Количество изменённых файлов
   ${files} Пути изменённых файлов
@@ -226,8 +226,8 @@
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Название:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ПОЛЬЗОВАТЕЛЬСКОЕ ДЕЙСТВИЕ</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Аргументы:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: 
-  
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры:
+
   ${REPO} Путь репозитория
   ${REMOTE} Выбранная удаённая ветка
   ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток
@@ -346,7 +346,9 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Принудительно удалить даже если содержит локальные изменения.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Подмодуль:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Удалить ветку</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">Вы хотите также удалить следующую удалённую ветку?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Ветка:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">Принудительно удалить, даже если содержит неслитые ревизии</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">Вы собираетесь удалить внешнюю ветку!!!</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Удаление нескольких веток</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Вы пытаетесь удалить несколько веток одновременно. Обязательно перепроверьте, прежде чем предпринимать какие-либо действия!</x:String>
@@ -440,6 +442,15 @@
   <x:String x:Key="Text.FileHistory" xml:space="preserve">История файлов</x:String>
   <x:String x:Key="Text.FileHistory.FileChange" xml:space="preserve">ИЗМЕНИТЬ</x:String>
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">СОДЕРЖИМОЕ</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">Изменение режима файла: </x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Режим удалённого файла: </x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Каталог</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Исполняемый</x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">Новый режим файла: </x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Обычный</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Подмодуль</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Символическая сскла</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Неизвестно</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-процесс</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Ветка разработчика:</x:String>
   <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Свойство:</x:String>
@@ -980,6 +991,7 @@
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">Игнорировать *{0} файлы в том же каталоге</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Игнорировать неотслеживаемые файлы в этом каталоге</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">Игнорировать только эти файлы</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">Игнорировать все неотслеживаемые файлы в одном и том же каталоге</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">Изменить</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">Теперь вы можете сформировать этот файл.</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">Очистить историю</x:String>

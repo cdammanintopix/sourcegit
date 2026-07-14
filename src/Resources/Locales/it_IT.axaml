@@ -196,7 +196,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">AZIONE PERSONALIZZATA</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argomenti:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri integrati:
-  
+
   ${REPO} Percorso del repository
   ${REMOTE} Remoto selezionato o remoto del branch selezionato
   ${BRANCH} Branch selezionato, senza la parte ${REMOTE} per i branch remoti

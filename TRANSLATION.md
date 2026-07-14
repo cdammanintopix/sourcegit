@@ -116,63 +116,9 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![el__GR](https://img.shields.io/badge/el__GR-97.05%25-yellow)
+### ![el__GR](https://img.shields.io/badge/el__GR-%E2%88%9A-brightgreen)
 
-<details>
-<summary>Missing keys in el_GR.axaml</summary>
-
-- Text.Apply.Source
-- Text.Apply.Source.File
-- Text.Apply.Source.Clipboard
-- Text.Bisect.WaitingForCheckoutAnother
-- Text.Bisect.WaitingForFirstBad
-- Text.CheckoutDetached
-- Text.CheckoutDetached.Target
-- Text.CheckoutDetached.Warning
-- Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules
-- Text.CopyAsPatch
-- Text.DeleteBranch.AskForRemote
-- Text.DeleteBranch.Force
-- Text.Diff.EmptyFile
-- Text.FileModeChange
-- Text.FileModeChange.Deleted
-- Text.FileModeChange.Directory
-- Text.FileModeChange.Executable
-- Text.FileModeChange.New
-- Text.FileModeChange.Normal
-- Text.FileModeChange.Submodule
-- Text.FileModeChange.Symlink
-- Text.FileModeChange.Unknown
-- Text.GitFlow.Finish
-- Text.GitFlow.FinishWithRebase
-- Text.GitFlow.StartAt
-- Text.GitFlow.StartName
-- Text.TagCM.Checkout
-- Text.TagCM.Merge
-- Text.UpdateSubmodules.Recursive
-- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
-
-</details>
-
-### ![es__ES](https://img.shields.io/badge/es__ES-98.82%25-yellow)
-
-<details>
-<summary>Missing keys in es_ES.axaml</summary>
-
-- Text.DeleteBranch.AskForRemote
-- Text.DeleteBranch.Force
-- Text.FileModeChange
-- Text.FileModeChange.Deleted
-- Text.FileModeChange.Directory
-- Text.FileModeChange.Executable
-- Text.FileModeChange.New
-- Text.FileModeChange.Normal
-- Text.FileModeChange.Submodule
-- Text.FileModeChange.Symlink
-- Text.FileModeChange.Unknown
-- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
-
-</details>
+### ![es__ES](https://img.shields.io/badge/es__ES-%E2%88%9A-brightgreen)
 
 ### ![fr__FR](https://img.shields.io/badge/fr__FR-95.97%25-yellow)
 
@@ -990,25 +936,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ru__RU](https://img.shields.io/badge/ru__RU-98.82%25-yellow)
-
-<details>
-<summary>Missing keys in ru_RU.axaml</summary>
-
-- Text.DeleteBranch.AskForRemote
-- Text.DeleteBranch.Force
-- Text.FileModeChange
-- Text.FileModeChange.Deleted
-- Text.FileModeChange.Directory
-- Text.FileModeChange.Executable
-- Text.FileModeChange.New
-- Text.FileModeChange.Normal
-- Text.FileModeChange.Submodule
-- Text.FileModeChange.Symlink
-- Text.FileModeChange.Unknown
-- Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder
-
-</details>
+### ![ru__RU](https://img.shields.io/badge/ru__RU-%E2%88%9A-brightgreen)
 
 ### ![ta__IN](https://img.shields.io/badge/ta__IN-64.83%25-red)
 
@@ -1734,20 +1662,6 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![zh__CN](https://img.shields.io/badge/zh__CN-99.90%25-yellow)
+### ![zh__CN](https://img.shields.io/badge/zh__CN-%E2%88%9A-brightgreen)
 
-<details>
-<summary>Missing keys in zh_CN.axaml</summary>
-
-- Text.DeleteBranch.AskForRemote
-
-</details>
-
-### ![zh__TW](https://img.shields.io/badge/zh__TW-99.90%25-yellow)
-
-<details>
-<summary>Missing keys in zh_TW.axaml</summary>
-
-- Text.DeleteBranch.AskForRemote
-
-</details>
+### ![zh__TW](https://img.shields.io/badge/zh__TW-%E2%88%9A-brightgreen)

@@ -33,6 +33,7 @@ namespace SourceGit.Commands
         private const string SPECIAL_DIFF_START = "diff ";
         private const string SPECIAL_BINARY = "Binary files ";
         private const string SPECIAL_NO_NEWLINE = " No newline at end of file";
+        private const string SPECIAL_SUBMODULE = "Subproject commit ";
 
         public Diff(string repo, Models.DiffOption opt, int numContextLines, bool ignoreWhitespace, bool ignoreCRAtEOL)
         {
@@ -92,7 +93,7 @@ namespace SourceGit.Commands
                 // Ignore exceptions.
             }
 
-            if (_result.IsBinary || _result.IsLFS || _result.TextDiff.Lines.Count == 0)
+            if (_isLFS || _result.IsBinary || _result.TextDiff.Lines.Count == 0)
             {
                 _result.TextDiff = null;
             }
@@ -102,6 +103,28 @@ namespace SourceGit.Commands
                 {
                     ProcessInlineHighlights();
                     _isInChunk = false;
+                }
+
+                if (_result.TextDiff.Lines.Count < 4)
+                {
+                    var isSubmoduleChange = true;
+
+                    for (int i = 1; i < _result.TextDiff.Lines.Count; i++)
+                    {
+                        var line = _result.TextDiff.Lines[i];
+                        if (!line.Content.StartsWith(SPECIAL_SUBMODULE, StringComparison.Ordinal))
+                        {
+                            isSubmoduleChange = false;
+                            break;
+                        }
+                    }
+
+                    if (isSubmoduleChange)
+                    {
+                        _result.IsSubmoduleChange = true;
+                        _result.TextDiff = null;
+                        return _result;
+                    }
                 }
 
                 _result.TextDiff.MaxLineNumber = Math.Max(_newLine, _oldLine);
@@ -254,7 +277,7 @@ namespace SourceGit.Commands
 
         private bool ParseLFSChange(char prefix, string content)
         {
-            if (_result.IsLFS)
+            if (_isLFS)
             {
                 if (prefix == PREFIX_DELETED)
                 {
@@ -284,7 +307,7 @@ namespace SourceGit.Commands
             {
                 if (content.StartsWith(LFS_SPECIFIER, StringComparison.Ordinal))
                 {
-                    _result.IsLFS = true;
+                    _isLFS = true;
                     _result.LFSDiff = new Models.LFSDiff();
                     return true;
                 }
@@ -340,5 +363,6 @@ namespace SourceGit.Commands
         private int _oldLine = 0;
         private int _newLine = 0;
         private bool _isInChunk = false;
+        private bool _isLFS = false;
     }
 }

@@ -53,7 +53,7 @@
                      Text="{DynamicResource Text.DeleteBranch.IsRemoteTip}"
                      Foreground="{DynamicResource Brush.FG2}"
                      FontStyle="Italic"/>
-        </StackPanel>        
+        </StackPanel>
       </Grid>
     </Grid>
   </StackPanel>

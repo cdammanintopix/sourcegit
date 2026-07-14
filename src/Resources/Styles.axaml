@@ -16,7 +16,7 @@
       <SolidColorBrush x:Key="SystemControlErrorTextForegroundBrush" Color="Red"/>
       <Color x:Key="SystemErrorTextColor">Red</Color>
     </Style.Resources>
-    
+
     <Setter Property="Background" Value="{DynamicResource Brush.Window}"/>
     <Setter Property="BorderBrush" Value="{DynamicResource Brush.WindowBorder}"/>
     <Setter Property="SystemDecorations" Value="Full"/>
@@ -48,7 +48,7 @@
             </VisualLayerManager>
           </Border>
         </Border>
-      </ControlTemplate>        
+      </ControlTemplate>
     </Setter>
   </Style>
 
@@ -403,11 +403,11 @@
     <Style Selector="^ /template/ RepeatButton:pointerover > Path">
       <Setter Property="Fill" Value="{DynamicResource Brush.FG1}" />
     </Style>
-    
+
     <Style Selector="^ /template/ Thumb:pointerover">
       <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}" />
     </Style>
-    
+
     <Style Selector="^[IsExpanded=False]">
       <Style Selector="^ /template/ RepeatButton">
         <Setter Property="IsVisible" Value="False" />
@@ -426,7 +426,7 @@
   </Style>
 
   <Style Selector="ScrollViewer.static_scrollbar">
-    <Setter Property="AllowAutoHide" Value="False"/>    
+    <Setter Property="AllowAutoHide" Value="False"/>
     <Style Selector="^ /template/ ScrollContentPresenter#PART_ContentPresenter">
       <Setter Property="Grid.RowSpan" Value="1"/>
       <Setter Property="Grid.ColumnSpan" Value="1"/>
@@ -1016,7 +1016,7 @@
         <Border/>
       </FocusAdornerTemplate>
     </Setter>
-    
+
     <Setter Property="VerticalAlignment" Value="Center"/>
     <Setter Property="Template">
       <ControlTemplate>
@@ -1051,7 +1051,7 @@
     </Style>
     <Style Selector="^:focus-visible:checked /template/ Path#Icon">
       <Setter Property="Fill" Value="White"/>
-    </Style> 
+    </Style>
   </Style>
 
   <Style Selector="RadioButton">
@@ -1060,9 +1060,9 @@
         <Border/>
       </FocusAdornerTemplate>
     </Setter>
-    
+
     <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
-    
+
     <Setter Property="Template">
       <ControlTemplate>
         <Grid ColumnDefinitions="16,*" Background="Transparent">
@@ -1362,7 +1362,7 @@
   <Style Selector="NumericUpDown">
     <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
     <Setter Property="Background" Value="{DynamicResource Brush.Contents}"/>
-    
+
     <Style Selector="^ /template/ ButtonSpinner#PART_Spinner">
       <Setter Property="MinHeight" Value="0"/>
       <Setter Property="Height" Value="28"/>
@@ -1414,6 +1414,7 @@
           <Grid RowDefinitions="Auto,Auto">
             <StackPanel Grid.Row="0" Orientation="Horizontal">
               <TextBox Watermark="{x:Static ae:SR.SearchLabel}"
+                       BorderBrush="{DynamicResource Brush.Border2}"
                        Name="PART_searchTextBox"
                        Width="265" Height="28"
                        Margin="0,0,0,0"

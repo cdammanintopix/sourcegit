@@ -204,8 +204,8 @@
   <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Astuce : vous pouvez cherry-pick les commits sélectionnés si l'autre côté est HEAD (via le menu contextuel).</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configurer le dépôt</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">MODÈLE DE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Paramètres intégrés : 
-  
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Paramètres intégrés :
+
   ${branch_name} Nom de la branche locale actuelle.
   ${files_num} Nombre de fichiers modifiés
   ${files} Chemins des fichiers modifiés
@@ -216,8 +216,8 @@
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nom de modèle:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACTION PERSONNALISÉE</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Arguments :</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Paramètres intégrés : 
-  
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Paramètres intégrés :
+
   ${REPO} Chemin du dépôt
   ${REMOTE} Dépôt distant sélectionné ou dépôt distant de la branche sélectionnée
   ${BRANCH} Branche sélectionnée, sans la partie ${REMOTE} pour les branches distantes
