@@ -63,6 +63,7 @@ namespace SourceGit.ViewModels
 
             var responseBuilder = new StringBuilder();
             var foundResponse = false;
+            var currentBranchName = _repo.CurrentBranch?.Name ?? "main";
 
             Text = builder.ToString();
             Response = string.Empty;
@@ -70,7 +71,7 @@ namespace SourceGit.ViewModels
 
             try
             {
-                await agent.GenerateCommitMessageAsync(_repo.FullPath, _changeList, message =>
+                await agent.GenerateCommitMessageAsync(_repo.FullPath, currentBranchName, _changeList, message =>
                 {
                     builder.AppendLine(message);
 
