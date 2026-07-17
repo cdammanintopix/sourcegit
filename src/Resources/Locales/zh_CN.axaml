@@ -584,6 +584,7 @@
   <x:String x:Key="Text.Launcher.Commands" xml:space="preserve">命令列表</x:String>
   <x:String x:Key="Text.Launcher.Error" xml:space="preserve">出错了</x:String>
   <x:String x:Key="Text.Launcher.Info" xml:space="preserve">系统提示</x:String>
+  <x:String x:Key="Text.Launcher.NewVersion" xml:space="preserve">检测到新版本</x:String>
   <x:String x:Key="Text.Launcher.OpenRepository" xml:space="preserve">打开其他仓库</x:String>
   <x:String x:Key="Text.Launcher.Pages" xml:space="preserve">页面列表</x:String>
   <x:String x:Key="Text.Launcher.Workspaces" xml:space="preserve">工作区列表</x:String>
@@ -804,9 +805,12 @@
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">在文件浏览器中打开</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">快速查找分支/标签/子模块</x:String>
   <x:String x:Key="Text.Repository.FilterCommits" xml:space="preserve">设置在列表中的可见性</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">折叠过滤项列表</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Default" xml:space="preserve">不指定</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">在提交列表中隐藏</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">展开过滤项列表</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">使用其对提交列表过滤</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">个过滤项已被启用</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">布局方式</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">水平排布</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">竖直排布</x:String>

@@ -6,7 +6,7 @@ This document shows the translation status of each locale file in the repository
 
 ### ![en_US](https://img.shields.io/badge/en__US-%E2%88%9A-brightgreen)
 
-### ![de__DE](https://img.shields.io/badge/de__DE-89.98%25-yellow)
+### ![de__DE](https://img.shields.io/badge/de__DE-89.63%25-yellow)
 
 <details>
 <summary>Missing keys in de_DE.axaml</summary>
@@ -81,6 +81,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Init.CommandTip
 - Text.Init.ErrorMessageTip
 - Text.InteractiveRebase.NoVerify
+- Text.Launcher.NewVersion
 - Text.Merge.Test
 - Text.Merge.Test.NoConflicts
 - Text.Merge.Test.UnknownError
@@ -102,6 +103,9 @@ This document shows the translation status of each locale file in the repository
 - Text.Rebase.Test.UnknownError
 - Text.Rebase.Test.WillCauseConflicts
 - Text.RemoteCM.EnableAutoFetch
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
 - Text.StashCM.ApplyFileChanges
 - Text.StashCM.Branch
 - Text.SubmoduleRevisionCompare
@@ -116,11 +120,31 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![el__GR](https://img.shields.io/badge/el__GR-%E2%88%9A-brightgreen)
+### ![el__GR](https://img.shields.io/badge/el__GR-99.61%25-yellow)
 
-### ![es__ES](https://img.shields.io/badge/es__ES-%E2%88%9A-brightgreen)
+<details>
+<summary>Missing keys in el_GR.axaml</summary>
 
-### ![fr__FR](https://img.shields.io/badge/fr__FR-95.97%25-yellow)
+- Text.Launcher.NewVersion
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
+
+</details>
+
+### ![es__ES](https://img.shields.io/badge/es__ES-99.61%25-yellow)
+
+<details>
+<summary>Missing keys in es_ES.axaml</summary>
+
+- Text.Launcher.NewVersion
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
+
+</details>
+
+### ![fr__FR](https://img.shields.io/badge/fr__FR-95.60%25-yellow)
 
 <details>
 <summary>Missing keys in fr_FR.axaml</summary>
@@ -153,6 +177,7 @@ This document shows the translation status of each locale file in the repository
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.StartAt
 - Text.GitFlow.StartName
+- Text.Launcher.NewVersion
 - Text.Merge.Test
 - Text.Merge.Test.NoConflicts
 - Text.Merge.Test.UnknownError
@@ -162,6 +187,9 @@ This document shows the translation status of each locale file in the repository
 - Text.Rebase.Test.OK
 - Text.Rebase.Test.UnknownError
 - Text.Rebase.Test.WillCauseConflicts
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
 - Text.TagCM.Checkout
 - Text.TagCM.Merge
 - Text.UpdateSubmodules.Recursive
@@ -169,7 +197,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![he__IL](https://img.shields.io/badge/he__IL-95.97%25-yellow)
+### ![he__IL](https://img.shields.io/badge/he__IL-95.60%25-yellow)
 
 <details>
 <summary>Missing keys in he_IL.axaml</summary>
@@ -202,6 +230,7 @@ This document shows the translation status of each locale file in the repository
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.StartAt
 - Text.GitFlow.StartName
+- Text.Launcher.NewVersion
 - Text.Merge.Test
 - Text.Merge.Test.NoConflicts
 - Text.Merge.Test.UnknownError
@@ -211,6 +240,9 @@ This document shows the translation status of each locale file in the repository
 - Text.Rebase.Test.OK
 - Text.Rebase.Test.UnknownError
 - Text.Rebase.Test.WillCauseConflicts
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
 - Text.TagCM.Checkout
 - Text.TagCM.Merge
 - Text.UpdateSubmodules.Recursive
@@ -218,7 +250,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![id__ID](https://img.shields.io/badge/id__ID-82.91%25-yellow)
+### ![id__ID](https://img.shields.io/badge/id__ID-82.58%25-yellow)
 
 <details>
 <summary>Missing keys in id_ID.axaml</summary>
@@ -324,6 +356,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Init.ErrorMessageTip
 - Text.InteractiveRebase.NoVerify
 - Text.Launcher.Commands
+- Text.Launcher.NewVersion
 - Text.Launcher.OpenRepository
 - Text.Merge.Test
 - Text.Merge.Test.NoConflicts
@@ -376,6 +409,9 @@ This document shows the translation status of each locale file in the repository
 - Text.Rebase.Test.UnknownError
 - Text.Rebase.Test.WillCauseConflicts
 - Text.RemoteCM.EnableAutoFetch
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
 - Text.Repository.OpenAsFolder
 - Text.Repository.Resolve
 - Text.SelfUpdate.CurrentVersion
@@ -400,7 +436,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![it__IT](https://img.shields.io/badge/it__IT-89.49%25-yellow)
+### ![it__IT](https://img.shields.io/badge/it__IT-89.14%25-yellow)
 
 <details>
 <summary>Missing keys in it_IT.axaml</summary>
@@ -478,6 +514,7 @@ This document shows the translation status of each locale file in the repository
 - Text.Init.CommandTip
 - Text.Init.ErrorMessageTip
 - Text.InteractiveRebase.NoVerify
+- Text.Launcher.NewVersion
 - Text.Merge.Test
 - Text.Merge.Test.NoConflicts
 - Text.Merge.Test.UnknownError
@@ -499,6 +536,9 @@ This document shows the translation status of each locale file in the repository
 - Text.Rebase.Test.UnknownError
 - Text.Rebase.Test.WillCauseConflicts
 - Text.RemoteCM.EnableAutoFetch
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
 - Text.SelfUpdate.CurrentVersion
 - Text.SelfUpdate.ReleaseDate
 - Text.StashCM.ApplyFileChanges
@@ -515,9 +555,19 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ja__JP](https://img.shields.io/badge/ja__JP-%E2%88%9A-brightgreen)
+### ![ja__JP](https://img.shields.io/badge/ja__JP-99.61%25-yellow)
 
-### ![ko__KR](https://img.shields.io/badge/ko__KR-97.45%25-yellow)
+<details>
+<summary>Missing keys in ja_JP.axaml</summary>
+
+- Text.Launcher.NewVersion
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
+
+</details>
+
+### ![ko__KR](https://img.shields.io/badge/ko__KR-97.06%25-yellow)
 
 <details>
 <summary>Missing keys in ko_KR.axaml</summary>
@@ -544,6 +594,10 @@ This document shows the translation status of each locale file in the repository
 - Text.GitFlow.FinishWithRebase
 - Text.GitFlow.StartAt
 - Text.GitFlow.StartName
+- Text.Launcher.NewVersion
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
 - Text.TagCM.Checkout
 - Text.TagCM.Merge
 - Text.UpdateSubmodules.Recursive
@@ -551,7 +605,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![pt__BR](https://img.shields.io/badge/pt__BR-62.97%25-red)
+### ![pt__BR](https://img.shields.io/badge/pt__BR-62.72%25-red)
 
 <details>
 <summary>Missing keys in pt_BR.axaml</summary>
@@ -750,6 +804,7 @@ This document shows the translation status of each locale file in the repository
 - Text.InteractiveRebase.NoVerify
 - Text.InteractiveRebase.ReorderTip
 - Text.Launcher.Commands
+- Text.Launcher.NewVersion
 - Text.Launcher.OpenRepository
 - Text.Launcher.Pages
 - Text.Launcher.Workspaces
@@ -836,6 +891,9 @@ This document shows the translation status of each locale file in the repository
 - Text.Repository.ClearStashes
 - Text.Repository.Dashboard
 - Text.Repository.FilterCommits
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
 - Text.Repository.HistoriesLayout
 - Text.Repository.HistoriesLayout.Horizontal
 - Text.Repository.HistoriesLayout.Vertical
@@ -936,9 +994,19 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ru__RU](https://img.shields.io/badge/ru__RU-%E2%88%9A-brightgreen)
+### ![ru__RU](https://img.shields.io/badge/ru__RU-99.61%25-yellow)
 
-### ![ta__IN](https://img.shields.io/badge/ta__IN-64.83%25-red)
+<details>
+<summary>Missing keys in ru_RU.axaml</summary>
+
+- Text.Launcher.NewVersion
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
+
+</details>
+
+### ![ta__IN](https://img.shields.io/badge/ta__IN-64.58%25-red)
 
 <details>
 <summary>Missing keys in ta_IN.axaml</summary>
@@ -1146,6 +1214,7 @@ This document shows the translation status of each locale file in the repository
 - Text.InteractiveRebase.NoVerify
 - Text.InteractiveRebase.ReorderTip
 - Text.Launcher.Commands
+- Text.Launcher.NewVersion
 - Text.Launcher.OpenRepository
 - Text.Launcher.Pages
 - Text.Launcher.Workspaces
@@ -1221,6 +1290,9 @@ This document shows the translation status of each locale file in the repository
 - Text.Repository.BranchSort.ByName
 - Text.Repository.ClearStashes
 - Text.Repository.Dashboard
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
 - Text.Repository.MoreOptions
 - Text.Repository.OpenAsFolder
 - Text.Repository.Resolve
@@ -1304,7 +1376,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![uk__UA](https://img.shields.io/badge/uk__UA-65.62%25-red)
+### ![uk__UA](https://img.shields.io/badge/uk__UA-65.36%25-red)
 
 <details>
 <summary>Missing keys in uk_UA.axaml</summary>
@@ -1508,6 +1580,7 @@ This document shows the translation status of each locale file in the repository
 - Text.InteractiveRebase.NoVerify
 - Text.InteractiveRebase.ReorderTip
 - Text.Launcher.Commands
+- Text.Launcher.NewVersion
 - Text.Launcher.OpenRepository
 - Text.Launcher.Pages
 - Text.Launcher.Workspaces
@@ -1583,6 +1656,9 @@ This document shows the translation status of each locale file in the repository
 - Text.Repository.BranchSort.ByName
 - Text.Repository.ClearStashes
 - Text.Repository.Dashboard
+- Text.Repository.FilterCommits.Collapse
+- Text.Repository.FilterCommits.Expand
+- Text.Repository.FilterCommits.Summary
 - Text.Repository.MoreOptions
 - Text.Repository.OpenAsFolder
 - Text.Repository.Resolve

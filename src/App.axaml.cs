@@ -525,6 +525,9 @@ namespace SourceGit
         #region Check for Updates
         private void Check4Update(bool manually = false)
         {
+            if (_launcher != null)
+                _launcher.NewVersion = null;
+
             Task.Run(async () =>
             {
                 try
@@ -538,23 +541,20 @@ namespace SourceGit
                     if (ver == null)
                         return;
 
-                    // Check if already up-to-date.
-                    if (!ver.IsNewVersion)
+                    if (manually)
                     {
-                        if (manually)
+                        if (ver.IsNewVersion)
+                            ShowSelfUpdateResult(ver);
+                        else
                             ShowSelfUpdateResult(new Models.AlreadyUpToDate());
-                        return;
                     }
-
-                    // Should not check ignored tag if this is called manually.
-                    if (!manually)
+                    else if (_launcher != null)
                     {
-                        var pref = ViewModels.Preferences.Instance;
-                        if (ver.TagName == pref.IgnoreUpdateTag)
+                        if (!ver.IsNewVersion || ver.TagName == ViewModels.Preferences.Instance.IgnoreUpdateTag)
                             return;
-                    }
 
-                    ShowSelfUpdateResult(ver);
+                        _launcher.NewVersion = ver;
+                    }
                 }
                 catch (Exception e)
                 {
