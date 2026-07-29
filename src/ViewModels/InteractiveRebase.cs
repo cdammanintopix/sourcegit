@@ -283,7 +283,7 @@ namespace SourceGit.ViewModels
                     UpdateItems();
                     PreSelected = selected;
                     IsLoading = false;
-                    AutoStart = prefill != null;
+                    AutoStart = prefill != null && prefill.Action is Models.InteractiveRebaseAction.Fixup or Models.InteractiveRebaseAction.Drop;
                 });
             });
         }
