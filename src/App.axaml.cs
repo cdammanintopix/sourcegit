@@ -11,6 +11,7 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
+using Avalonia.Platform;
 using Avalonia.Styling;
 using Avalonia.Threading;
 
@@ -101,8 +102,11 @@ namespace SourceGit
 
         public static void SetLocale(string localeKey)
         {
+            var locale = Models.Locale.Supported.Find(x => x.Key.Equals(localeKey, StringComparison.OrdinalIgnoreCase));
+            var finalLocaleKey = locale?.Key ?? "en_US";
+
             if (Current is not App app ||
-                app.Resources[localeKey] is not ResourceDictionary targetLocale ||
+                app.Resources[finalLocaleKey] is not ResourceDictionary targetLocale ||
                 targetLocale == app._activeLocale)
                 return;
 
@@ -472,6 +476,15 @@ namespace SourceGit
             Native.OS.SetupExternalTools();
             Models.AvatarManager.Instance.Start();
             Models.CIManager.Instance.Start();
+
+            if (this.TryGetFeature<IActivatableLifetime>() is { } activatable)
+            {
+                activatable.Activated += (_, e) =>
+                {
+                    if (e is FileActivatedEventArgs { Files: { Count: > 0 } } fileArgs)
+                        _launcher?.TryOpenRepositoryFromPath(fileArgs.Files[0].Path.LocalPath);
+                };
+            }
 
             string startupRepo = null;
             if (desktop.Args is { Length: 1 })
