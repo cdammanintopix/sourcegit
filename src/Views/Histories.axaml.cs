@@ -1084,7 +1084,7 @@ namespace SourceGit.Views
                             if (succ)
                             {
                                 var parent = await new Commands.QuerySingleCommit(repo.FullPath, $"{commit.SHA}~").GetResultAsync();
-                                await this.ShowDialogAsync(new ViewModels.InteractiveRebase(repo, parent, new ViewModels.InteractiveRebasePrefill(commit.SHA, Models.InteractiveRebaseAction.Pick)));
+                                await this.ShowDialogAsync(new ViewModels.InteractiveRebase(repo, parent, new ViewModels.InteractiveRebasePrefill(commit.SHA, Models.InteractiveRebaseAction.Fixup)));
                             }
                             e.Handled = true;
                         };
