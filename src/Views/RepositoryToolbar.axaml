@@ -83,13 +83,13 @@
       <Button Classes="icon_button" Width="32" Margin="16,0,0,0" Click="GetDependencies"
               IsVisible="{Binding IsGetDependenciesAvailable}"
               ToolTip.Tip="{DynamicResource Text.Repository.GetDependencies}">
-        <Path Width="17.5" Height="10" Data="{StaticResource Icons.Dependencies.Get}"/>
+        <Path Width="21" Height="12" Data="{StaticResource Icons.Dependencies.Get}"/>
       </Button>
 
       <Button Classes="icon_button" Width="32" Margin="16,0,0,0" Click="UpdateDependencies"
               IsVisible="{Binding IsUpdateDependenciesAvailable}"
               ToolTip.Tip="{DynamicResource Text.Repository.UpdateDependencies}">
-        <Path Width="17.5" Height="10" Data="{StaticResource Icons.Dependencies.Update}"/>
+        <Path Width="21" Height="12" Data="{StaticResource Icons.Dependencies.Update}"/>
       </Button>
 
       <Rectangle Width="1" Height="16"

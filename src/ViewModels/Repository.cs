@@ -771,30 +771,14 @@ namespace SourceGit.ViewModels
 
         public async Task GetDependenciesAsync()
         {
-            using var lockWatcher = LockWatcher();
-
-            var log = CreateLog("Get Dependencies");
-            var err = await Models.IpxRevCtrl.GetDependenciesAsync(FullPath, log);
-            log.Complete();
-
-            if (!string.IsNullOrEmpty(err))
-                SendNotification(err, true);
-
-            MarkWorkingCopyDirtyManually();
+            if (CanCreatePopup())
+                await ShowAndStartPopupAsync(new GetDependencies(this));
         }
 
         public async Task UpdateDependenciesAsync()
         {
-            using var lockWatcher = LockWatcher();
-
-            var log = CreateLog("Update Dependencies");
-            var err = await Models.IpxRevCtrl.UpdateDependenciesAsync(FullPath, log);
-            log.Complete();
-
-            if (!string.IsNullOrEmpty(err))
-                SendNotification(err, true);
-
-            MarkWorkingCopyDirtyManually();
+            if (CanCreatePopup())
+                await ShowAndStartPopupAsync(new UpdateDependencies(this));
         }
 
         public async Task ExecCustomActionAsync(Models.CustomAction action, object scopeTarget)
