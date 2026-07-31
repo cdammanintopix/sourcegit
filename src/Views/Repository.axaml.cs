@@ -166,10 +166,10 @@ namespace SourceGit.Views
             e.Handled = true;
         }
 
-        private async void OnGetDependencies(object sender, RoutedEventArgs e)
+        private void OnGetDependencies(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
-                await repo.GetDependenciesAsync();
+                repo.GetDependencies();
 
             e.Handled = true;
         }

@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SourceGit.ViewModels"
+             xmlns:c="using:SourceGit.Converters"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="450"
+             x:Class="SourceGit.Views.ResetDependency"
+             x:DataType="vm:ResetDependency">
+  <StackPanel Orientation="Vertical" Margin="8,0">
+    <StackPanel Orientation="Horizontal">
+      <Path Width="16" Height="16" Data="{StaticResource Icons.Reset}"/>
+
+      <TextBlock FontSize="18"
+                 Margin="8,0,0,0"
+                 Classes="bold"
+                 Text="{DynamicResource Text.ResetDependency}"/>
+    </StackPanel>
+
+    <Grid Margin="0,16,8,0" RowDefinitions="32,32,Auto" ColumnDefinitions="140,*">
+      <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Text="{DynamicResource Text.ResetDependency.Target}"/>
+      <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
+        <Path Width="14" Height="14" VerticalAlignment="Center" Data="{StaticResource Icons.Link}"/>
+        <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Text="{Binding Dependency.Name}"/>
+      </StackPanel>
+
+      <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Text="{DynamicResource Text.ResetDependency.MoveTo}"/>
+      <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
+        <Path Width="14" Height="14" VerticalAlignment="Center" Data="{StaticResource Icons.Commit}"/>
+        <TextBlock Margin="8,0,0,0"
+                   VerticalAlignment="Center"
+                   FontFamily="{DynamicResource Fonts.Monospace}"
+                   Text="{Binding Dependency.RevHash, Converter={x:Static c:StringConverters.ToShortSHA}}"/>
+        <TextBlock Margin="8,0,0,0"
+                   VerticalAlignment="Center"
+                   Foreground="{DynamicResource Brush.FG2}"
+                   Text="{Binding Dependency.RevDate}"/>
+      </StackPanel>
+
+      <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="Auto,*" Margin="8,8,0,0">
+        <Path Grid.Column="0"
+              Width="14" Height="14"
+              Data="{StaticResource Icons.Error}"
+              Fill="DarkOrange"/>
+        <TextBlock Grid.Column="1" Margin="8,0,0,0"
+                   Text="{DynamicResource Text.ResetDependency.Warning}"
+                   TextWrapping="Wrap"
+                   Foreground="DarkOrange"/>
+      </Grid>
+    </Grid>
+  </StackPanel>
+</UserControl>

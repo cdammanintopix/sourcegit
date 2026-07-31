@@ -81,20 +81,20 @@
                  Fill="{DynamicResource Brush.Border2}"/>
 
       <Button Classes="icon_button" Width="32" Margin="16,0,0,0" Click="GetDependencies"
-              IsVisible="{Binding IsGetDependenciesAvailable}"
+              IsVisible="{Binding SupportsDependencies}"
               ToolTip.Tip="{DynamicResource Text.Repository.GetDependencies}">
         <Path Width="21" Height="12" Data="{StaticResource Icons.Dependencies.Get}"/>
       </Button>
 
       <Button Classes="icon_button" Width="32" Margin="16,0,0,0" Click="UpdateDependencies"
-              IsVisible="{Binding IsUpdateDependenciesAvailable}"
+              IsVisible="{Binding SupportsDependencies}"
               ToolTip.Tip="{DynamicResource Text.Repository.UpdateDependencies}">
         <Path Width="21" Height="12" Data="{StaticResource Icons.Dependencies.Update}"/>
       </Button>
 
       <Rectangle Width="1" Height="16"
                  Margin="16,0,0,0"
-                 IsVisible="{Binding IsAnyDependenciesCommandAvailable}"
+                 IsVisible="{Binding SupportsDependencies}"
                  VerticalAlignment="Center"
                  Fill="{DynamicResource Brush.Border2}"/>
 

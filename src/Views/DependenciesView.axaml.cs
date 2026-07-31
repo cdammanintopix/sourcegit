@@ -206,6 +206,21 @@ namespace SourceGit.Views
                         ev.Handled = true;
                     };
 
+                    // Only offered when the working copy drifted away from the recorded revision.
+                    MenuItem reset = null;
+                    if (dep.Status == Models.DependencyStatus.RevisionChanged)
+                    {
+                        reset = new MenuItem();
+                        reset.Header = App.Text("Dependency.Reset");
+                        reset.Icon = this.CreateMenuIcon("Icons.Reset");
+                        reset.Click += (_, ev) =>
+                        {
+                            if (repo.CanCreatePopup())
+                                repo.ShowPopup(new ViewModels.ResetDependency(repo, dep));
+                            ev.Handled = true;
+                        };
+                    }
+
                     var copyName = new MenuItem();
                     copyName.Header = App.Text("Dependency.CopyName");
                     copyName.Icon = this.CreateMenuIcon("Icons.Folder");
@@ -243,6 +258,13 @@ namespace SourceGit.Views
                     var menu = new ContextMenu();
                     menu.Items.Add(open);
                     menu.Items.Add(explore);
+
+                    if (reset != null)
+                    {
+                        menu.Items.Add(new MenuItem() { Header = "-" });
+                        menu.Items.Add(reset);
+                    }
+
                     menu.Items.Add(new MenuItem() { Header = "-" });
                     menu.Items.Add(copy);
                     menu.Open(control);

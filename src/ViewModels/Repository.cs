@@ -491,21 +491,6 @@ namespace SourceGit.ViewModels
             get;
         } = [];
 
-        public bool IsGetDependenciesAvailable
-        {
-            get => Models.IpxRevCtrl.IsGetDependenciesAvailable;
-        }
-
-        public bool IsUpdateDependenciesAvailable
-        {
-            get => Models.IpxRevCtrl.IsUpdateDependenciesAvailable;
-        }
-
-        public bool IsAnyDependenciesCommandAvailable
-        {
-            get => IsGetDependenciesAvailable || IsUpdateDependenciesAvailable;
-        }
-
         public Repository(bool isBare, string path, string gitDir)
         {
             IsBare = isBare;
@@ -821,10 +806,13 @@ namespace SourceGit.ViewModels
                 ShowPopup(new RunCIPipeline(this, commit));
         }
 
-        public async Task GetDependenciesAsync()
+        /// <summary>
+        ///     Asks for confirmation first: this overwrites the work in all dependencies.
+        /// </summary>
+        public void GetDependencies()
         {
             if (CanCreatePopup())
-                await ShowAndStartPopupAsync(new GetDependencies(this));
+                ShowPopup(new GetDependencies(this));
         }
 
         public async Task UpdateDependenciesAsync()

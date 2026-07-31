@@ -83,12 +83,14 @@ namespace SourceGit.Models
         }
 
         /// <summary>
-        ///     Runs `get_dependencies -f {repo}`.
+        ///     Runs `get_dependencies -f {repo}`, restricted to a single dependency when
+        ///     <paramref name="only"/> is given.
         /// </summary>
         /// <returns>An error message on failure, or an empty string on success.</returns>
-        public static Task<string> GetDependenciesAsync(string repo, ICommandLog log)
+        public static Task<string> GetDependenciesAsync(string repo, ICommandLog log, string only = null)
         {
-            return RunAsync("get_dependencies", GetDependenciesExecutable, repo, log, "-f");
+            var args = string.IsNullOrEmpty(only) ? new[] { "-f" } : ["-f", "--only", only];
+            return RunAsync("get_dependencies", GetDependenciesExecutable, repo, log, args);
         }
 
         /// <summary>

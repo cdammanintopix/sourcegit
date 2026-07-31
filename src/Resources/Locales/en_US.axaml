@@ -362,6 +362,7 @@
   <x:String x:Key="Text.Dependency.CopyName" xml:space="preserve">Copy Name</x:String>
   <x:String x:Key="Text.Dependency.Date" xml:space="preserve">DATE</x:String>
   <x:String x:Key="Text.Dependency.Open" xml:space="preserve">Open Dependency Repository</x:String>
+  <x:String x:Key="Text.Dependency.Reset" xml:space="preserve">Reset</x:String>
   <x:String x:Key="Text.Dependency.Revision" xml:space="preserve">REVISION</x:String>
   <x:String x:Key="Text.Dependency.Status.NotCloned" xml:space="preserve">NOT CLONED</x:String>
   <x:String x:Key="Text.Dependency.Status.RevisionChanged" xml:space="preserve">REV CHANGED</x:String>
@@ -828,6 +829,7 @@
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">Filter in commit graph</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filter(s) enabled</x:String>
   <x:String x:Key="Text.Repository.GetDependencies" xml:space="preserve">Get Dependencies</x:String>
+  <x:String x:Key="Text.Repository.GetDependencies.Warning" xml:space="preserve">This will overwrite any work in progress in all dependencies</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">LAYOUT</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">Horizontal</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">Vertical</x:String>
@@ -881,6 +883,10 @@
   <x:String x:Key="Text.Reset.Mode" xml:space="preserve">Reset Mode:</x:String>
   <x:String x:Key="Text.Reset.MoveTo" xml:space="preserve">Move To:</x:String>
   <x:String x:Key="Text.Reset.Target" xml:space="preserve">Current Branch:</x:String>
+  <x:String x:Key="Text.ResetDependency" xml:space="preserve">Reset Dependency</x:String>
+  <x:String x:Key="Text.ResetDependency.MoveTo" xml:space="preserve">Move To:</x:String>
+  <x:String x:Key="Text.ResetDependency.Target" xml:space="preserve">Dependency:</x:String>
+  <x:String x:Key="Text.ResetDependency.Warning" xml:space="preserve">This will overwrite any work in progress in this dependency</x:String>
   <x:String x:Key="Text.ResetWithoutCheckout" xml:space="preserve">Reset Branch (Without Checkout)</x:String>
   <x:String x:Key="Text.ResetWithoutCheckout.MoveTo" xml:space="preserve">Move To:</x:String>
   <x:String x:Key="Text.ResetWithoutCheckout.Target" xml:space="preserve">Branch:</x:String>

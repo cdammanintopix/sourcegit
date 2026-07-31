@@ -345,6 +345,7 @@
   <x:String x:Key="Text.Dependency.CopyName" xml:space="preserve">Copier le nom</x:String>
   <x:String x:Key="Text.Dependency.Date" xml:space="preserve">DATE</x:String>
   <x:String x:Key="Text.Dependency.Open" xml:space="preserve">Ouvrir le dépôt de la dépendance</x:String>
+  <x:String x:Key="Text.Dependency.Reset" xml:space="preserve">Réinitialiser</x:String>
   <x:String x:Key="Text.Dependency.Revision" xml:space="preserve">RÉVISION</x:String>
   <x:String x:Key="Text.Dependency.Status.NotCloned" xml:space="preserve">NON CLONÉ</x:String>
   <x:String x:Key="Text.Dependency.Status.RevisionChanged" xml:space="preserve">RÉV MODIFIÉE</x:String>
@@ -779,6 +780,7 @@
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">Cacher dans le graphique des commits</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">Filtrer dans le graphique des commits</x:String>
   <x:String x:Key="Text.Repository.GetDependencies" xml:space="preserve">Récupérer les dépendances</x:String>
+  <x:String x:Key="Text.Repository.GetDependencies.Warning" xml:space="preserve">Cela écrasera tout travail en cours dans l'ensemble des dépendances</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">DISPOSITION</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">Horizontal</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">Vertical</x:String>
@@ -832,6 +834,10 @@
   <x:String x:Key="Text.Reset.Mode" xml:space="preserve">Reset Mode:</x:String>
   <x:String x:Key="Text.Reset.MoveTo" xml:space="preserve">Déplacer vers :</x:String>
   <x:String x:Key="Text.Reset.Target" xml:space="preserve">Branche actuelle :</x:String>
+  <x:String x:Key="Text.ResetDependency" xml:space="preserve">Réinitialiser la dépendance</x:String>
+  <x:String x:Key="Text.ResetDependency.MoveTo" xml:space="preserve">Déplacer vers :</x:String>
+  <x:String x:Key="Text.ResetDependency.Target" xml:space="preserve">Dépendance :</x:String>
+  <x:String x:Key="Text.ResetDependency.Warning" xml:space="preserve">Cela écrasera tout travail en cours dans cette dépendance</x:String>
   <x:String x:Key="Text.ResetWithoutCheckout" xml:space="preserve">Réinitialiser la Branche (Sans Récupération)</x:String>
   <x:String x:Key="Text.ResetWithoutCheckout.MoveTo" xml:space="preserve">Déplacer Vers :</x:String>
   <x:String x:Key="Text.ResetWithoutCheckout.Target" xml:space="preserve">Branche :</x:String>

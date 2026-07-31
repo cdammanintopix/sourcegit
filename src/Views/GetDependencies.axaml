@@ -16,5 +16,16 @@
                  Classes="bold"
                  Text="{DynamicResource Text.Repository.GetDependencies}"/>
     </StackPanel>
+
+    <Grid ColumnDefinitions="Auto,*" Margin="0,16,8,0">
+      <Path Grid.Column="0"
+            Width="14" Height="14"
+            Data="{StaticResource Icons.Error}"
+            Fill="DarkOrange"/>
+      <TextBlock Grid.Column="1" Margin="8,0,0,0"
+                 Text="{DynamicResource Text.Repository.GetDependencies.Warning}"
+                 TextWrapping="Wrap"
+                 Foreground="DarkOrange"/>
+    </Grid>
   </StackPanel>
 </UserControl>
