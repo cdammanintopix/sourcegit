@@ -76,7 +76,7 @@ namespace SourceGit.Models
             start.StandardErrorEncoding = Encoding.UTF8;
             start.WorkingDirectory = repo;
 
-            log?.AppendLine($"$ {name} -f {repo}\n");
+            log?.AppendLine($"$ {name} {string.Join(' ', start.ArgumentList)}\n");
 
             using var proc = new Process();
             proc.StartInfo = start;
