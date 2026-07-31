@@ -542,5 +542,23 @@ namespace SourceGit.Views
                 e.Handled = true;
             }
         }
+
+        private async void GetDependencies(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Repository repo)
+            {
+                await repo.GetDependenciesAsync();
+                e.Handled = true;
+            }
+        }
+
+        private async void UpdateDependencies(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Repository repo)
+            {
+                await repo.UpdateDependenciesAsync();
+                e.Handled = true;
+            }
+        }
     }
 }

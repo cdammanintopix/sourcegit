@@ -768,6 +768,7 @@
   <x:String x:Key="Text.Repository.FilterCommits.Default" xml:space="preserve">Réinitialiser</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">Cacher dans le graphique des commits</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">Filtrer dans le graphique des commits</x:String>
+  <x:String x:Key="Text.Repository.GetDependencies" xml:space="preserve">Récupérer les dépendances</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">DISPOSITION</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">Horizontal</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">Vertical</x:String>
@@ -809,6 +810,7 @@
   <x:String x:Key="Text.Repository.Tags.OrderByName" xml:space="preserve">Par nom</x:String>
   <x:String x:Key="Text.Repository.Tags.Sort" xml:space="preserve">Trier</x:String>
   <x:String x:Key="Text.Repository.Terminal" xml:space="preserve">Ouvrir dans un terminal</x:String>
+  <x:String x:Key="Text.Repository.UpdateDependencies" xml:space="preserve">Mettre à jour les dépendances</x:String>
   <x:String x:Key="Text.Repository.ViewLogs" xml:space="preserve">Voir les Logs</x:String>
   <x:String x:Key="Text.Repository.Visit" xml:space="preserve">Visiter '{0}' dans le navigateur</x:String>
   <x:String x:Key="Text.Repository.Worktrees" xml:space="preserve">WORKTREES</x:String>

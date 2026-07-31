@@ -442,6 +442,21 @@ namespace SourceGit.ViewModels
             get;
         } = [];
 
+        public bool IsGetDependenciesAvailable
+        {
+            get => Models.IpxRevCtrl.IsGetDependenciesAvailable;
+        }
+
+        public bool IsUpdateDependenciesAvailable
+        {
+            get => Models.IpxRevCtrl.IsUpdateDependenciesAvailable;
+        }
+
+        public bool IsAnyDependenciesCommandAvailable
+        {
+            get => IsGetDependenciesAvailable || IsUpdateDependenciesAvailable;
+        }
+
         public Repository(bool isBare, string path, string gitDir)
         {
             IsBare = isBare;
@@ -743,10 +758,43 @@ namespace SourceGit.ViewModels
                 ShowPopup(new Apply(this));
         }
 
+        public void RefreshCI()
+        {
+            Views.CI.Clear(Remotes);
+        }
+
         public void RunCIPipeline(Commit commit)
         {
             if (CanCreatePopup())
                 ShowPopup(new RunCIPipeline(this, commit));
+        }
+
+        public async Task GetDependenciesAsync()
+        {
+            using var lockWatcher = LockWatcher();
+
+            var log = CreateLog("Get Dependencies");
+            var err = await Models.IpxRevCtrl.GetDependenciesAsync(FullPath, log);
+            log.Complete();
+
+            if (!string.IsNullOrEmpty(err))
+                SendNotification(err, true);
+
+            MarkWorkingCopyDirtyManually();
+        }
+
+        public async Task UpdateDependenciesAsync()
+        {
+            using var lockWatcher = LockWatcher();
+
+            var log = CreateLog("Update Dependencies");
+            var err = await Models.IpxRevCtrl.UpdateDependenciesAsync(FullPath, log);
+            log.Complete();
+
+            if (!string.IsNullOrEmpty(err))
+                SendNotification(err, true);
+
+            MarkWorkingCopyDirtyManually();
         }
 
         public async Task ExecCustomActionAsync(Models.CustomAction action, object scopeTarget)
@@ -1381,11 +1429,6 @@ namespace SourceGit.ViewModels
                     StashesCount = stashes.Count;
                 });
             }, token);
-        }
-
-        public void RefreshCI()
-        {
-            Views.CI.Clear(Remotes);
         }
 
         public void ToggleHistoryShowFlag(Models.HistoryShowFlags flag)
