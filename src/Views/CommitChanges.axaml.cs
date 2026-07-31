@@ -3,6 +3,7 @@ using System.Text;
 
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
 namespace SourceGit.Views
@@ -32,6 +33,22 @@ namespace SourceGit.Views
                 detailView.CreateMultipleChangesContextMenu(changes)?.Open(view);
             else
                 detailView.CreateChangeContextMenu(changes[0])?.Open(view);
+        }
+
+        private void OnChangeDoubleTapped(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+
+            if (DataContext is not ViewModels.CommitDetail vm)
+                return;
+
+            if (sender is not ChangeCollectionView { SelectedChanges: { Count: > 0 } selectedChanges })
+                return;
+
+            if (selectedChanges.Count == 1)
+            {
+                vm.OpenChangeInMergeTool(selectedChanges[0]);
+            }    
         }
 
         private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)

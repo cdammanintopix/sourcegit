@@ -51,6 +51,7 @@
                                 Changes="{Binding VisibleChanges}"
                                 SelectedChanges="{Binding SelectedChanges, Mode=TwoWay}"
                                 ContextRequested="OnChangeContextRequested"
+                                ChangeDoubleTapped="OnChangeDoubleTapped"
                                 KeyDown="OnChangeCollectionViewKeyDown"/>
       </Border>
 

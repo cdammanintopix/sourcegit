@@ -233,6 +233,22 @@ namespace SourceGit.Views
             e.Handled = true;
         }
 
+        private void OnChangeDoubleTapped(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+
+            if (DataContext is not ViewModels.RevisionCompare vm)
+                return;
+
+            if (sender is not ChangeCollectionView { SelectedChanges: { Count: > 0 } selectedChanges })
+                return;
+
+            if (selectedChanges.Count == 1)
+            {
+                vm.OpenChangeWithExternalDiffTool(selectedChanges[0]);
+            }
+        }
+
         private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
         {
             if (DataContext is not ViewModels.RevisionCompare vm)
