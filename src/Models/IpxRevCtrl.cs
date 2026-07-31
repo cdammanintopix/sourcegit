@@ -187,7 +187,7 @@ namespace SourceGit.Models
             if (string.IsNullOrEmpty(exec))
                 return $"'{name}' was not found in `PATH`";
 
-            log?.AppendLine($"$ {name} {string.Join(' ', args)} {repo}\n");
+            log?.AppendLine($"$ {name} {repo} {string.Join(' ', args)}\n");
 
             string error;
             try
@@ -215,9 +215,9 @@ namespace SourceGit.Models
         {
             var start = new ProcessStartInfo();
             start.FileName = exec;
+            start.ArgumentList.Add(repo);
             foreach (var arg in args)
                 start.ArgumentList.Add(arg);
-            start.ArgumentList.Add(repo);
             start.UseShellExecute = false;
             start.CreateNoWindow = true;
             start.RedirectStandardOutput = true;
