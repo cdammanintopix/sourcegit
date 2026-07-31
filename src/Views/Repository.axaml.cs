@@ -166,6 +166,22 @@ namespace SourceGit.Views
             e.Handled = true;
         }
 
+        private async void OnGetDependencies(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Repository repo)
+                await repo.GetDependenciesAsync();
+
+            e.Handled = true;
+        }
+
+        private async void OnUpdateDependencies(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Repository repo)
+                await repo.UpdateDependenciesAsync();
+
+            e.Handled = true;
+        }
+
         private void OnWorktreeListPropertyChanged(object _, AvaloniaPropertyChangedEventArgs e)
         {
             if (e.Property == ItemsControl.ItemsSourceProperty || e.Property == IsVisibleProperty)
@@ -193,7 +209,7 @@ namespace SourceGit.Views
             if (!IsLoaded)
                 return;
 
-            var leftHeight = LeftSidebarGroups.Bounds.Height - 28.0 * 5 - 4;
+            var leftHeight = LeftSidebarGroups.Bounds.Height - 28.0 * (vm.SupportsDependencies ? 6 : 5) - 4;
             if (leftHeight <= 0)
                 return;
 
@@ -201,9 +217,10 @@ namespace SourceGit.Views
             var remoteBranchRows = vm.IsRemoteGroupExpanded ? RemoteBranchTree.Rows.Count : 0;
             var desiredBranches = (localBranchRows + remoteBranchRows) * 24.0;
             var desiredTag = vm.IsTagGroupExpanded ? 24.0 * TagsList.Rows : 0;
+            var desiredDependency = vm.SupportsDependencies && vm.IsDependencyGroupExpanded ? 24.0 * DependencyList.Rows : 0;
             var desiredSubmodule = vm.IsSubmoduleGroupExpanded ? 24.0 * SubmoduleList.Rows : 0;
             var desiredWorktree = vm.IsWorktreeGroupExpanded ? 24.0 * vm.Worktrees.Count : 0;
-            var desiredOthers = desiredTag + desiredSubmodule + desiredWorktree;
+            var desiredOthers = desiredTag + desiredDependency + desiredSubmodule + desiredWorktree;
             var hasOverflow = (desiredBranches + desiredOthers > leftHeight);
 
             if (vm.IsWorktreeGroupExpanded)
@@ -211,7 +228,7 @@ namespace SourceGit.Views
                 var height = desiredWorktree;
                 if (hasOverflow)
                 {
-                    var test = leftHeight - desiredBranches - desiredTag - desiredSubmodule;
+                    var test = leftHeight - desiredBranches - desiredTag - desiredDependency - desiredSubmodule;
                     if (test < 0)
                         height = Math.Min(120, height);
                     else
@@ -220,7 +237,7 @@ namespace SourceGit.Views
 
                 leftHeight -= height;
                 WorktreeList.Height = height;
-                hasOverflow = (desiredBranches + desiredTag + desiredSubmodule) > leftHeight;
+                hasOverflow = (desiredBranches + desiredTag + desiredDependency + desiredSubmodule) > leftHeight;
             }
 
             if (vm.IsSubmoduleGroupExpanded)
@@ -228,7 +245,7 @@ namespace SourceGit.Views
                 var height = desiredSubmodule;
                 if (hasOverflow)
                 {
-                    var test = leftHeight - desiredBranches - desiredTag;
+                    var test = leftHeight - desiredBranches - desiredTag - desiredDependency;
                     if (test < 0)
                         height = Math.Min(120, height);
                     else
@@ -237,6 +254,28 @@ namespace SourceGit.Views
 
                 leftHeight -= height;
                 SubmoduleList.Height = height;
+                hasOverflow = (desiredBranches + desiredTag + desiredDependency) > leftHeight;
+            }
+
+            if (vm.SupportsDependencies && vm.IsDependencyGroupExpanded)
+            {
+                var height = desiredDependency;
+                if (hasOverflow)
+                {
+                    var test = leftHeight - desiredBranches - desiredTag;
+                    if (test < 0)
+                        height = Math.Min(120, height);
+                    else
+                        height = Math.Max(120, test);
+
+                    // Keep whole rows only. Claiming the last few pixels would make the total desired
+                    // height of the sidebar exceed its own, and a `Grid` answers that by shrinking its
+                    // `Auto` rows, which shifts every group below the branches up by a pixel or two.
+                    height = Math.Floor(height / 24.0) * 24.0;
+                }
+
+                leftHeight -= height;
+                DependencyList.Height = height;
                 hasOverflow = (desiredBranches + desiredTag) > leftHeight;
             }
 

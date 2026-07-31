@@ -8,6 +8,7 @@
         void RefreshWorktrees();
         void RefreshTags();
         void RefreshCommits();
+        void RefreshDependencies();
         void RefreshSubmodules();
         void RefreshWorkingCopyChanges();
         void RefreshStashes();

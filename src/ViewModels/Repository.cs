@@ -151,6 +151,7 @@ namespace SourceGit.ViewModels
                     LocalBranchTrees = builder.Locals;
                     RemoteBranchTrees = builder.Remotes;
                     VisibleTags = BuildVisibleTags();
+                    VisibleDependencies = BuildVisibleDependencies();
                     VisibleSubmodules = BuildVisibleSubmodules();
                 }
             }
@@ -225,6 +226,41 @@ namespace SourceGit.ViewModels
         {
             get => _visibleTags;
             private set => SetProperty(ref _visibleTags, value);
+        }
+
+        /// <summary>
+        ///     Drives the visibility of the whole `DEPENDENCIES` section in the left sidebar.
+        /// </summary>
+        public bool SupportsDependencies
+        {
+            get => _supportsDependencies;
+            private set => SetProperty(ref _supportsDependencies, value);
+        }
+
+        public List<Models.Dependency> Dependencies
+        {
+            get => _dependencies;
+            private set => SetProperty(ref _dependencies, value);
+        }
+
+        public bool ShowDependenciesAsTree
+        {
+            get => _uiStates.ShowDependenciesAsTree;
+            set
+            {
+                if (value != _uiStates.ShowDependenciesAsTree)
+                {
+                    _uiStates.ShowDependenciesAsTree = value;
+                    VisibleDependencies = BuildVisibleDependencies();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public object VisibleDependencies
+        {
+            get => _visibleDependencies;
+            private set => SetProperty(ref _visibleDependencies, value);
         }
 
         public List<Models.Submodule> Submodules
@@ -339,6 +375,19 @@ namespace SourceGit.ViewModels
                 if (value != _uiStates.IsTagsExpandedInSideBar)
                 {
                     _uiStates.IsTagsExpandedInSideBar = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsDependencyGroupExpanded
+        {
+            get => _uiStates.IsDependenciesExpandedInSideBar;
+            set
+            {
+                if (value != _uiStates.IsDependenciesExpandedInSideBar)
+                {
+                    _uiStates.IsDependenciesExpandedInSideBar = value;
                     OnPropertyChanged();
                 }
             }
@@ -521,6 +570,8 @@ namespace SourceGit.ViewModels
                 _cancellationRefreshBranches.Cancel();
             if (_cancellationRefreshTags is { IsCancellationRequested: false })
                 _cancellationRefreshTags.Cancel();
+            if (_cancellationRefreshDependencies is { IsCancellationRequested: false })
+                _cancellationRefreshDependencies.Cancel();
             if (_cancellationRefreshWorkingCopyChanges is { IsCancellationRequested: false })
                 _cancellationRefreshWorkingCopyChanges.Cancel();
             if (_cancellationRefreshCommits is { IsCancellationRequested: false })
@@ -665,6 +716,7 @@ namespace SourceGit.ViewModels
             RefreshCommits();
             RefreshBranches();
             RefreshTags();
+            RefreshDependencies();
             RefreshSubmodules();
             RefreshWorktrees();
             RefreshWorkingCopyChanges();
@@ -975,6 +1027,12 @@ namespace SourceGit.ViewModels
         {
             _watcher?.MarkSubmodulesUpdated();
             RefreshSubmodules();
+        }
+
+        public void MarkDependenciesDirtyManually()
+        {
+            _watcher?.MarkDependenciesUpdated();
+            RefreshDependencies();
         }
 
         public void MarkFetched()
@@ -1299,6 +1357,41 @@ namespace SourceGit.ViewModels
             }, token);
         }
 
+        public void RefreshDependencies()
+        {
+            if (_cancellationRefreshDependencies is { IsCancellationRequested: false })
+                _cancellationRefreshDependencies.Cancel();
+
+            _cancellationRefreshDependencies = new CancellationTokenSource();
+            var token = _cancellationRefreshDependencies.Token;
+
+            Task.Run(async () =>
+            {
+                var supported = Models.IpxRevCtrl.SupportsDependencies(FullPath);
+
+                // Reveal the section as soon as we know it applies. Resolving the dependencies spawns a
+                // `git` process for each of them and takes a while when they live on a network share.
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    if (!token.IsCancellationRequested)
+                        SupportsDependencies = supported;
+                });
+
+                var deps = supported
+                    ? await Models.IpxRevCtrl.LoadDependenciesAsync(FullPath).ConfigureAwait(false)
+                    : new List<Models.Dependency>();
+
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    if (token.IsCancellationRequested)
+                        return;
+
+                    Dependencies = deps;
+                    VisibleDependencies = BuildVisibleDependencies();
+                });
+            }, token);
+        }
+
         public void RefreshSubmodules()
         {
             if (!MayHaveSubmodules())
@@ -1595,6 +1688,14 @@ namespace SourceGit.ViewModels
             App.GetLauncher().OpenRepositoryInTab(normalizedPath, null);
         }
 
+        public void OpenDependency(Models.Dependency dep)
+        {
+            if (!dep.CanBeOpened)
+                return;
+
+            App.GetLauncher().OpenRepositoryInTab(dep.FullPath, null);
+        }
+
         public void AddWorktree()
         {
             if (CanCreatePopup())
@@ -1795,6 +1896,28 @@ namespace SourceGit.ViewModels
             }
         }
 
+        private object BuildVisibleDependencies()
+        {
+            var visible = new List<Models.Dependency>();
+            if (string.IsNullOrEmpty(_filter))
+            {
+                visible.AddRange(_dependencies);
+            }
+            else
+            {
+                foreach (var d in _dependencies)
+                {
+                    if (d.Name.Contains(_filter, StringComparison.OrdinalIgnoreCase))
+                        visible.Add(d);
+                }
+            }
+
+            if (_uiStates.ShowDependenciesAsTree)
+                return DependencyCollectionAsTree.Build(visible, _visibleDependencies as DependencyCollectionAsTree);
+            else
+                return new DependencyCollectionAsList() { Dependencies = visible };
+        }
+
         private object BuildVisibleSubmodules()
         {
             var visible = new List<Models.Submodule>();
@@ -1993,6 +2116,9 @@ namespace SourceGit.ViewModels
         private List<Worktree> _worktrees = [];
         private List<Models.Tag> _tags = [];
         private object _visibleTags = null;
+        private bool _supportsDependencies = false;
+        private List<Models.Dependency> _dependencies = [];
+        private object _visibleDependencies = null;
         private List<Models.Submodule> _submodules = [];
         private object _visibleSubmodules = null;
         private string _navigateToCommitDelayed = string.Empty;
@@ -2006,6 +2132,7 @@ namespace SourceGit.ViewModels
 
         private CancellationTokenSource _cancellationRefreshBranches = null;
         private CancellationTokenSource _cancellationRefreshTags = null;
+        private CancellationTokenSource _cancellationRefreshDependencies = null;
         private CancellationTokenSource _cancellationRefreshWorkingCopyChanges = null;
         private CancellationTokenSource _cancellationRefreshCommits = null;
         private CancellationTokenSource _cancellationRefreshStashes = null;

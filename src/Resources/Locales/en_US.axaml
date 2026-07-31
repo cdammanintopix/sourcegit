@@ -358,6 +358,15 @@
   <x:String x:Key="Text.DeleteMultiTags.DeleteFromRemotes" xml:space="preserve">Delete them from remotes</x:String>
   <x:String x:Key="Text.DeleteMultiTags.Tip" xml:space="preserve">You are trying to delete multiple tags at one time. Be sure to double-check before taking action!</x:String>
   <x:String x:Key="Text.DeleteRemote" xml:space="preserve">Delete Remote</x:String>
+  <x:String x:Key="Text.Dependency.CheckedOut" xml:space="preserve">CHECKED OUT</x:String>
+  <x:String x:Key="Text.Dependency.CopyName" xml:space="preserve">Copy Name</x:String>
+  <x:String x:Key="Text.Dependency.Date" xml:space="preserve">DATE</x:String>
+  <x:String x:Key="Text.Dependency.Open" xml:space="preserve">Open Dependency Repository</x:String>
+  <x:String x:Key="Text.Dependency.Revision" xml:space="preserve">REVISION</x:String>
+  <x:String x:Key="Text.Dependency.Status.NotCloned" xml:space="preserve">NOT CLONED</x:String>
+  <x:String x:Key="Text.Dependency.Status.RevisionChanged" xml:space="preserve">REV CHANGED</x:String>
+  <x:String x:Key="Text.Dependency.Status.Unsupported" xml:space="preserve">NOT A GIT REPOSITORY</x:String>
+  <x:String x:Key="Text.Dependency.URL" xml:space="preserve">URL</x:String>
   <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">Remote:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Path" xml:space="preserve">Path:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">Target:</x:String>
@@ -807,6 +816,7 @@
   <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">Custom Actions</x:String>
   <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">No Custom Actions</x:String>
   <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">Dashboard</x:String>
+  <x:String x:Key="Text.Repository.Dependencies" xml:space="preserve">DEPENDENCIES</x:String>
   <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">Discard all changes</x:String>
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">Open in File Browser</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">Search Branches/Tags/Submodules</x:String>
@@ -846,6 +856,7 @@
   <x:String x:Key="Text.Repository.ShowFirstParentOnly" xml:space="preserve">First-parent only</x:String>
   <x:String x:Key="Text.Repository.ShowFlags" xml:space="preserve">SHOW FLAGS</x:String>
   <x:String x:Key="Text.Repository.ShowLostCommits" xml:space="preserve">Show lost commits</x:String>
+  <x:String x:Key="Text.Repository.ShowDependenciesAsTree" xml:space="preserve">Show Dependencies as Tree</x:String>
   <x:String x:Key="Text.Repository.ShowSubmodulesAsTree" xml:space="preserve">Show Submodules as Tree</x:String>
   <x:String x:Key="Text.Repository.ShowTagsAsTree" xml:space="preserve">Show Tags as Tree</x:String>
   <x:String x:Key="Text.Repository.Skip" xml:space="preserve">SKIP</x:String>

@@ -24,6 +24,7 @@ namespace SourceGit.ViewModels
                 _repo.SendNotification(err, true);
 
             _repo.MarkWorkingCopyDirtyManually();
+            _repo.MarkDependenciesDirtyManually();
 
             // Always close the popup. Failures are reported by the notification above and the log.
             return true;

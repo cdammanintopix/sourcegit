@@ -123,6 +123,11 @@ namespace SourceGit.Models
             Interlocked.Exchange(ref _updateSubmodules, 0);
         }
 
+        public void MarkDependenciesUpdated()
+        {
+            Interlocked.Exchange(ref _updateDependencies, 0);
+        }
+
         public void Dispose()
         {
             foreach (var watcher in _watchers)
@@ -196,6 +201,15 @@ namespace SourceGit.Models
                     else
                         Interlocked.CompareExchange(ref _updateSubmodules, oldUpdateSubmodule, -1);
                 }
+            }
+
+            var oldUpdateDependencies = Interlocked.Exchange(ref _updateDependencies, -1);
+            if (oldUpdateDependencies > 0)
+            {
+                if (now > oldUpdateDependencies)
+                    _repo.RefreshDependencies();
+                else
+                    Interlocked.CompareExchange(ref _updateDependencies, oldUpdateDependencies, -1);
             }
 
             var oldUpdateStashes = Interlocked.Exchange(ref _updateStashes, -1);
@@ -320,6 +334,14 @@ namespace SourceGit.Models
             if (name.StartsWith(".vs/", StringComparison.Ordinal))
                 return;
 
+            if (name.Equals("build/dependencies/dependencies.json", StringComparison.Ordinal))
+            {
+                var desired = DateTime.Now.AddSeconds(1).ToFileTime();
+                Interlocked.Exchange(ref _updateDependencies, desired);
+                Interlocked.Exchange(ref _updateWC, desired);
+                return;
+            }
+
             if (name.Equals(".gitmodules", StringComparison.Ordinal))
             {
                 var desired = DateTime.Now.AddSeconds(1).ToFileTime();
@@ -358,6 +380,7 @@ namespace SourceGit.Models
         private long _updateWC;
         private long _updateBranch;
         private long _updateSubmodules;
+        private long _updateDependencies;
         private long _updateStashes;
         private long _updateTags;
     }

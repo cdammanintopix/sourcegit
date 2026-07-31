@@ -87,6 +87,12 @@ namespace SourceGit.Models
             set;
         } = false;
 
+        public bool ShowDependenciesAsTree
+        {
+            get;
+            set;
+        } = true;
+
         public bool IncludeUntrackedInLocalChanges
         {
             get;
@@ -196,6 +202,12 @@ namespace SourceGit.Models
         } = false;
 
         public bool IsTagsExpandedInSideBar
+        {
+            get;
+            set;
+        } = false;
+
+        public bool IsDependenciesExpandedInSideBar
         {
             get;
             set;
