@@ -96,7 +96,9 @@
                   Margin="0,0,4,0" Padding="0"
                   Click="OnOpenCommitMessagePicker"
                   IsVisible="{Binding #ThisControl.ShowAdvancedOptions}"
-                  ToolTip.Tip="{DynamicResource Text.WorkingCopy.CommitMessageHelper}">
+                  ToolTip.Tip="{DynamicResource Text.WorkingCopy.CommitMessageHelper}"
+                  ToolTip.Placement="Top"
+                  ToolTip.VerticalOffset="0">
             <Path Width="12" Height="12" Data="{StaticResource Icons.Menu}"/>
           </Button>
 
@@ -106,7 +108,9 @@
                   Margin="0,0,4,0" Padding="0"
                   Click="OnOpenOpenAIHelper"
                   IsVisible="False"
-                  ToolTip.Tip="{DynamicResource Text.AIAssistant.Tip}">
+                  ToolTip.Tip="{DynamicResource Text.AIAssistant.Tip}"
+                  ToolTip.Placement="Top"
+                  ToolTip.VerticalOffset="0">
             <Path Width="13" Height="13" Data="{StaticResource Icons.AIAssist}"/>
           </Button>
 
@@ -115,7 +119,9 @@
                   Width="28"
                   Margin="0" Padding="0"
                   Click="OnOpenConventionalCommitHelper"
-                  ToolTip.Tip="{DynamicResource Text.ConventionalCommit}">
+                  ToolTip.Tip="{DynamicResource Text.ConventionalCommit}"
+                  ToolTip.Placement="Top"
+                  ToolTip.VerticalOffset="0">
             <Path Width="13" Height="13" Margin="0,1,0,0" Data="{StaticResource Icons.CommitMessageGenerator}"/>
           </Button>
 
@@ -126,7 +132,9 @@
                         Click="OnToggleBranchName"
                         IsChecked="{Binding #ThisControl.IsBranchNamePrepended, Mode=OneWay}"
                         IsVisible="{Binding #ThisControl.CanToggleBranchName}"
-                        ToolTip.Tip="{DynamicResource Text.CommitMessageTextBox.PrependBranchName}">
+                        ToolTip.Tip="{DynamicResource Text.CommitMessageTextBox.PrependBranchName}"
+                        ToolTip.Placement="Top"
+                        ToolTip.VerticalOffset="0">
             <Path Width="13" Height="13" Data="{StaticResource Icons.Branch.Add}"/>
           </ToggleButton>
 
