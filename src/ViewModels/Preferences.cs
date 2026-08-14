@@ -141,6 +141,12 @@ namespace SourceGit.ViewModels
             set => SetProperty(ref _subjectGuideLength, value);
         }
 
+        public bool PrependBranchNameByDefault
+        {
+            get;
+            set;
+        } = true;
+
         public int DateTimeFormat
         {
             get => Models.DateTimeFormat.ActiveIndex;

@@ -490,9 +490,51 @@ namespace SourceGit.Views
             set => SetValue(CurrentBranchProperty, value);
         }
 
+        public static readonly DirectProperty<CommitMessageToolBox, bool> CanToggleBranchNameProperty =
+            AvaloniaProperty.RegisterDirect<CommitMessageToolBox, bool>(
+                nameof(CanToggleBranchName),
+                static o => o.CanToggleBranchName);
+
+        public bool CanToggleBranchName
+        {
+            get => _canToggleBranchName;
+            private set => SetAndRaise(CanToggleBranchNameProperty, ref _canToggleBranchName, value);
+        }
+
+        public static readonly DirectProperty<CommitMessageToolBox, bool> IsBranchNamePrependedProperty =
+            AvaloniaProperty.RegisterDirect<CommitMessageToolBox, bool>(
+                nameof(IsBranchNamePrepended),
+                static o => o.IsBranchNamePrepended);
+
+        public bool IsBranchNamePrepended
+        {
+            get => _isBranchNamePrepended;
+            private set => SetAndRaise(IsBranchNamePrependedProperty, ref _isBranchNamePrepended, value);
+        }
+
         public CommitMessageToolBox()
         {
             InitializeComponent();
+        }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == CommitMessageProperty || change.Property == CurrentBranchProperty)
+            {
+                var isCommitMessageInit = string.IsNullOrEmpty(_commitMessage) && !string.Equals(_branchNameRemovedByUser, CurrentBranch?.Name, StringComparison.Ordinal);
+                CanToggleBranchName = BranchNamePrefix.IsSupported(CurrentBranch);
+
+                if (isCommitMessageInit && CanToggleBranchName && ViewModels.Preferences.Instance.PrependBranchNameByDefault)
+                {
+                    CommitMessage = BranchNamePrefix.Prepend(string.Empty, CurrentBranch);
+                    Editor?.CaretIndex = _commitMessage.Length;
+                    return;
+                }
+
+                IsBranchNamePrepended = BranchNamePrefix.IsPrepended(_commitMessage, CurrentBranch);
+            }
         }
 
         private void OnSuggestionTapped(object sender, TappedEventArgs e)
@@ -722,21 +764,23 @@ namespace SourceGit.Views
             view.Show(owner);
         }
 
-        private async void OnPrependBranchName(object sender, RoutedEventArgs e)
+        private void OnToggleBranchName(object _, RoutedEventArgs e)
         {
-            if (sender is Button button && CurrentBranch != null)
+            var branch = CurrentBranch;
+            if (BranchNamePrefix.IsSupported(branch))
             {
-                string branchPrefix = "[" + CurrentBranch.Name + "]";
-                if (CommitMessage.Length < branchPrefix.Length || CommitMessage[..branchPrefix.Length] != branchPrefix)
-                {
-                    if (CommitMessage.Length == 0 || CommitMessage[0] != '[')
-                    {
-                        branchPrefix += " ";
-                    }
-                    var caretIndex = Editor.CaretIndex + branchPrefix.Length;
-                    CommitMessage = branchPrefix + CommitMessage;
-                    Editor.CaretIndex = caretIndex;
-                }
+                // Remember the removal, so that the default prefix is not silently restored on the next
+                // notification (the repository sends a new `Branch` instance on every refresh).
+                _branchNameRemovedByUser = _isBranchNamePrepended ? branch.Name : null;
+
+                var old = _commitMessage ?? string.Empty;
+                var updated = _isBranchNamePrepended
+                    ? BranchNamePrefix.Remove(old, branch)
+                    : BranchNamePrefix.Prepend(old, branch);
+
+                var caretIndex = Math.Clamp(Editor.CaretIndex + updated.Length - old.Length, 0, updated.Length);
+                CommitMessage = updated;
+                Editor.CaretIndex = caretIndex;
                 Editor.Focus();
             }
 
@@ -745,5 +789,8 @@ namespace SourceGit.Views
 
         private string _commitMessage = string.Empty;
         private bool _showAdvancedOptions = false;
+        private bool _canToggleBranchName = false;
+        private bool _isBranchNamePrepended = false;
+        private string _branchNameRemovedByUser = null;
     }
 }

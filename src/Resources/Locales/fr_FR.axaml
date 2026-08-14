@@ -193,6 +193,7 @@
   <x:String x:Key="Text.CommitDetail.Info.WebLinks" xml:space="preserve">Ouvrir dans le navigateur</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.Column" xml:space="preserve">COL</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.Placeholder" xml:space="preserve">Saisissez le message de commit. Utilisez une ligne vide pour séparer le sujet et la description !</x:String>
+  <x:String x:Key="Text.CommitMessageTextBox.PrependBranchName" xml:space="preserve">Préfixer le message de commit avec le nom de la branche</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.SubjectCount" xml:space="preserve">SUJET</x:String>
   <x:String x:Key="Text.Compare" xml:space="preserve">Comparer</x:String>
   <x:String x:Key="Text.Compare.Changes" xml:space="preserve">CHANGEMENTS</x:String>
@@ -666,6 +667,7 @@
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">Activer les dossiers compacts dans l'arborescence des changements</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Language</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Historique de commits</x:String>
+  <x:String x:Key="Text.Preferences.General.PrependBranchNameByDefault" xml:space="preserve">Préfixer par défaut le message de commit avec le nom de la branche</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">Afficher la page 'CHANGEMENTS LOCAUX' par défaut</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">Afficher l'onglet 'CHANGEMENTS' dans les détails du commit par défaut</x:String>
   <x:String x:Key="Text.Preferences.General.ShowRelativeTimeInGraph" xml:space="preserve">Afficher le temps relatif dans le graphe de commits</x:String>

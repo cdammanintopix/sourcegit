@@ -89,7 +89,7 @@
               BorderThickness="0,1,0,0"
               BorderBrush="{DynamicResource Brush.Border2}"
               CornerRadius="0,0,4,4">
-        <Grid ColumnDefinitions="Auto,Auto,Auto,*">
+        <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*">
           <Button Grid.Column="0"
                   Classes="icon_button"
                   Width="28"
@@ -119,7 +119,18 @@
             <Path Width="13" Height="13" Margin="0,1,0,0" Data="{StaticResource Icons.CommitMessageGenerator}"/>
           </Button>
 
-          <StackPanel Grid.Column="3"
+          <ToggleButton Grid.Column="3"
+                        Classes="line_path"
+                        Width="28"
+                        Margin="0,0,4,0" Padding="0"
+                        Click="OnToggleBranchName"
+                        IsChecked="{Binding #ThisControl.IsBranchNamePrepended, Mode=OneWay}"
+                        IsVisible="{Binding #ThisControl.CanToggleBranchName}"
+                        ToolTip.Tip="{DynamicResource Text.CommitMessageTextBox.PrependBranchName}">
+            <Path Width="13" Height="13" Data="{StaticResource Icons.Branch.Add}"/>
+          </ToggleButton>
+
+          <StackPanel Grid.Column="4"
                       Margin="0,0,6,0"
                       HorizontalAlignment="Right" VerticalAlignment="Stretch"
                       Orientation="Horizontal">
@@ -140,16 +151,6 @@
                        VerticalAlignment="Center"/>
             <Path Width="10" Height="10" Margin="4,0,0,0" Data="{StaticResource Icons.Error}" Fill="DarkGoldenrod" IsVisible="{Binding #Editor.WarnSubjectLength, Mode=OneWay}"/>
           </StackPanel>
-
-          <Button Grid.Column="4"
-                  Classes="icon_button"
-                  Width="28"
-                  Margin="0,0,4,0" Padding="0"
-                  Click="OnPrependBranchName"
-                  IsVisible="{Binding #ThisControl.CurrentBranch, Converter={x:Static ObjectConverters.IsNotNull}}"
-                  ToolTip.Tip="Prepend with [branchName]">
-            <Path Width="13" Height="13" Data="{StaticResource Icons.Branch.Add}"/>
-          </Button>
         </Grid>
       </Border>
     </Grid>
