@@ -174,12 +174,15 @@ namespace SourceGit.ViewModels
             get => _currentBranch;
             private set
             {
-                var oldHead = _currentBranch?.Head;
+                var old = _currentBranch;
+                var oldHead = old?.Head;
                 if (SetProperty(ref _currentBranch, value))
                 {
                     _histories?.NotifyCurrentBranchChanged();
                     if (value != null && !value.Head.Equals(oldHead, StringComparison.Ordinal) && _workingCopy is { UseAmend: true })
                         _workingCopy.UseAmend = false;
+
+                    _workingCopy?.OnCurrentBranchChanged(old);
                 }
             }
         }
@@ -1053,8 +1056,7 @@ namespace SourceGit.ViewModels
 
         public void ClearCommitMessage()
         {
-            if (_workingCopy is not null)
-                _workingCopy.CommitMessage = string.Empty;
+            _workingCopy?.ResetCommitMessage();
         }
 
         public Models.Commit GetSelectedCommitInHistory()

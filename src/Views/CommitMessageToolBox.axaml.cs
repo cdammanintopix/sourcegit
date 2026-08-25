@@ -523,16 +523,7 @@ namespace SourceGit.Views
 
             if (change.Property == CommitMessageProperty || change.Property == CurrentBranchProperty)
             {
-                var isCommitMessageInit = string.IsNullOrEmpty(_commitMessage) && !string.Equals(_branchNameRemovedByUser, CurrentBranch?.Name, StringComparison.Ordinal);
                 CanToggleBranchName = BranchNamePrefix.IsSupported(CurrentBranch);
-
-                if (isCommitMessageInit && CanToggleBranchName && ViewModels.Preferences.Instance.PrependBranchNameByDefault)
-                {
-                    CommitMessage = BranchNamePrefix.Prepend(string.Empty, CurrentBranch);
-                    Editor?.CaretIndex = _commitMessage.Length;
-                    return;
-                }
-
                 IsBranchNamePrepended = BranchNamePrefix.IsPrepended(_commitMessage, CurrentBranch);
             }
         }
@@ -769,10 +760,6 @@ namespace SourceGit.Views
             var branch = CurrentBranch;
             if (BranchNamePrefix.IsSupported(branch))
             {
-                // Remember the removal, so that the default prefix is not silently restored on the next
-                // notification (the repository sends a new `Branch` instance on every refresh).
-                _branchNameRemovedByUser = _isBranchNamePrepended ? branch.Name : null;
-
                 var old = _commitMessage ?? string.Empty;
                 var updated = _isBranchNamePrepended
                     ? BranchNamePrefix.Remove(old, branch)
@@ -791,6 +778,5 @@ namespace SourceGit.Views
         private bool _showAdvancedOptions = false;
         private bool _canToggleBranchName = false;
         private bool _isBranchNamePrepended = false;
-        private string _branchNameRemovedByUser = null;
     }
 }

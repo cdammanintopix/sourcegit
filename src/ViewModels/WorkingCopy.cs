@@ -109,7 +109,7 @@ namespace SourceGit.ViewModels
                     }
                     else
                     {
-                        CommitMessage = string.Empty;
+                        ResetCommitMessage();
                         ResetAuthor = false;
                         CommitAndPush = App.Text("WorkingCopy.CommitAndPush");
                     }
@@ -556,7 +556,7 @@ namespace SourceGit.ViewModels
                 await _inProgressContext.ContinueAsync(log);
                 log.Complete();
 
-                CommitMessage = string.Empty;
+                ResetCommitMessage();
                 IsCommitting = false;
             }
             else
@@ -576,7 +576,7 @@ namespace SourceGit.ViewModels
                 await _inProgressContext.SkipAsync(log);
                 log.Complete();
 
-                CommitMessage = string.Empty;
+                ResetCommitMessage();
                 IsCommitting = false;
             }
             else
@@ -596,13 +596,42 @@ namespace SourceGit.ViewModels
                 await _inProgressContext.AbortAsync(log);
                 log.Complete();
 
-                CommitMessage = string.Empty;
+                ResetCommitMessage();
                 IsCommitting = false;
             }
             else
             {
                 _repo.MarkWorkingCopyDirtyManually();
             }
+        }
+
+        /// <summary>
+        ///     Starts a new commit message. Depending on user's preference, it is pre-filled with the branch name.
+        /// </summary>
+        public void ResetCommitMessage()
+        {
+            CommitMessage = Preferences.Instance.PrependBranchNameByDefault
+                ? Models.BranchNamePrefix.Prepend(string.Empty, _repo.CurrentBranch)
+                : string.Empty;
+        }
+
+        /// <summary>
+        ///     Keeps the branch name prefix in sync when the current branch changed. Names are compared instead of
+        ///     instances, because refreshing the repository rebuilds the `Branch` objects.
+        /// </summary>
+        public void OnCurrentBranchChanged(Models.Branch previous)
+        {
+            if (_useAmend)
+                return;
+
+            var current = _repo.CurrentBranch;
+            if (previous != null && current != null && previous.Name.Equals(current.Name, StringComparison.Ordinal))
+                return;
+
+            if (string.IsNullOrEmpty(_commitMessage))
+                ResetCommitMessage();
+            else if (Models.BranchNamePrefix.IsPrepended(_commitMessage, previous))
+                CommitMessage = Models.BranchNamePrefix.Prepend(Models.BranchNamePrefix.Remove(_commitMessage, previous), current);
         }
 
         public void ApplyCommitMessageTemplate(Models.CommitTemplate tmpl)
@@ -694,7 +723,7 @@ namespace SourceGit.ViewModels
                         await _repo.ShowAndStartPopupAsync(new Push(_repo, pushBranch, _useAmend));
                 }
 
-                CommitMessage = string.Empty;
+                ResetCommitMessage();
                 UseAmend = false;
             }
 
