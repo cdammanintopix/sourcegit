@@ -901,6 +901,8 @@ namespace SourceGit.ViewModels
             RefreshCommits();
             RefreshWorkingCopyChanges();
             RefreshWorktrees();
+            if (checkout)
+                RefreshDependencies();
         }
 
         public void RefreshAfterCheckoutBranch(Models.Branch checkouted)
@@ -937,6 +939,7 @@ namespace SourceGit.ViewModels
             RefreshCommits();
             RefreshWorkingCopyChanges();
             RefreshWorktrees();
+            RefreshDependencies();
         }
 
         public void RefreshAfterRenameBranch(Models.Branch b, string newName)
@@ -990,6 +993,7 @@ namespace SourceGit.ViewModels
             RefreshCommits();
             RefreshWorkingCopyChanges();
             RefreshWorktrees();
+            RefreshDependencies();
         }
 
         public void MarkTagsDirtyManually()
@@ -1358,7 +1362,7 @@ namespace SourceGit.ViewModels
                 var supported = Models.IpxRevCtrl.SupportsDependencies(FullPath);
 
                 // Reveal the section as soon as we know it applies. Resolving the dependencies spawns a
-                // `git` process for each of them and takes a while when they live on a network share.
+                // `git` process for each of them
                 Dispatcher.UIThread.Invoke(() =>
                 {
                     if (!token.IsCancellationRequested)
@@ -1376,6 +1380,7 @@ namespace SourceGit.ViewModels
 
                     Dependencies = deps;
                     VisibleDependencies = BuildVisibleDependencies();
+                    _watcher?.SetDependencies(deps);
                 });
             }, token);
         }

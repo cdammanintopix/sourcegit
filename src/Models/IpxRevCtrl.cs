@@ -162,8 +162,8 @@ namespace SourceGit.Models
                 validated.Add(dep);
             }
 
-            // Resolving a dependency spawns a `git` process, and there are usually dozens of them living
-            // on a network share. Run them concurrently, but keep the number of processes reasonable.
+            // Resolving a dependency spawns a `git` process, and there are usually dozens of them. Run
+            // them concurrently, but keep the number of processes reasonable.
             using var limit = new SemaphoreSlim(Math.Min(8, Environment.ProcessorCount));
             await Task.WhenAll(validated.ConvertAll(async dep =>
             {

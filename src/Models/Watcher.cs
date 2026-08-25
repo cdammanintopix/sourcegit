@@ -24,6 +24,100 @@ namespace SourceGit.Models
             private Watcher _target;
         }
 
+        /// <summary>
+        ///     Keeps one `FileSystemWatcher` per dependency `.git` folder, shared by every open
+        ///     repository: several of them usually depend on the same libraries. Each subscriber still
+        ///     gets its own notification, since the revision they expect differs.
+        /// </summary>
+        private static class DependencyGitDirPool
+        {
+            private class Entry
+            {
+                public FileSystemWatcher Watcher;
+                public readonly List<Watcher> Subscribers = [];
+            }
+
+            public static void Subscribe(string gitDir, Watcher subscriber)
+            {
+                FileSystemWatcher started = null;
+
+                lock (_lock)
+                {
+                    if (!_entries.TryGetValue(gitDir, out var entry))
+                    {
+                        entry = new Entry();
+
+                        var watcher = new FileSystemWatcher();
+                        watcher.Path = gitDir;
+                        watcher.Filter = "*";
+                        watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.DirectoryName | NotifyFilters.FileName;
+                        watcher.IncludeSubdirectories = true;
+                        watcher.Created += (_, e) => Dispatch(entry, e);
+                        watcher.Renamed += (_, e) => Dispatch(entry, e);
+                        watcher.Changed += (_, e) => Dispatch(entry, e);
+                        watcher.Deleted += (_, e) => Dispatch(entry, e);
+                        watcher.EnableRaisingEvents = false;
+
+                        entry.Watcher = watcher;
+                        _entries.Add(gitDir, entry);
+                        started = watcher;
+                    }
+
+                    entry.Subscribers.Add(subscriber);
+                }
+
+                if (started == null)
+                    return;
+
+                // Starts the filesystem watcher in another thread to avoid UI blocking
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        started.EnableRaisingEvents = true;
+                    }
+                    catch
+                    {
+                        // Ignore exceptions. This may occur while `Unsubscribe` disposes it.
+                    }
+                });
+            }
+
+            public static void Unsubscribe(string gitDir, Watcher subscriber)
+            {
+                FileSystemWatcher disposing;
+
+                lock (_lock)
+                {
+                    if (!_entries.TryGetValue(gitDir, out var entry))
+                        return;
+
+                    entry.Subscribers.Remove(subscriber);
+                    if (entry.Subscribers.Count > 0)
+                        return;
+
+                    _entries.Remove(gitDir);
+                    disposing = entry.Watcher;
+                }
+
+                disposing.EnableRaisingEvents = false;
+                disposing.Dispose();
+            }
+
+            private static void Dispatch(Entry entry, FileSystemEventArgs e)
+            {
+                Watcher[] subscribers;
+                lock (_lock)
+                    subscribers = entry.Subscribers.ToArray();
+
+                foreach (var subscriber in subscribers)
+                    subscriber.OnDependencyGitDirChanged(e);
+            }
+
+            private static readonly Dictionary<string, Entry> _entries = new(StringComparer.Ordinal);
+            private static readonly object _lock = new();
+        }
+
         public Watcher(IRepository repo, string fullpath, string gitDir)
         {
             _repo = repo;
@@ -128,6 +222,45 @@ namespace SourceGit.Models
             Interlocked.Exchange(ref _updateDependencies, 0);
         }
 
+        /// <summary>
+        ///     Watches the `.git` folder of each dependency, so that checking out another revision in one
+        ///     of them - from another tab, another tool or a terminal - updates their state right away.
+        ///     Only the `.git` folder is watched: local edits in a dependency working copy do not change
+        ///     the revision it has checked out.
+        /// </summary>
+        public void SetDependencies(List<Dependency> dependencies)
+        {
+            var wanted = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var dep in dependencies)
+            {
+                if (!dep.IsGit || string.IsNullOrEmpty(dep.FullPath))
+                    continue;
+
+                // A plain clone has a `.git` folder. Anything else (a worktree or a submodule, which
+                // store a `gitdir:` pointer file instead) is left out.
+                var gitDir = Path.Combine(dep.FullPath, ".git");
+                if (Directory.Exists(gitDir))
+                    wanted.Add(new DirectoryInfo(gitDir).FullName);
+            }
+
+            if (wanted.SetEquals(_dependencyGitDirs))
+                return;
+
+            foreach (var gitDir in _dependencyGitDirs)
+            {
+                if (!wanted.Contains(gitDir))
+                    DependencyGitDirPool.Unsubscribe(gitDir, this);
+            }
+
+            foreach (var gitDir in wanted)
+            {
+                if (!_dependencyGitDirs.Contains(gitDir))
+                    DependencyGitDirPool.Subscribe(gitDir, this);
+            }
+
+            _dependencyGitDirs = wanted;
+        }
+
         public void Dispose()
         {
             foreach (var watcher in _watchers)
@@ -137,6 +270,11 @@ namespace SourceGit.Models
             }
 
             _watchers.Clear();
+
+            foreach (var gitDir in _dependencyGitDirs)
+                DependencyGitDirPool.Unsubscribe(gitDir, this);
+            _dependencyGitDirs = [];
+
             _timer.Dispose();
             _timer = null;
         }
@@ -149,6 +287,7 @@ namespace SourceGit.Models
             var now = DateTime.Now.ToFileTime();
             var refreshCommits = false;
             var refreshSubmodules = false;
+            var refreshDependencies = false;
             var refreshWC = false;
 
             var oldUpdateBranch = Interlocked.Exchange(ref _updateBranch, -1);
@@ -158,6 +297,7 @@ namespace SourceGit.Models
                 {
                     refreshCommits = true;
                     refreshSubmodules = _repo.MayHaveSubmodules();
+                    refreshDependencies = true; // `dependencies.json` is a tracked file, so its content follows `HEAD`.
                     refreshWC = true;
 
                     _repo.RefreshBranches();
@@ -203,13 +343,21 @@ namespace SourceGit.Models
                 }
             }
 
-            var oldUpdateDependencies = Interlocked.Exchange(ref _updateDependencies, -1);
-            if (oldUpdateDependencies > 0)
+            if (refreshDependencies)
             {
-                if (now > oldUpdateDependencies)
-                    _repo.RefreshDependencies();
-                else
-                    Interlocked.CompareExchange(ref _updateDependencies, oldUpdateDependencies, -1);
+                Interlocked.Exchange(ref _updateDependencies, -1);
+                _repo.RefreshDependencies();
+            }
+            else
+            {
+                var oldUpdateDependencies = Interlocked.Exchange(ref _updateDependencies, -1);
+                if (oldUpdateDependencies > 0)
+                {
+                    if (now > oldUpdateDependencies)
+                        _repo.RefreshDependencies();
+                    else
+                        Interlocked.CompareExchange(ref _updateDependencies, oldUpdateDependencies, -1);
+                }
             }
 
             var oldUpdateStashes = Interlocked.Exchange(ref _updateStashes, -1);
@@ -261,6 +409,26 @@ namespace SourceGit.Models
 
             var name = e.Name.Replace('\\', '/').TrimEnd('/');
             HandleGitDirFileChanged(name);
+        }
+
+        private void OnDependencyGitDirChanged(FileSystemEventArgs e)
+        {
+            if (string.IsNullOrEmpty(e.Name))
+                return;
+
+            var name = e.Name.Replace('\\', '/').TrimEnd('/');
+            if (name.EndsWith(".lock", StringComparison.Ordinal) ||
+                name.Contains("fsmonitor--daemon/", StringComparison.Ordinal) ||
+                name.StartsWith("lfs/", StringComparison.Ordinal) ||
+                name.StartsWith("objects/", StringComparison.Ordinal))
+                return;
+
+            // `HEAD` covers a checkout, the refs cover the branch it points at moving (a pull for example).
+            if (name.Equals("HEAD", StringComparison.Ordinal) ||
+                name.Equals("packed-refs", StringComparison.Ordinal) ||
+                name.StartsWith("refs/", StringComparison.Ordinal) ||
+                name.StartsWith("reftable/", StringComparison.Ordinal))
+                Interlocked.Exchange(ref _updateDependencies, DateTime.Now.AddSeconds(1).ToFileTime());
         }
 
         private void OnWorkingCopyChanged(object o, FileSystemEventArgs e)
@@ -374,6 +542,7 @@ namespace SourceGit.Models
         private readonly IRepository _repo;
         private readonly string _root;
         private List<FileSystemWatcher> _watchers;
+        private HashSet<string> _dependencyGitDirs = new(StringComparer.Ordinal);
         private Timer _timer;
 
         private long _lockCount;
