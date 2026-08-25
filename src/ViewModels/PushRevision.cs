@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using SourceGit.Models;
 using SourceGit.Views;
@@ -73,6 +74,7 @@ namespace SourceGit.ViewModels
             Revision = revision;
             RemoteBranch = remoteBranch;
             Force = false;
+            CanTerminate = true;
         }
 
         public override async Task<bool> Sure()
@@ -89,6 +91,9 @@ namespace SourceGit.ViewModels
             var log = _repo.CreateLog("Push Revision");
             Use(log);
 
+            _cancellation = new CancellationTokenSource();
+            var token = _cancellation.Token;
+
             var succ = await new Commands.Push(
                 _repo.FullPath,
                 Revision.SHA,
@@ -97,7 +102,8 @@ namespace SourceGit.ViewModels
                 false,
                 false,
                 false,
-                Force, CreateMR, DraftMR, CISkip, CIArgs).Use(log).RunAsync();
+                Force,
+                false, CreateMR, DraftMR, CISkip, CIArgs).WithCancellation(token).Use(log).RunAsync();
 
             log.Complete();
 
@@ -115,10 +121,18 @@ namespace SourceGit.ViewModels
                 CI.QueueForNextRefresh(_repo.Remotes, Revision.SHA);
             }
 
+            _cancellation = null;
             return succ;
         }
 
+        public override void Terminate()
+        {
+            // Just fire cancel event and UI will auto wait the `Sure` complete
+            var _ = _cancellation?.CancelAsync();
+        }
+
         private readonly Repository _repo;
+        private CancellationTokenSource _cancellation = null;
         private bool _createMR = false;
         private bool _ciSkip = false;
     }

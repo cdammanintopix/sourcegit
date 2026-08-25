@@ -625,7 +625,7 @@ namespace SourceGit.ViewModels
 
         public bool IsLFSEnabled()
         {
-            var path = Path.Combine(FullPath, ".git", "hooks", "pre-push");
+            var path = Path.Combine(GitDir, "hooks", "pre-push");
             if (!File.Exists(path))
                 return false;
 
@@ -1261,6 +1261,8 @@ namespace SourceGit.ViewModels
                     LocalBranchTrees = builder.Locals;
                     RemoteBranchTrees = builder.Remotes;
 
+                    ValidateHistoryFilters(true);
+
                     var localBranchesCount = 0;
                     foreach (var b in branches)
                     {
@@ -1306,6 +1308,7 @@ namespace SourceGit.ViewModels
 
                     Tags = tags;
                     VisibleTags = BuildVisibleTags();
+                    ValidateHistoryFilters(false);
                 });
             }, token);
         }
@@ -1330,6 +1333,19 @@ namespace SourceGit.ViewModels
                 var commits = await new Commands.QueryCommits(FullPath, builder.ToString())
                     .GetResultAsync()
                     .ConfigureAwait(false);
+
+                var merged = new HashSet<string>();
+                foreach (var c in commits)
+                {
+                    if (merged.Remove(c.SHA))
+                        c.IsMerged = true;
+
+                    if (c.IsMerged)
+                    {
+                        foreach (var p in c.Parents)
+                            merged.Add(p);
+                    }
+                }
 
                 Dispatcher.UIThread.Invoke(() =>
                 {
@@ -1679,9 +1695,8 @@ namespace SourceGit.ViewModels
             if (selfPage == null)
                 return;
 
-            var root = Path.GetFullPath(Path.Combine(FullPath, submodule));
-            var normalizedPath = root.Replace('\\', '/').TrimEnd('/');
-            App.GetLauncher().OpenRepositoryInTab(normalizedPath, null);
+            var fullpath = Path.GetFullPath(Path.Combine(FullPath, submodule));
+            App.GetLauncher().OpenSubRepository(selfPage, fullpath);
         }
 
         public void OpenDependency(Models.Dependency dep)
@@ -1996,6 +2011,37 @@ namespace SourceGit.ViewModels
             {
                 foreach (var item in list.TagItems)
                     item.FilterMode = Models.FilterMode.None;
+            }
+        }
+
+        private void ValidateHistoryFilters(bool forBranch)
+        {
+            if (_historyFilterMode == Models.FilterMode.None)
+                return;
+
+            var set = new HashSet<string>();
+
+            if (forBranch)
+            {
+                foreach (var b in _branches)
+                    set.Add(b.FullName);
+
+                foreach (var f in _uiStates.HistoryFilters)
+                {
+                    if (f.Type is Models.FilterType.LocalBranch or Models.FilterType.RemoteBranch)
+                        f.IsValid = set.Contains(f.Pattern);
+                }
+            }
+            else
+            {
+                foreach (var t in _tags)
+                    set.Add(t.Name);
+
+                foreach (var f in _uiStates.HistoryFilters)
+                {
+                    if (f.Type is Models.FilterType.Tag)
+                        f.IsValid = set.Contains(f.Pattern);
+                }
             }
         }
 

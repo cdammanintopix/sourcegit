@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using SourceGit.Models;
 using SourceGit.Views;
@@ -100,6 +101,12 @@ namespace SourceGit.ViewModels
             set;
         }
 
+        public bool NoVerify
+        {
+            get;
+            set;
+        }
+
         public bool CreateMR
         {
             get => _createMR;
@@ -147,6 +154,7 @@ namespace SourceGit.ViewModels
         public Push(Repository repo, Models.Branch localBranch, bool forcePush=false)
         {
             _repo = repo;
+            CanTerminate = true;
             ForcePush = forcePush;
 
             // Gather all local branches and find current branch.
@@ -250,6 +258,9 @@ namespace SourceGit.ViewModels
             var log = _repo.CreateLog("Push");
             Use(log);
 
+            _cancellation = new CancellationTokenSource();
+            var token = _cancellation.Token;
+
             var succ = await new Commands.Push(
                 _repo.FullPath,
                 _selectedLocalBranch.Name,
@@ -258,7 +269,8 @@ namespace SourceGit.ViewModels
                 PushAllTags,
                 _repo.Submodules.Count > 0 && CheckSubmodules,
                 _isSetTrackOptionVisible && _tracking,
-                ForcePush, CreateMR, DraftMR, CISkip, CIArgs).Use(log).RunAsync();
+                ForcePush,
+                NoVerify, CreateMR, DraftMR, CISkip, CIArgs).WithCancellation(token).Use(log).RunAsync();
 
             log.Complete();
 
@@ -277,7 +289,14 @@ namespace SourceGit.ViewModels
                 CI.QueueForNextRefresh(_repo.Remotes, head.SHA);
             }
 
+            _cancellation = null;
             return succ;
+        }
+
+        public override void Terminate()
+        {
+            // Just fire cancel event and UI will auto wait the `Sure` complete
+            var _ = _cancellation?.CancelAsync();
         }
 
         private void AutoSelectBranchByRemote()
@@ -336,6 +355,7 @@ namespace SourceGit.ViewModels
         private Models.Branch _selectedRemoteBranch = null;
         private bool _isSetTrackOptionVisible = false;
         private bool _tracking = true;
+        private CancellationTokenSource _cancellation = null;
         private bool _createMR = false;
         private bool _ciSkip = false;
     }
