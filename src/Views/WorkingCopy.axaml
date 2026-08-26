@@ -264,6 +264,7 @@
                   HorizontalAlignment="Left"
                   IsChecked="{Binding NoVerifyOnCommit, Mode=TwoWay}"
                   Content="{DynamicResource Text.WorkingCopy.NoVerify}"
+                  IsVisible="false"
                   ToolTip.Tip="--no-verify"
                   ToolTip.Placement="Top"
                   ToolTip.VerticalOffset="0"/>
