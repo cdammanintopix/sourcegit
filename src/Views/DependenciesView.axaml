@@ -38,20 +38,20 @@
                   Width="12" Height="12"
                   Data="{StaticResource Icons.Check}"
                   Fill="Green"
-                  IsVisible="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:DependencyStatus.Normal}}"/>
+                  IsVisible="{Binding IsClean}"/>
             <Border Height="16"
                     Margin="6,0,0,0" Padding="4,0"
                     HorizontalAlignment="Left" VerticalAlignment="Center"
                     Background="DarkOrange"
                     CornerRadius="4"
-                    IsVisible="{Binding Status, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static m:DependencyStatus.Normal}}">
+                    IsVisible="{Binding HasStatusBadge}">
               <Grid>
                 <TextBlock VerticalAlignment="Center"
                            Text="{DynamicResource Text.Dependency.Status.NotCloned}"
                            Foreground="White"
                            IsVisible="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:DependencyStatus.NotCloned}}"/>
                 <TextBlock VerticalAlignment="Center"
-                           Text="{DynamicResource Text.Dependency.Status.RevisionChanged}"
+                           Text="{DynamicResource Text.Submodule.Status.RevisionChanged}"
                            Foreground="White"
                            IsVisible="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:DependencyStatus.RevisionChanged}}"/>
                 <TextBlock VerticalAlignment="Center"
@@ -59,6 +59,18 @@
                            Foreground="White"
                            IsVisible="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:DependencyStatus.Unsupported}}"/>
               </Grid>
+            </Border>
+
+            <!-- Orthogonal to the status above: a dependency can sit on the wrong revision AND be modified. -->
+            <Border Height="16"
+                    Margin="6,0,0,0" Padding="4,0"
+                    HorizontalAlignment="Left" VerticalAlignment="Center"
+                    Background="DarkOrange"
+                    CornerRadius="4"
+                    IsVisible="{Binding HasLocalChanges}">
+              <TextBlock VerticalAlignment="Center"
+                         Text="{DynamicResource Text.Submodule.Status.Modified}"
+                         Foreground="White"/>
             </Border>
           </StackPanel>
 
@@ -101,7 +113,7 @@
           <TextBlock Grid.Row="3" Grid.Column="0"
                      Classes="info_label"
                      HorizontalAlignment="Left" VerticalAlignment="Center"
-                     Text="{DynamicResource Text.Dependency.URL}"/>
+                     Text="{DynamicResource Text.Submodule.URL}"/>
           <TextBlock Grid.Row="3" Grid.Column="1"
                      Margin="8,0,0,0"
                      Text="{Binding URL}"

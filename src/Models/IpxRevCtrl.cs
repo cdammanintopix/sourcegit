@@ -117,12 +117,23 @@ namespace SourceGit.Models
         }
 
         /// <summary>
-        ///     Reads `build/dependencies/dependencies.json` and resolves the state of each dependency.
+        ///     Reads `build/dependencies/dependencies.json`, then resolves the state of each dependency.
         /// </summary>
-        public static async Task<List<Dependency>> LoadDependenciesAsync(string repo)
+        /// <param name="onListed">
+        ///     Raised as soon as the file is parsed, before any `git` runs, so the entries can be shown
+        ///     right away. Raised a second time if the repository lists itself and had to be dropped.
+        /// </param>
+        /// <param name="onResolved">
+        ///     Raised for each dependency as its state becomes known, so a slow disk fills the list in
+        ///     progressively instead of showing nothing until the last one is done.
+        /// </param>
+        public static async Task LoadDependenciesAsync(string repo, Action<List<Dependency>> onListed, Action<Dependency> onResolved)
         {
             if (!SupportsDependencies(repo))
-                return [];
+            {
+                onListed([]);
+                return;
+            }
 
             List<Dependency> deps;
             try
@@ -130,56 +141,42 @@ namespace SourceGit.Models
                 using var stream = File.OpenRead(GetDependenciesFile(repo));
                 deps = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.ListDependency) ?? [];
             }
-            catch
+            catch (Exception e)
             {
-                return [];
+                Native.OS.LogException(e);
+                onListed([]);
+                return;
             }
 
+            var listed = deps.FindAll(dep => !string.IsNullOrEmpty(dep.Name));
+            listed.Sort((l, r) => NumericSort.Compare(l.Name, r.Name));
+            onListed([.. listed]);
+
+            // Locating the IPX root spawns a process of its own, so it comes after the entries are shown.
             var root = await SearchIpxRootAsync(repo).ConfigureAwait(false);
-            var self = string.Empty;
-            if (!string.IsNullOrEmpty(root))
-            {
-                try
-                {
-                    self = Path.GetRelativePath(root, repo).Replace('\\', '/');
-                }
-                catch
-                {
-                    // Keep `self` empty, no entry will be filtered out.
-                }
-            }
-
-            var validated = new List<Dependency>();
-            foreach (var dep in deps)
-            {
-                if (string.IsNullOrEmpty(dep.Name))
-                    continue;
-
-                // A repository never depends on itself.
-                if (dep.Name.Equals(self, StringComparison.OrdinalIgnoreCase))
-                    continue;
-
-                validated.Add(dep);
-            }
 
             // Resolving a dependency spawns a `git` process, and there are usually dozens of them. Run
             // them concurrently, but keep the number of processes reasonable.
             using var limit = new SemaphoreSlim(Math.Min(8, Environment.ProcessorCount));
-            await Task.WhenAll(validated.ConvertAll(async dep =>
+            await Task.WhenAll(listed.ConvertAll(async dep =>
             {
                 await limit.WaitAsync().ConfigureAwait(false);
                 try
                 {
                     await dep.ResolveAsync(root).ConfigureAwait(false);
                 }
+                catch (Exception e)
+                {
+                    // One dependency that cannot be read must not hold up the others.
+                    Native.OS.LogException(e);
+                }
                 finally
                 {
                     limit.Release();
                 }
-            })).ConfigureAwait(false);
 
-            validated.Sort((l, r) => NumericSort.Compare(l.Name, r.Name));
-            return validated;
+                onResolved(dep);
+            })).ConfigureAwait(false);
         }
 
         private static async Task<string> RunAsync(string name, string exec, string repo, ICommandLog log, params string[] args)

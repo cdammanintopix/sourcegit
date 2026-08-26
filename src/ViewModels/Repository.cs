@@ -1377,30 +1377,90 @@ namespace SourceGit.ViewModels
 
             Task.Run(async () =>
             {
-                var supported = Models.IpxRevCtrl.SupportsDependencies(FullPath);
-
-                // Reveal the section as soon as we know it applies. Resolving the dependencies spawns a
-                // `git` process for each of them
-                Dispatcher.UIThread.Invoke(() =>
+                try
                 {
-                    if (!token.IsCancellationRequested)
-                        SupportsDependencies = supported;
-                });
+                    var supported = Models.IpxRevCtrl.SupportsDependencies(FullPath);
 
-                var deps = supported
-                    ? await Models.IpxRevCtrl.LoadDependenciesAsync(FullPath).ConfigureAwait(false)
-                    : new List<Models.Dependency>();
+                    Dispatcher.UIThread.Invoke(() =>
+                    {
+                        if (!token.IsCancellationRequested)
+                            SupportsDependencies = supported;
+                    });
 
-                Dispatcher.UIThread.Invoke(() =>
+                    if (supported)
+                    {
+                        await Models.IpxRevCtrl.LoadDependenciesAsync(
+                            FullPath,
+                            listed => Dispatcher.UIThread.Invoke(() => PublishDependencies(listed, token)),
+                            resolved => Dispatcher.UIThread.Post(() => NotifyDependencyRefreshed(resolved)))
+                            .ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        Dispatcher.UIThread.Invoke(() => PublishDependencies([], token));
+                    }
+                }
+                catch (Exception e)
                 {
-                    if (token.IsCancellationRequested)
-                        return;
-
-                    Dependencies = deps;
-                    VisibleDependencies = BuildVisibleDependencies();
-                    _watcher?.SetDependencies(deps);
-                });
+                    // Without this the task would fault silently and the section would stay empty.
+                    Native.OS.LogException(e);
+                }
             }, token);
+        }
+
+        /// <summary>
+        ///     Re-reads a single dependency, without touching the others nor rebuilding the list. Bound
+        ///     controls update through the change notifications raised by the dependency itself.
+        /// </summary>
+        public void RefreshDependency(string fullPath)
+        {
+            var dep = _dependencies.Find(x => x.FullPath.Equals(fullPath, StringComparison.Ordinal));
+            if (dep == null)
+                return;
+
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await dep.RefreshAsync().ConfigureAwait(false);
+                    Dispatcher.UIThread.Post(() => NotifyDependencyRefreshed(dep));
+                }
+                catch (Exception e)
+                {
+                    Native.OS.LogException(e);
+                }
+            });
+        }
+
+        private void PublishDependencies(List<Models.Dependency> deps, CancellationToken token)
+        {
+            if (token.IsCancellationRequested)
+                return;
+
+            Dependencies = deps;
+            VisibleDependencies = BuildVisibleDependencies();
+            _watcher?.SetDependencies(deps);
+        }
+
+        /// <summary>
+        ///     Must be called on the UI thread, once a dependency has been re-read.
+        /// </summary>
+        private void NotifyDependencyRefreshed(Models.Dependency dep)
+        {
+            dep.NotifyStateChanged();
+
+            // In tree mode the marker is bound to the row, not to the dependency itself.
+            if (_visibleDependencies is DependencyCollectionAsTree tree)
+            {
+                foreach (var row in tree.Rows)
+                {
+                    if (ReferenceEquals(row.Dependency, dep))
+                        row.NotifyIsDirtyChanged();
+                }
+            }
+
+            // `FullPath` is only known once resolved, so this is where a dependency gets its watcher.
+            _watcher?.SetDependencies(_dependencies);
         }
 
         public void RefreshSubmodules()

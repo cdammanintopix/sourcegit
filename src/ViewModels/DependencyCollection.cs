@@ -35,6 +35,16 @@ namespace SourceGit.ViewModels
             get => Dependency?.IsDirty ?? false;
         }
 
+        /// <summary>
+        ///     Called by <see cref="Repository.RefreshDependency"/> once it re-read the dependency this
+        ///     row stands for. The row cannot subscribe to it: the tree is rebuilt on every keystroke in
+        ///     the filter box, so the handlers would pile up on a dependency that outlives its rows.
+        /// </summary>
+        public void NotifyIsDirtyChanged()
+        {
+            OnPropertyChanged(nameof(IsDirty));
+        }
+
         public DependencyTreeNode(Models.Dependency dep, int depth)
         {
             FullPath = dep.Name;

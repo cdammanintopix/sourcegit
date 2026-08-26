@@ -348,10 +348,8 @@
   <x:String x:Key="Text.Dependency.Open" xml:space="preserve">Ouvrir le dépôt de la dépendance</x:String>
   <x:String x:Key="Text.Dependency.Reset" xml:space="preserve">Réinitialiser</x:String>
   <x:String x:Key="Text.Dependency.Revision" xml:space="preserve">RÉVISION</x:String>
-  <x:String x:Key="Text.Dependency.Status.NotCloned" xml:space="preserve">NON CLONÉ</x:String>
-  <x:String x:Key="Text.Dependency.Status.RevisionChanged" xml:space="preserve">RÉV MODIFIÉE</x:String>
-  <x:String x:Key="Text.Dependency.Status.Unsupported" xml:space="preserve">PAS UN DÉPÔT GIT</x:String>
-  <x:String x:Key="Text.Dependency.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.Dependency.Status.NotCloned" xml:space="preserve">non cloné</x:String>
+  <x:String x:Key="Text.Dependency.Status.Unsupported" xml:space="preserve">pas un dépôt git</x:String>
   <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">Remote :</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Path" xml:space="preserve">Chemin:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">Cible :</x:String>

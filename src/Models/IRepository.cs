@@ -9,6 +9,7 @@
         void RefreshTags();
         void RefreshCommits();
         void RefreshDependencies();
+        void RefreshDependency(string fullPath);
         void RefreshSubmodules();
         void RefreshWorkingCopyChanges();
         void RefreshStashes();
