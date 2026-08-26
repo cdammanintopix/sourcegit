@@ -6,7 +6,6 @@
              xmlns:vm="using:SourceGit.ViewModels"
              xmlns:v="using:SourceGit.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             CurrentBranch="{Binding #ThisControl.((vm:WorkingCopy)DataContext).Repository.CurrentBranch}"
              x:Class="SourceGit.Views.CommitMessageToolBox"
              x:Name="ThisControl">
   <Border Background="{DynamicResource Brush.Contents}"
