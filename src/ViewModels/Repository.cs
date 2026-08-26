@@ -160,7 +160,14 @@ namespace SourceGit.ViewModels
         public List<Models.Remote> Remotes
         {
             get => _remotes;
-            private set => SetProperty(ref _remotes, value);
+            private set
+            {
+                if (SetProperty(ref _remotes, value))
+                {
+                    if (_histories != null)
+                        _histories.HasSingleRemote = value != null && value.Count == 1;
+                }
+            }
         }
 
         public List<Models.Branch> Branches
@@ -178,7 +185,9 @@ namespace SourceGit.ViewModels
                 var oldHead = old?.Head;
                 if (SetProperty(ref _currentBranch, value))
                 {
-                    _histories?.NotifyCurrentBranchChanged();
+                    if (_histories != null)
+                        _histories.CurrentBranch = value;
+
                     if (value != null && !value.Head.Equals(oldHead, StringComparison.Ordinal) && _workingCopy is { UseAmend: true })
                         _workingCopy.UseAmend = false;
 
