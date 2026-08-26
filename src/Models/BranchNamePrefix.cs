@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SourceGit.Models
 {
@@ -10,6 +11,16 @@ namespace SourceGit.Models
         public static bool IsSupported(Branch branch)
         {
             return branch is { IsDetachedHead: false } && !string.IsNullOrEmpty(branch.Name);
+        }
+
+        /// <summary>
+        ///     Tells whether a new commit message should be prefixed with this branch name. Long-lived branches are
+        ///     shared by everyone, so their name brings nothing to a commit message. Those are excluded from the
+        ///     default only: the toggle still allows to add their name manually.
+        /// </summary>
+        public static bool IsEnabledByDefault(Branch branch)
+        {
+            return IsSupported(branch) && !_excludedFromDefault.Contains(branch.Name);
         }
 
         public static string Make(Branch branch)
@@ -47,5 +58,13 @@ namespace SourceGit.Models
             var rest = message.Substring(Make(branch).Length);
             return rest.StartsWith(' ') ? rest.Substring(1) : rest;
         }
+
+        private static readonly HashSet<string> _excludedFromDefault = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "default",
+            "intopix",
+            "master",
+            "main",
+        };
     }
 }

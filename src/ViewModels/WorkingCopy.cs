@@ -612,8 +612,9 @@ namespace SourceGit.ViewModels
         /// </summary>
         public void ResetCommitMessage()
         {
-            CommitMessage = Preferences.Instance.PrependBranchNameByDefault
-                ? Models.BranchNamePrefix.Prepend(string.Empty, _repo.CurrentBranch)
+            var branch = _repo.CurrentBranch;
+            CommitMessage = Preferences.Instance.PrependBranchNameByDefault && Models.BranchNamePrefix.IsEnabledByDefault(branch)
+                ? Models.BranchNamePrefix.Prepend(string.Empty, branch)
                 : string.Empty;
         }
 
@@ -631,9 +632,17 @@ namespace SourceGit.ViewModels
                 return;
 
             if (string.IsNullOrEmpty(_commitMessage))
+            {
                 ResetCommitMessage();
+            }
             else if (Models.BranchNamePrefix.IsPrepended(_commitMessage, previous))
-                CommitMessage = Models.BranchNamePrefix.Prepend(Models.BranchNamePrefix.Remove(_commitMessage, previous), current);
+            {
+                // The name of a long-lived branch is never written automatically, so the prefix is dropped here.
+                var rest = Models.BranchNamePrefix.Remove(_commitMessage, previous);
+                CommitMessage = Models.BranchNamePrefix.IsEnabledByDefault(current)
+                    ? Models.BranchNamePrefix.Prepend(rest, current)
+                    : rest;
+            }
         }
 
         public void ApplyCommitMessageTemplate(Models.CommitTemplate tmpl)
