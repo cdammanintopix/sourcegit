@@ -285,8 +285,8 @@ namespace SourceGit.ViewModels
                     Models.Notification.Send(_repo.FullPath, "Message from remote:\n\n    " + remoteMessage + "\n");
                 }
                 // Trigger CI status refresh
-                var head = await new Commands.QuerySingleCommit(_repo.FullPath, _selectedLocalBranch.Name).GetResultAsync();
-                CI.QueueForNextRefresh(_repo.Remotes, head.SHA);
+                var head = await new Commands.QueryRevisionByRefName(_repo.FullPath, _selectedLocalBranch.Name).GetResultAsync();
+                CI.QueueForNextRefresh(_repo.Remotes, head);
             }
 
             _cancellation = null;
