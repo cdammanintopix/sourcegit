@@ -38,25 +38,30 @@ namespace SourceGit.Commands
             starter.RedirectStandardOutput = true;
             starter.RedirectStandardError = true;
 
-            await using (var sw = File.Create(outputFile))
+            try
             {
-                try
+                await using var sw = new FileStream(outputFile, new FileStreamOptions
                 {
-                    using var proc = Process.Start(starter)!;
+                    Mode = FileMode.Create,
+                    Access = FileAccess.Write,
+                    UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite |
+                                      UnixFileMode.GroupRead | UnixFileMode.GroupWrite |
+                                      UnixFileMode.OtherRead,
+                });
+                using var proc = Process.Start(starter)!;
 
-                    if (input != null)
-                    {
-                        var inputString = await new StreamReader(input).ReadToEndAsync().ConfigureAwait(false);
-                        await proc.StandardInput.WriteAsync(inputString).ConfigureAwait(false);
-                    }
-
-                    await proc.StandardOutput.BaseStream.CopyToAsync(sw).ConfigureAwait(false);
-                    await proc.WaitForExitAsync().ConfigureAwait(false);
-                }
-                catch (Exception e)
+                if (input != null)
                 {
-                    Models.Notification.Send(repo, "Save file failed: " + e.Message, true);
+                    var inputString = await new StreamReader(input).ReadToEndAsync().ConfigureAwait(false);
+                    await proc.StandardInput.WriteAsync(inputString).ConfigureAwait(false);
                 }
+
+                await proc.StandardOutput.BaseStream.CopyToAsync(sw).ConfigureAwait(false);
+                await proc.WaitForExitAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                Models.Notification.Send(repo, "Save file failed: " + e.Message, true);
             }
         }
     }
