@@ -40,24 +40,26 @@ namespace SourceGit.Commands
 
             try
             {
-                await using var sw = new FileStream(outputFile, new FileStreamOptions
+                await using (var sw = File.Create(outputFile))
                 {
-                    Mode = FileMode.Create,
-                    Access = FileAccess.Write,
-                    UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite |
-                                      UnixFileMode.GroupRead | UnixFileMode.GroupWrite |
-                                      UnixFileMode.OtherRead,
-                });
-                using var proc = Process.Start(starter)!;
+                    using var proc = Process.Start(starter)!;
 
-                if (input != null)
-                {
-                    var inputString = await new StreamReader(input).ReadToEndAsync().ConfigureAwait(false);
-                    await proc.StandardInput.WriteAsync(inputString).ConfigureAwait(false);
+                    if (input != null)
+                    {
+                        var inputString = await new StreamReader(input).ReadToEndAsync().ConfigureAwait(false);
+                        await proc.StandardInput.WriteAsync(inputString).ConfigureAwait(false);
+                    }
+
+                    await proc.StandardOutput.BaseStream.CopyToAsync(sw).ConfigureAwait(false);
+                    await proc.WaitForExitAsync().ConfigureAwait(false);
                 }
 
-                await proc.StandardOutput.BaseStream.CopyToAsync(sw).ConfigureAwait(false);
-                await proc.WaitForExitAsync().ConfigureAwait(false);
+                if (!OperatingSystem.IsWindows())
+                {
+                    File.SetUnixFileMode(outputFile, UnixFileMode.UserRead | UnixFileMode.UserWrite |
+                                                   UnixFileMode.GroupRead | UnixFileMode.GroupWrite |
+                                                   UnixFileMode.OtherRead);
+                }
             }
             catch (Exception e)
             {
